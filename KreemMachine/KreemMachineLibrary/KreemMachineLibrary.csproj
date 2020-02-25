@@ -91,7 +91,7 @@
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Services\RolesService.cs" />
-    <Compile Include="Services\PasswordHashService.cs" />
+    <Compile Include="Helpers\PasswordHashHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
