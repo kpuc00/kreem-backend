@@ -89,7 +89,6 @@
     <Compile Include="Models\Repositories\IRepository.cs" />
     <Compile Include="Models\Repositories\RoleRepository.cs" />
     <Compile Include="Models\Role.cs" />
-    <Compile Include="Models\Roles.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Services\RolesService.cs" />
     <Compile Include="Services\PasswordHashService.cs" />
