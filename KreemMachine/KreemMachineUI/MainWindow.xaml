@@ -7,6 +7,46 @@
         mc:Ignorable="d"
         Title="Kreem Machine" Height="450" Width="800">
     <Grid>
-        <TextBlock FontSize="50" Text="Heyyyyyy" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <TabControl x:Name="MainContent" TabStripPlacement="Left">
+            <!--Style to make the TabHeaders go to left and look somewhat nice-->
+            <TabControl.Resources>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TabItem}">
+                                <Border Name="Border" BorderBrush="Black" Margin="10 0"
+                                            BorderThickness="0" MinWidth="100">
+                                        <ContentPresenter x:Name="ContentSite" ContentSource="Header"  
+                                                RecognizesAccessKey="True" TextBlock.FontSize="18"/>
+                                    </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Panel.ZIndex" Value="100" />
+                                        <Setter TargetName="Border" Property="BorderThickness" Value="0 0 0 1" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+            
+            <!--Users-->
+            <TabItem Header="Users" >
+                <TextBlock Text="Interface for users" />
+            </TabItem>
+
+            <!--Schedule-->
+            <TabItem Header="Schedule">
+                <TextBlock Text="Interface for schedule" />
+            </TabItem>
+
+            <!--Statistics-->
+            <TabItem Header="Statistics">
+                <TextBlock Text="Interface for statistics" />
+
+            </TabItem>
+        </TabControl>
     </Grid>
+    
 </Window>
