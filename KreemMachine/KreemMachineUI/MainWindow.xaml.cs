@@ -37,5 +37,11 @@ namespace KreemMachine
             AllUsers = userService.GetAll();
             AllUsersListBox.ItemsSource = AllUsers;
         }
+
+        private void CreateUserButton_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new CreateUserWindow();
+            window.Show();
+        }
     }
 }

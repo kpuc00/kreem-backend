@@ -44,7 +44,8 @@
                         <ColumnDefinition Width="Auto" /> <!-- Create button -->
                         <ColumnDefinition Width="*" /> <!-- Search bar-->
                     </Grid.ColumnDefinitions>
-                    <Button Content="Create" Padding="7 3" Margin="5 3" />
+                    <Button x:Name="CreateUserButton" Click="CreateUserButton_Click"
+                            Content="Create" Padding="7 3" Margin="5 3" />
                     <TextBox Grid.Column="1" Margin="3" />
                     <ListBox Grid.Row="1" Grid.ColumnSpan="2"  x:Name="AllUsersListBox" 
                              TextBlock.FontSize="18" Grid.IsSharedSizeScope="True">

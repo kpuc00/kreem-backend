@@ -1,0 +1,65 @@
+﻿<Window x:Class="KreemMachine.CreateUserWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KreemMachine"
+        mc:Ignorable="d"
+        Title="Create user" Height="600" Width="400">
+    <Window.Resources>
+        <Style x:Key="FormElementBase"  TargetType="{x:Type FrameworkElement}">
+            <Setter Property="Margin" Value="0 7" />
+        </Style>
+
+        <Style TargetType="TextBlock" BasedOn="{StaticResource FormElementBase}"  />
+        <Style TargetType="TextBox" BasedOn="{StaticResource FormElementBase}"  />
+        <Style TargetType="ComboBox" BasedOn="{StaticResource FormElementBase}"  />
+        <Style TargetType="Button" BasedOn="{StaticResource FormElementBase}"  />
+
+
+    </Window.Resources>
+    <Grid Margin="20 0" TextElement.FontSize="18" >
+        <Grid.RowDefinitions>
+            <!-- Image selection -->
+            <RowDefinition Height="200" />
+            
+            <!-- All fields-->
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+ 
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <!-- Labels -->
+            <ColumnDefinition Width="2*" />
+            <!-- Margin -->
+            <ColumnDefinition Width="10" IsEnabled="False"/>
+            <!-- Fields -->
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Full name" Grid.Row="1" HorizontalAlignment="Right" />
+        <TextBlock Text="Email" Grid.Row="2" HorizontalAlignment="Right" />
+        <TextBlock Text="Role"  Grid.Row="3" HorizontalAlignment="Right" />
+        <TextBlock Text="Hourly wage" Grid.Row="4" HorizontalAlignment="Right" />
+        <TextBlock Text="Address"  Grid.Row="5" HorizontalAlignment="Right" />
+        <TextBlock Text="Phone number"  Grid.Row="6" HorizontalAlignment="Right" />
+
+
+        <TextBox x:Name="NameTextBox" Grid.Row="1" Grid.Column="2"  />
+        <TextBox x:Name="EmailTextBox" Grid.Row="2" Grid.Column="2" />
+        <ComboBox Name="RoleComboBox" Grid.Row="3" Grid.Column="2" />
+        <TextBox x:Name="WageTextBox" Grid.Row="4" Grid.Column="2" />
+        <TextBox x:Name="AdressTextBox" Grid.Row="5" Grid.Column="2"/>
+        <TextBox x:Name="PhoneTextBox" Grid.Row="6" Grid.Column="2" />
+
+
+        <Button Grid.Row="20" Grid.ColumnSpan="3" Content="Save" 
+                HorizontalAlignment="Center" Padding="15 0" />
+
+    </Grid>
+</Window>
