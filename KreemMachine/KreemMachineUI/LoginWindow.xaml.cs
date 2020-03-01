@@ -46,19 +46,20 @@ namespace KreemMachine
             var user = users?.getByCredentials(Email, Password);
 
             if (user != null)
-            {
-                var window = new MainWindow(user);
-                window.Show();
-                
-                this.Hide();
-                // after 'MainWindow' is closed, also close This Window
-                window.Closed += (Sender, E) => this.Close();
-                
-            }
+                DislayMainWindow();
             else
-            {
                 MessageBox.Show("Either email or password is wrong");
-            }
+        }
+
+        private void DislayMainWindow()
+        {
+            var window = new MainWindow();
+            window.Show();
+
+            this.Hide();
+
+            // after 'MainWindow' is closed, also close This Window
+            window.Closed += (Sender, E) => this.Close();
         }
     }
 }

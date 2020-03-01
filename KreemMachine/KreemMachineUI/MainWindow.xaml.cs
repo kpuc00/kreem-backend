@@ -25,8 +25,6 @@ namespace KreemMachine
             InitializeComponent();
         }
 
-        public MainWindow(User user):this()
-        {
 
         }
     }
