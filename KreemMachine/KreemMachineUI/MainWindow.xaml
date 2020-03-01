@@ -32,8 +32,44 @@
             </TabControl.Resources>
             
             <!--Users-->
-            <TabItem Header="Users" >
-                <TextBlock Text="Interface for users" />
+            <TabItem Header="Users" Loaded="TabItem_Loaded">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <!--Create button and search-->
+                        <RowDefinition Height="auto" />
+                        <!--List of users-->
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" /> <!-- Create button -->
+                        <ColumnDefinition Width="*" /> <!-- Search bar-->
+                    </Grid.ColumnDefinitions>
+                    <Button Content="Create" Padding="7 3" Margin="5 3" />
+                    <TextBox Grid.Column="1" Margin="3" />
+                    <ListBox Grid.Row="1" Grid.ColumnSpan="2"  x:Name="AllUsersListBox" 
+                             TextBlock.FontSize="18" Grid.IsSharedSizeScope="True">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30" /> <!-- Photo -->
+                                        <ColumnDefinition SharedSizeGroup="NameColumn" Width="Auto"/> <!-- Name -->
+                                        <ColumnDefinition SharedSizeGroup="RoleColumn" Width="Auto"/> <!-- Role -->
+                                        <ColumnDefinition SharedSizeGroup="EmailColumn" Width="Auto"/> <!-- Email -->
+                                        <ColumnDefinition Width="Auto"/> <!-- Edit -->
+                                        <ColumnDefinition Width="Auto"/> <!-- Delete -->
+                                    </Grid.ColumnDefinitions>
+                                    <Image />
+                                    <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="0 0 5 0" />
+                                    <TextBlock Grid.Column="2" Text="{Binding Role.Name}" Margin="0 0 5 0" />
+                                    <TextBlock Grid.Column="3" Text="{Binding Email}" Margin="0 0 5 0" />
+                                    <Button Grid.Column="4" Content=" Edit " Margin="0 0 5 0" />
+                                    <Button Grid.Column="5" Content=" Delete " />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
             </TabItem>
 
             <!--Schedule-->

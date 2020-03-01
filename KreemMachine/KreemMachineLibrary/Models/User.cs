@@ -30,7 +30,7 @@ namespace KreemMachineLibrary.Models
         public long role { get; set; }
 
         [Required]
-        public Role Role { get; set; }
+        public virtual Role Role { get; set; }
 
         /// <summary>
         /// This field is the plain-text password used when creating a user

@@ -43,7 +43,7 @@ namespace KreemMachine
 
             //If the thread initializing users hasn't yet finished
             //users might still be null, hence safe navigation operator ?.
-            var user = users?.getByCredentials(Email, Password);
+            var user = users?.AuthenticateByCredentials(Email, Password);
 
             if (user != null)
                 DislayMainWindow();
