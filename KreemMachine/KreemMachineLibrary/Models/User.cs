@@ -32,14 +32,6 @@ namespace KreemMachineLibrary.Models
         [Required]
         public virtual Role Role { get; set; }
 
-        /// <summary>
-        /// This field is the plain-text password used when creating a user
-        /// It is NOT stored in the database
-        /// </summary>
-        [NotMapped]
-        public string Password { get; set; }
-
-
         public User(){}
 
         public User(string name, string email, Role role, string hash)
