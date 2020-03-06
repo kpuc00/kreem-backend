@@ -31,6 +31,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
  
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -42,20 +43,22 @@
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Full name" Grid.Row="1" HorizontalAlignment="Right" />
-        <TextBlock Text="Email" Grid.Row="2" HorizontalAlignment="Right" />
-        <TextBlock Text="Role"  Grid.Row="3" HorizontalAlignment="Right" />
-        <TextBlock Text="Hourly wage" Grid.Row="4" HorizontalAlignment="Right" />
-        <TextBlock Text="Address"  Grid.Row="5" HorizontalAlignment="Right" />
-        <TextBlock Text="Phone number"  Grid.Row="6" HorizontalAlignment="Right" />
+        <TextBlock Text="First name" Grid.Row="1" HorizontalAlignment="Right" />
+        <TextBlock Text="Last name" Grid.Row="2" HorizontalAlignment="Right" />
+        <TextBlock Text="Email" Grid.Row="3" HorizontalAlignment="Right" />
+        <TextBlock Text="Role"  Grid.Row="4" HorizontalAlignment="Right" />
+        <TextBlock Text="Hourly wage" Grid.Row="5" HorizontalAlignment="Right" />
+        <TextBlock Text="Address"  Grid.Row="6" HorizontalAlignment="Right" />
+        <TextBlock Text="Phone number"  Grid.Row="7" HorizontalAlignment="Right" />
 
 
-        <TextBox x:Name="NameTextBox" Grid.Row="1" Grid.Column="2"  />
-        <TextBox x:Name="EmailTextBox" Grid.Row="2" Grid.Column="2" />
-        <ComboBox Name="RoleComboBox" Grid.Row="3" Grid.Column="2" />
-        <TextBox x:Name="WageTextBox" Grid.Row="4" Grid.Column="2" />
-        <TextBox x:Name="AdressTextBox" Grid.Row="5" Grid.Column="2"/>
-        <TextBox x:Name="PhoneTextBox" Grid.Row="6" Grid.Column="2" />
+        <TextBox x:Name="FirstNameTextBox" Grid.Row="1" Grid.Column="2"  />
+        <TextBox x:Name="LastNameTextBox" Grid.Row="2" Grid.Column="2"  />
+        <TextBox x:Name="EmailTextBox" Grid.Row="3" Grid.Column="2" />
+        <ComboBox Name="RoleComboBox" Grid.Row="4" Grid.Column="2" />
+        <TextBox x:Name="WageTextBox" Grid.Row="5" Grid.Column="2" />
+        <TextBox x:Name="AdressTextBox" Grid.Row="6" Grid.Column="2"/>
+        <TextBox x:Name="PhoneTextBox" Grid.Row="7" Grid.Column="2" />
 
 
         <Button Grid.Row="20" Grid.ColumnSpan="3" Content="Save" 

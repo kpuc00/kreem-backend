@@ -21,26 +21,23 @@ namespace KreemMachineLibrary.Services
             // since it's just a few of them that are probable to be used anyway
             // it's better to load them in memory in advance
             // than to have a sepparate query when we actually need them
-            db.Roles.Load();
+           // db.Roles.Load();
         }
 
-        internal User Create(string name, string email, Role role, string password) {   
-            string hash = PasswordHashHelper.CreateHash(password);
-            var user = new User(name, email, role, hash);
-            return user;
-        } 
-
-        public User CreateAndSave(string name, string email, Role role, string password)
+        public User CreateAndSave(User user)
         {
-            var user = Create(name, email, role, password);
+            HashPassword(user);
             user = SaveToDatabase(user);
             return user;
         }
 
+        internal void HashPassword(User user)
+        {
+            user.PasswordHash = PasswordHashHelper.CreateHash(user.PasswordHash);
+        }
+
         internal User SaveToDatabase (User user)
         {
-            db.Roles.Attach(user.Role);
-
             var fromDb = db.Users.Add(user);
             db.SaveChanges();
 
@@ -60,7 +57,7 @@ namespace KreemMachineLibrary.Services
             if (candidate == null)
                 return null;
 
-            if (PasswordHashHelper.VerifyPassword(password, candidate.Hash))
+            if (PasswordHashHelper.VerifyPassword(password, candidate.PasswordHash))
             {
                 SecurityContext.Authenticate(candidate);
                 return candidate;

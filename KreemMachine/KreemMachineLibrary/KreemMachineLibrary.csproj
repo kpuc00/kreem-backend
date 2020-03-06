@@ -77,21 +77,12 @@
   <ItemGroup>
     <Compile Include="DataBaseContext.cs" />
     <Compile Include="Globals.cs" />
-    <Compile Include="Migrations\202002241741319_roles.cs" />
-    <Compile Include="Migrations\202002241741319_roles.designer.cs">
-      <DependentUpon>202002241741319_roles.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202002242215466_users.cs" />
-    <Compile Include="Migrations\202002242215466_users.designer.cs">
-      <DependentUpon>202002242215466_users.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Repositories\IRepository.cs" />
-    <Compile Include="Models\Repositories\RoleRepository.cs" />
-    <Compile Include="Models\Role.cs" />
+    <Compile Include="Models\Roles.cs" />
+    <Compile Include="Models\ScheduledShift.cs" />
+    <Compile Include="Models\Shift.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserScheduledShift.cs" />
     <Compile Include="SecurityContext.cs" />
-    <Compile Include="Services\RolesService.cs" />
     <Compile Include="Helpers\PasswordHashHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\UserService.cs" />
@@ -100,14 +91,8 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202002241741319_roles.resx">
-      <DependentUpon>202002241741319_roles.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202002242215466_users.resx">
-      <DependentUpon>202002242215466_users.cs</DependentUpon>
-    </EmbeddedResource>
+    <Folder Include="Migrations\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

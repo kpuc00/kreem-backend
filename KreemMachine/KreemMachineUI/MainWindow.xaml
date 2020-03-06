@@ -16,9 +16,9 @@
                             <ControlTemplate TargetType="{x:Type TabItem}">
                                 <Border Name="Border" BorderBrush="Black" Margin="10 0"
                                             BorderThickness="0" MinWidth="100">
-                                        <ContentPresenter x:Name="ContentSite" ContentSource="Header"  
+                                    <ContentPresenter x:Name="ContentSite" ContentSource="Header"  
                                                 RecognizesAccessKey="True" TextBlock.FontSize="18"/>
-                                    </Border>
+                                </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Panel.ZIndex" Value="100" />
@@ -30,7 +30,7 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-            
+
             <!--Users-->
             <TabItem Header="Users" Loaded="TabItem_Loaded">
                 <Grid>
@@ -41,8 +41,10 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" /> <!-- Create button -->
-                        <ColumnDefinition Width="*" /> <!-- Search bar-->
+                        <ColumnDefinition Width="Auto" />
+                        <!-- Create button -->
+                        <ColumnDefinition Width="*" />
+                        <!-- Search bar-->
                     </Grid.ColumnDefinitions>
                     <Button x:Name="CreateUserButton" Click="CreateUserButton_Click"
                             Content="Create" Padding="7 3" Margin="5 3" />
@@ -53,19 +55,28 @@
                             <DataTemplate>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="30" /> <!-- Photo -->
-                                        <ColumnDefinition SharedSizeGroup="NameColumn" Width="Auto"/> <!-- Name -->
-                                        <ColumnDefinition SharedSizeGroup="RoleColumn" Width="Auto"/> <!-- Role -->
-                                        <ColumnDefinition SharedSizeGroup="EmailColumn" Width="Auto"/> <!-- Email -->
-                                        <ColumnDefinition Width="Auto"/> <!-- Edit -->
-                                        <ColumnDefinition Width="Auto"/> <!-- Delete -->
+                                        <!-- Photo -->
+                                        <ColumnDefinition Width="30" />
+                                        <!-- First Name -->
+                                        <ColumnDefinition SharedSizeGroup="FirstNameColumn" Width="Auto"/>
+                                        <!-- Last Name -->
+                                        <ColumnDefinition SharedSizeGroup="LastNameColumn" Width="Auto"/>
+                                        <!-- Role -->
+                                        <ColumnDefinition SharedSizeGroup="RoleColumn" Width="Auto"/>
+                                        <!-- Email -->
+                                        <ColumnDefinition SharedSizeGroup="EmailColumn" Width="Auto"/>
+                                        <!-- Edit -->
+                                        <ColumnDefinition Width="Auto"/>
+                                        <!-- Delete -->
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <Image />
-                                    <TextBlock Grid.Column="1" Text="{Binding Name}" Margin="0 0 5 0" />
-                                    <TextBlock Grid.Column="2" Text="{Binding Role.Name}" Margin="0 0 5 0" />
-                                    <TextBlock Grid.Column="3" Text="{Binding Email}" Margin="0 0 5 0" />
-                                    <Button Grid.Column="4" Content=" Edit " Margin="0 0 5 0" />
-                                    <Button Grid.Column="5" Content=" Delete " />
+                                    <TextBlock Grid.Column="1" Text="{Binding FirstName}" Margin="0 0 10 0" />
+                                    <TextBlock Grid.Column="2" Text="{Binding LastName}" Margin="0 0 10 0" />
+                                    <TextBlock Grid.Column="3" Text="{Binding Role}" Margin="0 0 10 0" />
+                                    <TextBlock Grid.Column="4" Text="{Binding Email}" Margin="0 0 10 0" />
+                                    <Button Grid.Column="5" Content=" Edit " Margin="0 0 10 0" />
+                                    <Button Grid.Column="6" Content=" Delete " />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -85,5 +96,5 @@
             </TabItem>
         </TabControl>
     </Grid>
-    
+
 </Window>

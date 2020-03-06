@@ -41,6 +41,7 @@ namespace KreemMachine
         private void LogInButton_Click(object sender, RoutedEventArgs e)
         {
 
+
             //If the thread initializing users hasn't yet finished
             //users might still be null, hence safe navigation operator ?.
             var user = users?.AuthenticateByCredentials(Email, Password);
