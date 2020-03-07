@@ -1,4 +1,6 @@
-﻿using System;
+﻿using KreemMachineLibrary.Models;
+using KreemMachineLibrary.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +21,33 @@ namespace KreemMachine
     /// </summary>
     public partial class CreateUserWindow : Window
     {
+
+        UserService users = new UserService();
+
         public CreateUserWindow()
         {
             InitializeComponent();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            RoleComboBox.ItemsSource = Enum.GetValues(typeof(Role));
+            RoleComboBox.SelectedItem = Role.Employee;
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var user = new User(
+                FirstNameTextBox.Text,
+                LastNameTextBox.Text,
+                EmailTextBox.Text,
+                (Role)RoleComboBox.SelectedItem,
+                float.Parse(WageTextBox.Text),
+                BirthDatePicker.SelectedDate,
+                AdressTextBox.Text,
+                PhoneTextBox.Text);
+
+            users.Save(user);
         }
     }
 }

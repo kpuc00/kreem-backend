@@ -24,7 +24,7 @@ namespace KreemMachineLibrary.Services
            // db.Roles.Load();
         }
 
-        public User CreateAndSave(User user)
+        public User Save(User user)
         {
             HashPassword(user);
             user = SaveToDatabase(user);
@@ -33,7 +33,8 @@ namespace KreemMachineLibrary.Services
 
         internal void HashPassword(User user)
         {
-            user.PasswordHash = PasswordHashHelper.CreateHash(user.PasswordHash);
+            // TODO: Use randomly generated passwords latter
+            user.PasswordHash = PasswordHashHelper.CreateHash("qweqwe");
         }
 
         internal User SaveToDatabase (User user)

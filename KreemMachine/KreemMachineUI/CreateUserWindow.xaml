@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KreemMachine"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Title="Create user" Height="600" Width="400">
     <Window.Resources>
         <Style x:Key="FormElementBase"  TargetType="{x:Type FrameworkElement}">
@@ -15,6 +16,7 @@
         <Style TargetType="TextBox" BasedOn="{StaticResource FormElementBase}"  />
         <Style TargetType="ComboBox" BasedOn="{StaticResource FormElementBase}"  />
         <Style TargetType="Button" BasedOn="{StaticResource FormElementBase}"  />
+        <Style TargetType="DatePicker" BasedOn="{StaticResource FormElementBase}"  />
 
 
     </Window.Resources>
@@ -24,6 +26,7 @@
             <RowDefinition Height="200" />
             
             <!-- All fields-->
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -48,21 +51,26 @@
         <TextBlock Text="Email" Grid.Row="3" HorizontalAlignment="Right" />
         <TextBlock Text="Role"  Grid.Row="4" HorizontalAlignment="Right" />
         <TextBlock Text="Hourly wage" Grid.Row="5" HorizontalAlignment="Right" />
-        <TextBlock Text="Address"  Grid.Row="6" HorizontalAlignment="Right" />
-        <TextBlock Text="Phone number"  Grid.Row="7" HorizontalAlignment="Right" />
+        <TextBlock Text="Birth date" Grid.Row="6" HorizontalAlignment="Right" />
+        <TextBlock Text="Address"  Grid.Row="7" HorizontalAlignment="Right" />
+        <TextBlock Text="Phone number"  Grid.Row="8" HorizontalAlignment="Right" />
 
 
         <TextBox x:Name="FirstNameTextBox" Grid.Row="1" Grid.Column="2"  />
         <TextBox x:Name="LastNameTextBox" Grid.Row="2" Grid.Column="2"  />
         <TextBox x:Name="EmailTextBox" Grid.Row="3" Grid.Column="2" />
-        <ComboBox Name="RoleComboBox" Grid.Row="4" Grid.Column="2" />
+        <ComboBox Name="RoleComboBox" Grid.Row="4" Grid.Column="2"
+                  Padding="0" FontSize="14" FontWeight="Medium" />
         <TextBox x:Name="WageTextBox" Grid.Row="5" Grid.Column="2" />
-        <TextBox x:Name="AdressTextBox" Grid.Row="6" Grid.Column="2"/>
-        <TextBox x:Name="PhoneTextBox" Grid.Row="7" Grid.Column="2" />
+        <DatePicker x:Name="BirthDatePicker" Grid.Row="6" Grid.Column="2"
+                    Padding="0" FontSize="14" FontWeight="SemiBold"/>
+        <TextBox x:Name="AdressTextBox" Grid.Row="7" Grid.Column="2"/>
+        <TextBox x:Name="PhoneTextBox" Grid.Row="8" Grid.Column="2" />
 
 
         <Button Grid.Row="20" Grid.ColumnSpan="3" Content="Save" 
-                HorizontalAlignment="Center" Padding="15 0" />
+                HorizontalAlignment="Center" Padding="15 0"
+                Name="SaveButton" Click="SaveButton_Click"/>
 
     </Grid>
 </Window>

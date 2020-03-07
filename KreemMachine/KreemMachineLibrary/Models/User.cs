@@ -50,6 +50,9 @@ namespace KreemMachineLibrary.Models
         [Column("hourly_wage"), Required]
         public float HourlyWage { get; set; }
 
+        [Column("birth_date"), Required]
+        public DateTime? Birthdate { get; set; }
+
         public string Address { get; set; }
 
         [Column("phone_number")]
@@ -59,15 +62,15 @@ namespace KreemMachineLibrary.Models
 
         public User() { }
 
-        public User(string firstName, string lastName, string email, string passwordHash, Role role,
-                    float hourlyWage, string adress = null, string phoneNumber = null)
+        public User(string firstName, string lastName, string email, Role role, float hourlyWage, 
+                    DateTime? birthdate, string adress = null, string phoneNumber = null)
         {
             FirstName = firstName;
             LastName = lastName;
             Email = email;
-            PasswordHash = passwordHash;
             Role = role;
             HourlyWage = hourlyWage;
+            Birthdate = birthdate;
             Address = adress;
             PhoneNumber = phoneNumber;
         }
