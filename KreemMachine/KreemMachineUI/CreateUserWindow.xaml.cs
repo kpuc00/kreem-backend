@@ -49,6 +49,8 @@ namespace KreemMachine
                 PhoneTextBox.Text);
 
             users.Save(user);
+
+            MessageBox.Show($"Your password is {user.Password}");
         }
 
 
