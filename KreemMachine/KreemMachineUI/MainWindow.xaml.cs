@@ -43,5 +43,10 @@ namespace KreemMachine
             var window = new CreateUserWindow();
             window.Show();
         }
+
+        private void DeleteUserButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }

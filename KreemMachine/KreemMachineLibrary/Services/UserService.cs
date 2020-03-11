@@ -73,7 +73,16 @@ namespace KreemMachineLibrary.Services
             return db.Users.Local;
         }
 
-       
+        public string GenerateEmployeeEmail(string first, string last) {
+            string firstLetter = first[0].ToString().ToLower();
+            string lastLower = last.ToLower();
+
+            string employeeEmail = firstLetter + "." + lastLower + "@mediabazaar.nl";
+            
+            return employeeEmail;
+        }
+
+
 
     }
 

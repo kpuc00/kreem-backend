@@ -47,7 +47,7 @@
                         <!-- Search bar-->
                     </Grid.ColumnDefinitions>
                     <Button x:Name="CreateUserButton" Click="CreateUserButton_Click"
-                            Content="Create" Padding="7 3" Margin="5 3" />
+                            Content="Create" Padding="7 3" Margin="5,3,5,0" Height="24" VerticalAlignment="Top" />
                     <TextBox Grid.Column="1" Margin="3" />
                     <ListBox Grid.Row="1" Grid.ColumnSpan="2"  x:Name="AllUsersListBox" 
                              TextBlock.FontSize="18" Grid.IsSharedSizeScope="True">
@@ -72,11 +72,11 @@
                                     </Grid.ColumnDefinitions>
                                     <Image />
                                     <TextBlock Grid.Column="1" Text="{Binding FirstName}" Margin="0 0 10 0" />
-                                    <TextBlock Grid.Column="2" Text="{Binding LastName}" Margin="0 0 10 0" />
+                                    <TextBlock Grid.Column="2"  Text="{Binding LastName}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="3" Text="{Binding Role}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="4" Text="{Binding Email}" Margin="0 0 10 0" />
                                     <Button Grid.Column="5" Content=" Edit " Margin="0 0 10 0" />
-                                    <Button Grid.Column="6" Content=" Delete " />
+                                    <Button Grid.Column="6" Content=" Delete " Click="DeleteUserButton_Click" />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
