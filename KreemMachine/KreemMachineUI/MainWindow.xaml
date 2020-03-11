@@ -94,7 +94,17 @@
 
             <!--Schedule-->
             <TabItem Header="Schedule">
-                <TextBlock Text="Interface for schedule" />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <local:MonthPicker x:Name="ScheduleMonthPicker" Grid.Row="0" 
+                                       HorizontalAlignment="Left" SelectedMonthChanged="ScheduleMonthPicker_SelectedMonthChanged" />
+
+                </Grid>
             </TabItem>
 
             <!--Statistics-->

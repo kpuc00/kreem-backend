@@ -52,5 +52,18 @@ namespace KreemMachine
             userService.DeleteEmployee(user);
 
         }
+
+
+        #region Schedule
+
+        private void ScheduleMonthPicker_SelectedMonthChanged(object sender, DateTime month)
+        {
+            Console.WriteLine(month.ToString());
+        }
+
+
+        #endregion
+
+
     }
 }
