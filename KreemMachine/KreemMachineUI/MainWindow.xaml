@@ -93,7 +93,7 @@
             </TabItem>
 
             <!--Schedule-->
-            <TabItem Header="Schedule">
+            <TabItem Header="Schedule" Loaded="ScheduleTab_Loaded">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
@@ -103,7 +103,14 @@
 
                     <local:MonthPicker x:Name="ScheduleMonthPicker" Grid.Row="0" 
                                        HorizontalAlignment="Left" SelectedMonthChanged="ScheduleMonthPicker_SelectedMonthChanged" />
-
+                  
+                    <ListBox x:Name="ScheduleListBox" Grid.Row="1">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="7" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
                 </Grid>
             </TabItem>
 

@@ -1,4 +1,5 @@
-﻿using KreemMachineLibrary.Models;
+﻿using KreemMachine.ViewModels;
+using KreemMachineLibrary.Models;
 using KreemMachineLibrary.Services;
 using System;
 using System.Collections.Generic;
@@ -58,7 +59,29 @@ namespace KreemMachine
 
         private void ScheduleMonthPicker_SelectedMonthChanged(object sender, DateTime month)
         {
-            Console.WriteLine(month.ToString());
+
+            var x = new List<ScheduleDayViewModel>();
+
+
+            int skips = (int)month.DayOfWeek - 1;
+            skips = (skips == -1) ? 6 : skips;
+
+            for (int i = 0; i < skips; i++)
+            {
+                x.Add(default);
+            }
+
+            for (var day = month; day < month.AddMonths(1); day = day.AddDays(1))
+                x.Add(new ScheduleDayViewModel(day));
+
+            
+
+            ScheduleListBox.ItemsSource = x;
+
+        }
+        private void ScheduleTab_Loaded(object sender, RoutedEventArgs e)
+        {
+            ScheduleMonthPicker_SelectedMonthChanged(sender, ScheduleMonthPicker.SelectedMonth);
         }
 
 
