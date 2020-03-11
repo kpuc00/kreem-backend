@@ -7,7 +7,11 @@
         mc:Ignorable="d"
         Title="Kreem Machine" Height="450" Width="800">
     <Grid>
-        <TabControl x:Name="MainContent" TabStripPlacement="Left">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="19*"/>
+            <RowDefinition Height="65*"/>
+        </Grid.RowDefinitions>
+        <TabControl x:Name="MainContent" TabStripPlacement="Left" Margin="10,10,-0.4,0" Grid.RowSpan="2">
             <!--Style to make the TabHeaders go to left and look somewhat nice-->
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
@@ -50,10 +54,11 @@
                             Content="Create" Padding="7 3" Margin="5,3,5,0" Height="24" VerticalAlignment="Top" />
                     <TextBox Grid.Column="1" Margin="3" />
                     <ListBox Grid.Row="1" Grid.ColumnSpan="2"  x:Name="AllUsersListBox" 
-                             TextBlock.FontSize="18" Grid.IsSharedSizeScope="True">
+                             TextBlock.FontSize="18" Grid.IsSharedSizeScope="True" 
+                             HorizontalContentAlignment="Stretch">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Grid>
+                                <Grid VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
                                         <!-- Photo -->
                                         <ColumnDefinition Width="30" />
@@ -65,18 +70,21 @@
                                         <ColumnDefinition SharedSizeGroup="RoleColumn" Width="Auto"/>
                                         <!-- Email -->
                                         <ColumnDefinition SharedSizeGroup="EmailColumn" Width="Auto"/>
+                                        <!--Empty column for ui purpose-->
+                                        <ColumnDefinition Width="*"/>
                                         <!-- Edit -->
-                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="auto"/>
                                         <!-- Delete -->
-                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Image />
+                                    <Image Grid.Column="0" />
                                     <TextBlock Grid.Column="1" Text="{Binding FirstName}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="2"  Text="{Binding LastName}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="3" Text="{Binding Role}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="4" Text="{Binding Email}" Margin="0 0 10 0" />
-                                    <Button Grid.Column="5" Content=" Edit " Margin="0 0 10 0" />
-                                    <Button Grid.Column="6" Content=" Delete " Click="DeleteUserButton_Click" />
+                                    <TextBlock Grid.Column="5" Margin="0 0 10 0" />
+                                    <Button Grid.Column="6" Content=" Edit " Margin="0 0 10 0" />
+                                    <Button Grid.Column="7" Content=" Delete " Click="DeleteUserButton_Click" />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
