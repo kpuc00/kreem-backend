@@ -46,7 +46,11 @@ namespace KreemMachine
 
         private void DeleteUserButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            var button = sender as Button;
+            var user = button.DataContext as User;
+
+            userService.DeleteEmployee(user);
+
         }
     }
 }

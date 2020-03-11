@@ -73,6 +73,11 @@ namespace KreemMachineLibrary.Services
             return db.Users.Local;
         }
 
+        public void DeleteEmployee(User user) {
+            db.Users.Remove(user);
+            db.SaveChanges();
+        }
+
         public string GenerateEmployeeEmail(string first, string last) {
             string firstLetter = first[0].ToString().ToLower();
             string lastLower = last.ToLower();
