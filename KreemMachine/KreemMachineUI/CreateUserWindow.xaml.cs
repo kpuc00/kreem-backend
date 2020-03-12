@@ -43,10 +43,10 @@ namespace KreemMachine
                 LastNameTextBox.Text,
                 EmailTextBox.Text,
                 (Role)RoleComboBox.SelectedItem,
-                float.Parse(WageTextBox.Text),
+                float.Parse(HourlyWageTextBox.Text),
                 BirthDatePicker.SelectedDate,
-                AdressTextBox.Text,
-                PhoneTextBox.Text);
+                AddressTextBox.Text,
+                PhoneNumberTextBox.Text);
 
             users.Save(user);
 

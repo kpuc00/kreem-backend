@@ -6,71 +6,63 @@
         xmlns:local="clr-namespace:KreemMachine"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="Create user" Height="600" Width="400">
+        Title="Create user" Height="700" Width="500">
     <Window.Resources>
         <Style x:Key="FormElementBase"  TargetType="{x:Type FrameworkElement}">
             <Setter Property="Margin" Value="0 7" />
         </Style>
 
         <Style TargetType="TextBlock" BasedOn="{StaticResource FormElementBase}"  />
-        <Style TargetType="TextBox" BasedOn="{StaticResource FormElementBase}"  />
+        <Style TargetType="TextBox"   BasedOn="{StaticResource FormElementBase}"/>
         <Style TargetType="ComboBox" BasedOn="{StaticResource FormElementBase}"  />
         <Style TargetType="Button" BasedOn="{StaticResource FormElementBase}"  />
         <Style TargetType="DatePicker" BasedOn="{StaticResource FormElementBase}"  />
 
 
     </Window.Resources>
-    <Grid Margin="20 0" TextElement.FontSize="18" >
+    <Grid Margin="20" TextElement.FontSize="18">
+
         <Grid.RowDefinitions>
-            <!-- Image selection -->
-            <RowDefinition Height="200" />
-            
-            <!-- All fields-->
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
- 
+            <RowDefinition Height="200"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <!-- Labels -->
-            <ColumnDefinition Width="2*" />
-            <!-- Margin -->
-            <ColumnDefinition Width="10" IsEnabled="False"/>
-            <!-- Fields -->
-            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="First name" Grid.Row="1" HorizontalAlignment="Right" />
-        <TextBlock Text="Last name" Grid.Row="2" HorizontalAlignment="Right" />
-        <TextBlock Text="Email" Grid.Row="3" HorizontalAlignment="Right" />
-        <TextBlock Text="Role"  Grid.Row="4" HorizontalAlignment="Right" />
-        <TextBlock Text="Hourly wage" Grid.Row="5" HorizontalAlignment="Right" />
-        <TextBlock Text="Birth date" Grid.Row="6" HorizontalAlignment="Right" />
-        <TextBlock Text="Address"  Grid.Row="7" HorizontalAlignment="Right" />
-        <TextBlock Text="Phone number"  Grid.Row="8" HorizontalAlignment="Right" />
+        <!--Lables on left-->
+        <TextBlock Text="Picture here" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 10 0"/>
+        <TextBlock Text="Fist Name:"  Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
+        <TextBlock Text="Last Name:" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
+        <TextBlock Text="Email:" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
+        <TextBlock Text="Role:" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
+        <TextBlock Text="Hourly Wage:" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
+        <TextBlock Text="Birth Date:" Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
+        <TextBlock Text="Address:" Grid.Column="0" Grid.Row="7" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
+        <TextBlock Text="Phone Number:" Grid.Column="0" Grid.Row="8" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
 
+        <!--Input fields on right-->
+        <TextBox Name="FirstNameTextBox" Grid.Row="1" Grid.Column="1" Margin="5"/>
+        <TextBox Name="LastNameTextBox" Grid.Row="2" Grid.Column="1" Margin="5"/>
+        <TextBox Name="EmailTextBox" Grid.Row="3" Grid.Column="1" IsEnabled="False" Margin="5"/>
+        <ComboBox Name="RoleComboBox" Grid.Row="4" Grid.Column="1" Margin="5"/>
+        <TextBox Name="HourlyWageTextBox" Grid.Row="5" Grid.Column="1" Margin="5"/>
+        <DatePicker Name="BirthDatePicker" Grid.Row="6" Grid.Column="1" Margin="5"/>
+        <TextBox Name="AddressTextBox" Grid.Row="7" Grid.Column="1" Margin="5"/>
+        <TextBox Name="PhoneNumberTextBox" Grid.Row="8" Grid.Column="1" Margin="5"/>
 
-        <TextBox x:Name="FirstNameTextBox" Grid.Row="1" Grid.Column="2" KeyUp="FirstNameTextBox_KeyUp"/>
-        <TextBox x:Name="LastNameTextBox" Grid.Row="2" Grid.Column="2"  KeyUp="LastNameTextBox_KeyUp"/>
-        <TextBox x:Name="EmailTextBox" IsReadOnly="True" Grid.Row="3" Grid.Column="2" />
-        <ComboBox Name="RoleComboBox" Grid.Row="4" Grid.Column="2"
-                  Padding="0" FontSize="14" FontWeight="Medium" />
-        <TextBox x:Name="WageTextBox" Grid.Row="5" Grid.Column="2" />
-        <DatePicker x:Name="BirthDatePicker" Grid.Row="6" Grid.Column="2"
-                    Padding="0" FontSize="14" FontWeight="SemiBold"/>
-        <TextBox x:Name="AdressTextBox" Grid.Row="7" Grid.Column="2"/>
-        <TextBox x:Name="PhoneTextBox" Grid.Row="8" Grid.Column="2" />
-
-
-        <Button Grid.Row="20" Grid.ColumnSpan="3" Content="Save" 
-                HorizontalAlignment="Center" Padding="15 0"
-                Name="SaveButton" Click="SaveButton_Click"/>
+        <!--Button on the bottom-->
+        <Button Grid.Row="20" Margin="50"  Width="200" Height="60"  Grid.ColumnSpan="2" Content="Save" 
+                HorizontalAlignment="Center" Name="SaveButton" Click="SaveButton_Click"/>
 
     </Grid>
 </Window>
