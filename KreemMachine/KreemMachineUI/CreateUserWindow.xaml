@@ -56,8 +56,8 @@
         <TextBlock Text="Phone number"  Grid.Row="8" HorizontalAlignment="Right" />
 
 
-        <TextBox x:Name="FirstNameTextBox" Grid.Row="1" Grid.Column="2" KeyDown="FirstNameTextBox_KeyDown" />
-        <TextBox x:Name="LastNameTextBox" Grid.Row="2" Grid.Column="2"  KeyDown="LastNameTextBox_KeyDown" KeyUp="FirstNameTextBox_KeyDown" />
+        <TextBox x:Name="FirstNameTextBox" Grid.Row="1" Grid.Column="2" KeyUp="FirstNameTextBox_KeyUp"/>
+        <TextBox x:Name="LastNameTextBox" Grid.Row="2" Grid.Column="2"  KeyUp="LastNameTextBox_KeyUp"/>
         <TextBox x:Name="EmailTextBox" IsReadOnly="True" Grid.Row="3" Grid.Column="2" />
         <ComboBox Name="RoleComboBox" Grid.Row="4" Grid.Column="2"
                   Padding="0" FontSize="14" FontWeight="Medium" />

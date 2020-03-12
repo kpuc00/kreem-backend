@@ -12,7 +12,7 @@ namespace KreemMachineLibrary.Services
 {
     public class UserService
     {
-
+        
         DataBaseContext db = Globals.db;
 
         public UserService()
@@ -49,7 +49,7 @@ namespace KreemMachineLibrary.Services
         {
             var fromDb = db.Users.Add(user);
             db.SaveChanges();
-
+            
             return fromDb;
         }
 
@@ -81,6 +81,11 @@ namespace KreemMachineLibrary.Services
             return db.Users.Local;
         }
 
+        public void UpdateEmployee(User user) {
+            db.Entry(user).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+
         public void DeleteEmployee(User user) {
             db.Users.Remove(user);
             db.SaveChanges();
@@ -93,6 +98,15 @@ namespace KreemMachineLibrary.Services
             string employeeEmail = firstLetter + "." + lastLower + "@mediabazaar.nl";
             
             return employeeEmail;
+        }
+
+        public ObservableCollection<User> FilterEmployees(string p) {
+            db.Users.Load();
+            if (!String.IsNullOrWhiteSpace(p)) {
+                return new ObservableCollection<User>( db.Users.Local.Where(u => u.FirstName.ToLower().Contains(p.ToLower())));
+            }
+            return db.Users.Local;
+            
         }
 
 

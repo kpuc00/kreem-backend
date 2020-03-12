@@ -31,11 +31,16 @@ namespace KreemMachine
             InitializeComponent();
         }
 
-
+        
         private void TabItem_Loaded(object sender, RoutedEventArgs e)
         {
             AllUsers = userService.GetAll();
             AllUsersListBox.ItemsSource = AllUsers;
+        }
+
+        private void SearchTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            AllUsersListBox.ItemsSource = userService.FilterEmployees(SearchTextBox.Text);
         }
 
         private void CreateUserButton_Click(object sender, RoutedEventArgs e)
@@ -51,6 +56,15 @@ namespace KreemMachine
 
             userService.DeleteEmployee(user);
 
+        }
+
+        private void EditUserButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var user = button.DataContext as User;
+
+            var window = new EditUserWindow(user, userService);
+            window.Show();
         }
     }
 }

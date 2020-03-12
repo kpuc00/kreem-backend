@@ -55,7 +55,7 @@ namespace KreemMachine
 
 
 
-        private void FirstNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void FirstNameTextBox_KeyUp(object sender, KeyEventArgs e)
         {
             string[] tempFirstLastName = CheckFirstLastNameTextBox();
             string firstName = tempFirstLastName[0];
@@ -65,7 +65,7 @@ namespace KreemMachine
             EmailTextBox.Text = employeeEmail;
         }
 
-        private void LastNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        private void LastNameTextBox_KeyUp(object sender, KeyEventArgs e)
         {
             string[] tempFirstLastName = CheckFirstLastNameTextBox();
             string firstName = tempFirstLastName[0];
