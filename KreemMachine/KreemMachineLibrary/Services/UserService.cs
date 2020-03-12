@@ -33,11 +33,9 @@ namespace KreemMachineLibrary.Services
 
         internal void HashPassword(User user)
         {
-            // TODO: Use randomly generated passwords later
             Random random = new Random();
-            int length = 10;
             var randomPassword = "";
-            for (var i = 0; i < length; i++)
+            for (var i = 0; i < 10; i++)
             {
                 randomPassword += ((char)(random.Next(1, 26) + 64)).ToString();
             }
