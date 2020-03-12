@@ -26,6 +26,7 @@ namespace KreemMachine
         ObservableCollection<User> AllUsers;
 
         UserService userService = new UserService();
+        ScheduleService scheduleService = new ScheduleService();
 
         public MainWindow()
         {
@@ -60,29 +61,66 @@ namespace KreemMachine
         private void ScheduleMonthPicker_SelectedMonthChanged(object sender, DateTime month)
         {
 
-            var x = new List<ScheduleDayViewModel>();
+            var days = new List<ScheduleDayViewModel>();
 
-
+            // DayOfWeek returns 0 for sunday, 1 for monday, 2 for toesdat and so on
             int skips = (int)month.DayOfWeek - 1;
             skips = (skips == -1) ? 6 : skips;
 
             for (int i = 0; i < skips; i++)
-            {
-                x.Add(default);
-            }
-
-            for (var day = month; day < month.AddMonths(1); day = day.AddDays(1))
-                x.Add(new ScheduleDayViewModel(day));
-
+                days.Add(null);
             
 
-            ScheduleListBox.ItemsSource = x;
+            for (var day = month; day < month.AddMonths(1); day = day.AddDays(1))
+                days.Add(new ScheduleDayViewModel(day));
+
+            IEnumerable<ScheduledShift> shifts = scheduleService.GetScheduledShifts(start: month, end: month.AddMonths(1));
+
+            IEnumerator<ScheduleDayViewModel> enumerator = days.GetEnumerator();
+            
+            while(enumerator.Current == null)
+                enumerator.MoveNext();
+
+
+            foreach(var shift in shifts)
+            {
+                f();
+
+                void f()
+                {
+                    if (shift.Date == enumerator.Current.Day)
+                        enumerator.Current.Shifts.Add(shift);
+                    else
+                    {
+                        enumerator.MoveNext();
+                        f();
+                    }
+                }
+
+            }
+
+           
+
+            ScheduleListBox.ItemsSource = days;
 
         }
         private void ScheduleTab_Loaded(object sender, RoutedEventArgs e)
         {
             ScheduleMonthPicker_SelectedMonthChanged(sender, ScheduleMonthPicker.SelectedMonth);
         }
+
+
+        private void ScheduleListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selected = e.AddedItems[0] as ScheduleDayViewModel;
+
+            foreach(var shift in selected.Shifts)
+            {
+                Console.WriteLine(shift.Shift.Name, shift.Date);
+            }
+            Console.WriteLine();
+        }
+
 
 
         #endregion

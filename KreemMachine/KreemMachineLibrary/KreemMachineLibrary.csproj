@@ -85,6 +85,7 @@
     <Compile Include="SecurityContext.cs" />
     <Compile Include="Helpers\PasswordHashHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ScheduleService.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>

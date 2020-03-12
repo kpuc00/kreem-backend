@@ -10,18 +10,18 @@ namespace KreemMachine.ViewModels
     public class ScheduleDayViewModel
     {
 
-        public DateTime day { get; set; }
+        public DateTime Day { get; set; }
 
-        public List<ScheduledShift> Shifts { get; set; }
+        public IList<ScheduledShift> Shifts { get; set; } = new List<ScheduledShift>();
 
         public ScheduleDayViewModel(DateTime day)
         {
-            this.day = day;
+            this.Day = day;
         }
 
         public override string ToString()
         {
-            return day.Day.ToString();
+            return Day.Day.ToString();
         }
 
     }

@@ -57,7 +57,7 @@
                              TextBlock.FontSize="18" Grid.IsSharedSizeScope="True" 
                              HorizontalContentAlignment="Stretch">
                         <ListBox.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate >
                                 <Grid VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
                                         <!-- Photo -->
@@ -104,12 +104,19 @@
                     <local:MonthPicker x:Name="ScheduleMonthPicker" Grid.Row="0" 
                                        HorizontalAlignment="Left" SelectedMonthChanged="ScheduleMonthPicker_SelectedMonthChanged" />
                   
-                    <ListBox x:Name="ScheduleListBox" Grid.Row="1">
+                    <ListBox x:Name="ScheduleListBox" Grid.Row="1"
+                             SelectionChanged="ScheduleListBox_SelectionChanged"
+                             SelectionMode="Single">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <UniformGrid Columns="7" />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate >
+                                <TextBlock Text="{Binding Day.Day}"  />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
             </TabItem>

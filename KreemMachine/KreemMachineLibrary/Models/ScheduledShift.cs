@@ -31,5 +31,9 @@ namespace KreemMachineLibrary.Models
             Date = date;
             Shift = shift;
         }
+
+        public ScheduledShift()
+        {
+        }
     }
 }
