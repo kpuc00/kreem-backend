@@ -95,13 +95,39 @@
 
             <!--Statistics-->
             <TabItem Header="Statistics">
-                <TextBlock Margin="1,-5,-1.6,6.4" Padding="5" ><InlineUIContainer>
+                <TextBlock Margin="1,0,6.4,5.4" Padding="5" ><InlineUIContainer>
                         <Grid Height="406" Width="657">
-                        <CheckBox Content="Morning" Margin="308,24,176,360"/>
-                        <CheckBox Content="Noon" Margin="399,24,103,369"/>
-                        <CheckBox Content="Evening" Margin="478,23,10,369"/>
-                        <DatePicker Margin="95,14,443,369"/>
-        <DataGrid x:Name="dataGridStatistics" HorizontalAlignment="Left" Margin="10,65,0,0" VerticalAlignment="Top" Height="331" Width="637"/>
+                        <Grid Margin="10">
+                            <TabControl TabStripPlacement="Left" HorizontalAlignment="Left" Height="414" VerticalAlignment="Top" Width="666" Margin="-13,-12,-16.2,-15.6">
+                                <TabItem Header="Resources per shift">
+                                    <Grid Background="White" Margin="0,0,11.4,0">
+                                        <DatePicker HorizontalAlignment="Left" Margin="52,10,0,0" VerticalAlignment="Top"/>
+                                        <CheckBox Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0"/>
+                                        <CheckBox Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336"/>
+                                        <CheckBox Content="Evening" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top"/>
+                                        <DataGrid Height="348" Margin="0,38,10,0" VerticalAlignment="Top"/>
+                                    </Grid>
+                                </TabItem>
+                                <TabItem Header="Resources per month">
+                                    <Grid Background="White" Margin="0,0,11.4,0">
+                                        <DatePicker HorizontalAlignment="Left" Margin="52,10,0,0" VerticalAlignment="Top"/>
+                                        <CheckBox Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0"/>
+                                        <CheckBox Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336"/>
+                                        <CheckBox Content="Evening" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top"/>
+                                        <DataGrid Height="348" Margin="0,38,10,0" VerticalAlignment="Top"/>
+                                    </Grid>
+                                </TabItem>
+                                <TabItem Header="Employee statistics">
+                                    <Grid Background="White" Margin="0,0,11.4,0">
+                                        <DatePicker HorizontalAlignment="Left" Margin="52,10,0,0" VerticalAlignment="Top"/>
+                                        <CheckBox Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0"/>
+                                        <CheckBox Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336"/>
+                                        <CheckBox Content="Evening" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top"/>
+                                        <DataGrid Height="348" Margin="0,38,10,0" VerticalAlignment="Top"/>
+                                    </Grid>
+                                </TabItem>
+                            </TabControl>
+                        </Grid>
                         </Grid>
                     </InlineUIContainer></TextBlock>
 
