@@ -106,7 +106,6 @@ namespace KreemMachineLibrary.Services
                 return new ObservableCollection<User>( db.Users.Local.Where(u => u.FirstName.ToLower().Contains(p.ToLower())));
             }
             return db.Users.Local;
-            
         }
 
 
