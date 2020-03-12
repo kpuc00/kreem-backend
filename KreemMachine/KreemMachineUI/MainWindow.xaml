@@ -97,27 +97,48 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
-                        <RowDefinition Height="*" />
                         <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
+                    <!-- Month picker-->
                     <local:MonthPicker x:Name="ScheduleMonthPicker" Grid.Row="0" 
-                                       HorizontalAlignment="Left" SelectedMonthChanged="ScheduleMonthPicker_SelectedMonthChanged" />
-                  
-                    <ListBox x:Name="ScheduleListBox" Grid.Row="1"
+                                       HorizontalAlignment="Center" SelectedMonthChanged="ScheduleMonthPicker_SelectedMonthChanged" />
+                    
+                    <!-- Calendar Headers -->
+                    <UniformGrid Grid.Row="1" Rows="1" TextBlock.FontSize="18" TextBlock.TextAlignment="Center">
+                        <TextBlock Text="Mon"  />
+                        <TextBlock Text="Tue" />
+                        <TextBlock Text="Wed" />
+                        <TextBlock Text="Thu" />
+                        <TextBlock Text="Fri" />
+                        <TextBlock Text="Sat" />
+                        <TextBlock Text="Sun" />
+                    </UniformGrid>
+                    
+                    <!-- Calendar -->
+                    <ListBox x:Name="ScheduleListBox" Grid.Row="2"
                              SelectionChanged="ScheduleListBox_SelectionChanged"
-                             SelectionMode="Single">
+                             SelectionMode="Single" 
+                             HorizontalContentAlignment="Stretch"
+                             VerticalContentAlignment="Center">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <UniformGrid Columns="7" />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
-                            <DataTemplate >
-                                <TextBlock Text="{Binding Day.Day}"  />
+                            <DataTemplate>
+                                <Grid Background="{Binding StatusBackgroundColor}" Margin="-4 -13">
+                                    <TextBlock Text="{Binding Day.Day}" HorizontalAlignment="Center" />
+                                </Grid>
+                                
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+
+                    <!-- TODO: Add legend -->
                 </Grid>
             </TabItem>
 
