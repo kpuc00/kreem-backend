@@ -43,5 +43,20 @@ namespace KreemMachine
             var window = new CreateUserWindow();
             window.Show();
         }
+
+        private void TabItem_Loaded_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TabItem_Loaded_2(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TabItem_Loaded_3(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
