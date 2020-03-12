@@ -115,7 +115,7 @@
                             <TabControl TabStripPlacement="Left" HorizontalAlignment="Left" Height="414" VerticalAlignment="Top" Width="666" Margin="-13,-12,-16.2,-15.6">
                                 <TabItem Header="Resources per shift">
                                     <Grid Background="White" Margin="0,0,11.4,0">
-                                        <DatePicker HorizontalAlignment="Left" Margin="52,10,0,0" VerticalAlignment="Top"/>
+                                        <local:MonthPicker x:Name="StatisticsPerShiftMonthPicker" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedMonthChanged="ScheduleMonthPicker_SelectedMonthChanged" Margin="10,6,0,0" />
                                         <CheckBox Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0"/>
                                         <CheckBox Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336"/>
                                         <CheckBox Content="Evening" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top"/>
@@ -124,7 +124,7 @@
                                 </TabItem>
                                 <TabItem Header="Resources per month">
                                     <Grid Background="White" Margin="0,0,11.4,0">
-                                        <DatePicker HorizontalAlignment="Left" Margin="52,10,0,0" VerticalAlignment="Top"/>
+                                        <local:MonthPicker x:Name="StatisticsPerMonthMonthPicker" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedMonthChanged="ScheduleMonthPicker_SelectedMonthChanged" Margin="10,6,0,0" />
                                         <CheckBox Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0"/>
                                         <CheckBox Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336"/>
                                         <CheckBox Content="Evening" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top"/>
@@ -133,7 +133,7 @@
                                 </TabItem>
                                 <TabItem Header="Employee statistics">
                                     <Grid Background="White" Margin="0,0,11.4,0">
-                                        <DatePicker HorizontalAlignment="Left" Margin="52,10,0,0" VerticalAlignment="Top"/>
+                                        <local:MonthPicker x:Name="EmployeeStatisticsMonthPicker" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedMonthChanged="ScheduleMonthPicker_SelectedMonthChanged" Margin="10,6,0,0" />
                                         <CheckBox Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0"/>
                                         <CheckBox Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336"/>
                                         <CheckBox Content="Evening" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top"/>
