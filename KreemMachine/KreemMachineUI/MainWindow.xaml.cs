@@ -27,6 +27,7 @@ namespace KreemMachine
 
         UserService userService = new UserService();
         ScheduleService scheduleService = new ScheduleService();
+        ShiftService shiftService = new ShiftService();
 
         public MainWindow()
         {
@@ -131,7 +132,17 @@ namespace KreemMachine
             Console.WriteLine();
         }
 
+        private void ScheduleManuallyButton_Click(object sender, EventArgs e)
+        {
+            ManuallyGenerateScheduleTabItem.IsSelected = true;
+            ManualScheduleShiftPicker.AvailableShifts = shiftService.getAllShifts();
 
+        }
+
+        private void ManualScheduleShiftPicker_SelectedShiftChanged(object sender, DateTime SelectedDay, Shift SelectedShift)
+        {
+            Console.WriteLine(SelectedDay.ToString("dd/MM/yyyy ") + SelectedShift.Name);
+        }
 
         #endregion
 

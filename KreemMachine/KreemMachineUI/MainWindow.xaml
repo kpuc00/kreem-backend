@@ -138,10 +138,14 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <!-- Generate Buttons and Legend -->
+                    <!-- Buttons -->
                     <StackPanel Grid.Row="3" HorizontalAlignment="Left" TextBlock.FontSize="16" >
+                        <!-- Auto schedule -->
                         <Button Content="Autogenerate" Margin="7" Padding="7 3" />
-                        <Button Content="Schedule manually" Margin="7"  Padding="7 3"  />
+                        
+                        <!-- Manually schedule -->
+                        <Button Content="Schedule manually" Click="ScheduleManuallyButton_Click"
+                                Margin="7"  Padding="7 3"  />
                     </StackPanel>
 
                     <!-- TODO: extract the colors somewhere else and bind them here and to the backend -->
@@ -208,6 +212,19 @@
                         </Grid>
                     </InlineUIContainer></TextBlock>
 
+            </TabItem>
+
+            <!--Manually generate schedule-->
+            <TabItem Visibility="Hidden" x:Name="ManuallyGenerateScheduleTabItem" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <local:ScheduleShiftPicker x:Name="ManualScheduleShiftPicker" SelectedShiftChanged="ManualScheduleShiftPicker_SelectedShiftChanged"
+                                               HorizontalAlignment="Left"/>
+
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>
