@@ -35,5 +35,9 @@ namespace KreemMachineLibrary.Models
             HourlyWage = user.HourlyWage;
 
         }
+
+        public UserScheduledShift()
+        {
+        }
     }
 }

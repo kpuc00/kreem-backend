@@ -19,12 +19,31 @@ namespace KreemMachine.ViewModels
         {
             get
             {
-                if (Shifts.Count == 0)
+                if (IsUnscheduled())
                     return Brushes.Transparent;
+
+                else if (IsUnderstaffed())
+                    return Brushes.Red;
+
+                else if (IsOverstaffed())
+                    return Brushes.Yellow;
+
                 else
                     return Brushes.LawnGreen;
+
             }
         }
+
+        private bool IsUnscheduled() =>
+            Shifts.Count == 0;
+
+        private bool IsUnderstaffed() => 
+         Shifts.Any(s => s.EmployeeScheduledShits.Count < s.Shift.MinStaff);
+
+
+        private bool IsOverstaffed() => 
+             Shifts.Any(s => s.EmployeeScheduledShits.Count > s.Shift.MaxStaff);
+
 
         public ScheduleDayViewModel(DateTime day)
         {

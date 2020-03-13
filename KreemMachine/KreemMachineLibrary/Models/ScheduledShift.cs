@@ -25,6 +25,8 @@ namespace KreemMachineLibrary.Models
     
         public virtual Shift Shift { get; set; }
 
+        public virtual ICollection<UserScheduledShift> EmployeeScheduledShits { get; set; }
+
         public ScheduledShift(long id, DateTime date, Shift shift)
         {
             Id = id;

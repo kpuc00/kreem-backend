@@ -122,7 +122,7 @@
                              SelectionChanged="ScheduleListBox_SelectionChanged"
                              SelectionMode="Single" 
                              HorizontalContentAlignment="Stretch"
-                             VerticalContentAlignment="Center">
+                             VerticalContentAlignment="Stretch">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <UniformGrid Columns="7" />
@@ -130,8 +130,8 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding StatusBackgroundColor}" Margin="-4 -13">
-                                    <TextBlock Text="{Binding Day.Day}" HorizontalAlignment="Center" />
+                                <Grid Background="{Binding StatusBackgroundColor}" Margin="-4 0" >
+                                    <TextBlock Text="{Binding Day.Day}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                 </Grid>
                                 
                             </DataTemplate>
