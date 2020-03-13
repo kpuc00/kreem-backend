@@ -150,19 +150,19 @@
                         <StackPanel>
                             <TextBlock Text="Legend:" FontSize="16" />
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="● " FontSize="28" Foreground="White"  />
-                                <TextBlock Text="Not scheduled" FontSize="14" VerticalAlignment="Center" />
+                                <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5" Foreground="White"  />
+                                <TextBlock Text="Not scheduled" FontSize="14"  VerticalAlignment="Center" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="● " FontSize="28" Foreground="LawnGreen"  />
+                                <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5"  Foreground="LawnGreen"  />
                                 <TextBlock Text="In order" FontSize="14" VerticalAlignment="Center" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="● " FontSize="28" Foreground="Red"  />
+                                <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5"  Foreground="Red"  />
                                 <TextBlock Text="Understaffed" FontSize="14" VerticalAlignment="Center" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="● " FontSize="28" Foreground="Yellow"  />
+                                <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5"  Foreground="Yellow"  />
                                 <TextBlock Text="Overstaffed" FontSize="14" VerticalAlignment="Center" />
                             </StackPanel>
                         </StackPanel>
