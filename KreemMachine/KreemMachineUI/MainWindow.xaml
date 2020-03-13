@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KreemMachine"
         mc:Ignorable="d"
-        Title="Kreem Machine" Height="450" Width="800">
+        Title="Kreem Machine" Height="500" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="19*"/>
@@ -130,15 +130,43 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding StatusBackgroundColor}" Margin="-4 0" >
+                                <Border Background="{Binding StatusBackgroundColor}"  Margin="-5 -2"
+                                        BorderBrush="LightGray" BorderThickness="1">
                                     <TextBlock Text="{Binding Day.Day}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                </Grid>
-                                
+                                </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <!-- TODO: Add legend -->
+                    <!-- Generate Buttons and Legend -->
+                    <StackPanel Grid.Row="3" HorizontalAlignment="Left" TextBlock.FontSize="16" >
+                        <Button Content="Autogenerate" Margin="7" Padding="7 3" />
+                        <Button Content="Schedule manually" Margin="7"  Padding="7 3"  />
+                    </StackPanel>
+
+                    <!-- TODO: extract the colors somewhere else and bind them here and to the backend -->
+                    <Border Grid.Row="3" HorizontalAlignment="Right" Background="LightGray" 
+                                Margin="7" Padding="5 5 35 0" BorderBrush="DarkGray" BorderThickness="2">
+                        <StackPanel>
+                            <TextBlock Text="Legend:" FontSize="16" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="● " FontSize="28" Foreground="White"  />
+                                <TextBlock Text="Not scheduled" FontSize="14" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="● " FontSize="28" Foreground="LawnGreen"  />
+                                <TextBlock Text="In order" FontSize="14" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="● " FontSize="28" Foreground="Red"  />
+                                <TextBlock Text="Understaffed" FontSize="14" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="● " FontSize="28" Foreground="Yellow"  />
+                                <TextBlock Text="Overstaffed" FontSize="14" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
                 </Grid>
             </TabItem>
 
