@@ -27,6 +27,10 @@ namespace KreemMachineLibrary.Models
 
         public virtual ICollection<UserScheduledShift> EmployeeScheduledShits { get; set; }
 
+        public bool isUnderstaffed => EmployeeScheduledShits.Count < Shift.MinStaff;
+
+        public bool IsOverstaffed => EmployeeScheduledShits.Count > Shift.MaxStaff;
+
         public ScheduledShift(long id, DateTime date, Shift shift)
         {
             Id = id;

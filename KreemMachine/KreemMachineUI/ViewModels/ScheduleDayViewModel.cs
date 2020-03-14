@@ -38,21 +38,16 @@ namespace KreemMachine.ViewModels
             Shifts.Count == 0;
 
         private bool IsUnderstaffed() => 
-         Shifts.Any(s => s.EmployeeScheduledShits.Count < s.Shift.MinStaff);
+            Shifts.Any(s => s.isUnderstaffed);
 
 
         private bool IsOverstaffed() => 
-             Shifts.Any(s => s.EmployeeScheduledShits.Count > s.Shift.MaxStaff);
+             Shifts.Any(s => s.IsOverstaffed);
 
 
         public ScheduleDayViewModel(DateTime day)
         {
             this.Day = day;
-        }
-
-        public override string ToString()
-        {
-            return Day.Day.ToString();
         }
 
     }
