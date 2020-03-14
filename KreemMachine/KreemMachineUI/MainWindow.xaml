@@ -216,14 +216,48 @@
 
             <!--Manually generate schedule-->
             <TabItem Visibility="Hidden" x:Name="ManuallyGenerateScheduleTabItem" >
-                <Grid>
+                <Grid Grid.IsSharedSizeScope="True">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <local:ScheduleShiftPicker x:Name="ManualScheduleShiftPicker" SelectedShiftChanged="ManualScheduleShiftPicker_SelectedShiftChanged"
-                                               HorizontalAlignment="Left"/>
+                    <StackPanel Orientation="Horizontal" >
+                        <local:ScheduleShiftPicker x:Name="ManualScheduleShiftPicker" Margin="5"
+                                                   SelectedShiftChanged="ManualScheduleShiftPicker_SelectedShiftChanged" />
+                        
+                        <TextBlock Text="Staff selected: " VerticalAlignment="Center" />
+                        <TextBlock x:Name="StaffSelectedTextBox" Text="1 " VerticalAlignment="Center" />
+                        <TextBlock Text="/ " VerticalAlignment="Center" />
+                        <TextBlock x:Name="StaffPrefferedTextBox" Text="4" VerticalAlignment="Center" />
+                       
+                        <TextBlock Text=" (Min:" VerticalAlignment="Center" />
+                        <TextBlock x:Name="MinStaffTextBox" Text=" 2" VerticalAlignment="Center" />
+                        <TextBlock Text=" Max: " VerticalAlignment="Center" />
+                        <TextBlock x:Name="MaxStaffTextBox" Text="5" VerticalAlignment="Center" />
+                        <TextBlock Text=")" VerticalAlignment="Center" />
+                    </StackPanel>
 
+                    <Button Content="Save" HorizontalAlignment="Right" 
+                            Margin="5" FontSize="16" Padding="7 0"/>
+
+                    <ListBox Grid.Row="1" x:Name="ManuallyScheduleUsersListBox" BorderThickness="0" TextBlock.FontSize="18">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0 7">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition SharedSizeGroup="EmployeeNameColumn" Width="auto"/>
+                                        <ColumnDefinition SharedSizeGroup="EmployeeWorkedHoursColumn" Width="auto"/>
+                                        <ColumnDefinition SharedSizeGroup="EmployeeScheduledColumn" Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Grid.Column="0" />
+                                    <TextBlock Grid.Column="1" Text="{Binding FullName}" TextDecorations="Underline" />
+                                    <TextBlock Grid.Column="2" Text="11/40" Margin="20 0" />
+                                    <CheckBox Grid.Column="3" IsChecked="False"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Grid>
             </TabItem>
         </TabControl>

@@ -141,11 +141,12 @@ namespace KreemMachine
 
         private void ManualScheduleShiftPicker_SelectedShiftChanged(object sender, DateTime SelectedDay, Shift SelectedShift)
         {
-            Console.WriteLine(SelectedDay.ToString("dd/MM/yyyy ") + SelectedShift.Name);
+            var users = userService.GetAllByRole(Role.Employee);
+            ManuallyScheduleUsersListBox.ItemsSource = users;
         }
 
-        #endregion
 
+        #endregion
 
     }
 }
