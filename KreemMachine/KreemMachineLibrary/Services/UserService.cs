@@ -33,8 +33,14 @@ namespace KreemMachineLibrary.Services
 
         internal void HashPassword(User user)
         {
-            // TODO: Use randomly generated passwords latter
-            user.PasswordHash = PasswordHashHelper.CreateHash("qweqwe");
+            Random random = new Random();
+            var randomPassword = "";
+            for (var i = 0; i < 10; i++)
+            {
+                randomPassword += ((char)(random.Next(1, 26) + 64)).ToString();
+            }
+            user.Password = randomPassword;
+            user.PasswordHash = PasswordHashHelper.CreateHash(randomPassword);
         }
 
         internal User SaveToDatabase (User user)
@@ -73,7 +79,21 @@ namespace KreemMachineLibrary.Services
             return db.Users.Local;
         }
 
-       
+        public void DeleteEmployee(User user) {
+            db.Users.Remove(user);
+            db.SaveChanges();
+        }
+
+        public string GenerateEmployeeEmail(string first, string last) {
+            string firstLetter = first[0].ToString().ToLower();
+            string lastLower = last.ToLower();
+
+            string employeeEmail = firstLetter + "." + lastLower + "@mediabazaar.nl";
+            
+            return employeeEmail;
+        }
+
+
 
     }
 

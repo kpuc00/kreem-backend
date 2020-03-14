@@ -60,6 +60,12 @@ namespace KreemMachineLibrary.Models
 
         public virtual IList<UserScheduledShift> ScheduledShifts { get; set; }
 
+        /// <summary>
+        /// Auto generated password in plain text, not stored in the database
+        /// </summary>
+        [NotMapped]
+        public string Password { get; set; }
+
         public User() { }
 
         public User(string firstName, string lastName, string email, Role role, float hourlyWage, 

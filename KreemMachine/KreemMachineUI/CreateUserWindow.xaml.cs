@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Text.RegularExpressions;
 
 namespace KreemMachine
 {
@@ -48,6 +49,53 @@ namespace KreemMachine
                 PhoneTextBox.Text);
 
             users.Save(user);
+
+            MessageBox.Show($"Your password is {user.Password}");
         }
+
+
+
+        private void FirstNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            string[] tempFirstLastName = CheckFirstLastNameTextBox();
+            string firstName = tempFirstLastName[0];
+            string lastName = tempFirstLastName[1];
+
+            string employeeEmail = users.GenerateEmployeeEmail(firstName, lastName);
+            EmailTextBox.Text = employeeEmail;
+        }
+
+        private void LastNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            string[] tempFirstLastName = CheckFirstLastNameTextBox();
+            string firstName = tempFirstLastName[0];
+            string lastName = tempFirstLastName[1];
+
+            string employeeEmail = users.GenerateEmployeeEmail(firstName, lastName);
+            EmailTextBox.Text = employeeEmail;
+        }
+
+        private string[] CheckFirstLastNameTextBox() {
+            string firstName = "example";
+            string lastName = "example";
+            string[] retVal = new string[2];
+
+            if (!String.IsNullOrWhiteSpace(FirstNameTextBox.Text))
+            {
+                firstName = FirstNameTextBox.Text;
+            }
+            if (!String.IsNullOrWhiteSpace(LastNameTextBox.Text))
+            {
+                lastName = LastNameTextBox.Text;
+            }
+
+            retVal[0] = firstName;
+            retVal[1] = Regex.Replace(lastName, @"\s?", "");
+
+            return retVal;
+        }
+
+
     }
+
 }

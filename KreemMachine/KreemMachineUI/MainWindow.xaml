@@ -8,7 +8,11 @@
         x:Name="_this"
         Title="Kreem Machine" Height="500" Width="1200">
     <Grid>
-        <TabControl x:Name="MainContent" TabStripPlacement="Left">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="19*"/>
+            <RowDefinition Height="65*"/>
+        </Grid.RowDefinitions>
+        <TabControl x:Name="MainContent" TabStripPlacement="Left" Margin="10,10,-0.4,0" Grid.RowSpan="2">
             <!--Style to make the TabHeaders go to left and look somewhat nice-->
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabItem}">
@@ -48,13 +52,14 @@
                         <!-- Search bar-->
                     </Grid.ColumnDefinitions>
                     <Button x:Name="CreateUserButton" Click="CreateUserButton_Click"
-                            Content="Create" Padding="7 3" Margin="5 3" />
+                            Content="Create" Padding="7 3" Margin="5,3,5,0" Height="24" VerticalAlignment="Top" />
                     <TextBox Grid.Column="1" Margin="3" />
                     <ListBox Grid.Row="1" Grid.ColumnSpan="2"  x:Name="AllUsersListBox" 
-                             TextBlock.FontSize="18" Grid.IsSharedSizeScope="True">
+                             TextBlock.FontSize="18" Grid.IsSharedSizeScope="True" 
+                             HorizontalContentAlignment="Stretch">
                         <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
+                            <DataTemplate >
+                                <Grid VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
                                         <!-- Photo -->
                                         <ColumnDefinition Width="30" />
@@ -66,18 +71,21 @@
                                         <ColumnDefinition SharedSizeGroup="RoleColumn" Width="Auto"/>
                                         <!-- Email -->
                                         <ColumnDefinition SharedSizeGroup="EmailColumn" Width="Auto"/>
+                                        <!--Empty column for ui purpose-->
+                                        <ColumnDefinition Width="*"/>
                                         <!-- Edit -->
-                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="auto"/>
                                         <!-- Delete -->
-                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Image />
+                                    <Image Grid.Column="0" />
                                     <TextBlock Grid.Column="1" Text="{Binding FirstName}" Margin="0 0 10 0" />
-                                    <TextBlock Grid.Column="2" Text="{Binding LastName}" Margin="0 0 10 0" />
+                                    <TextBlock Grid.Column="2"  Text="{Binding LastName}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="3" Text="{Binding Role}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="4" Text="{Binding Email}" Margin="0 0 10 0" />
-                                    <Button Grid.Column="5" Content=" Edit " Margin="0 0 10 0" />
-                                    <Button Grid.Column="6" Content=" Delete " />
+                                    <TextBlock Grid.Column="5" Margin="0 0 10 0" />
+                                    <Button Grid.Column="6" Content=" Edit " Margin="0 0 10 0" />
+                                    <Button Grid.Column="7" Content=" Delete " Click="DeleteUserButton_Click" />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -86,13 +94,92 @@
             </TabItem>
 
             <!--Schedule-->
-            <TabItem Header="Schedule">
-                <TextBlock Text="Interface for schedule" />
+            <TabItem Header="Schedule" Loaded="ScheduleTab_Loaded">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Month picker-->
+                    <local:MonthPicker x:Name="ScheduleMonthPicker" Grid.Row="0" 
+                                       HorizontalAlignment="Center" SelectedMonthChanged="ScheduleMonthPicker_SelectedMonthChanged" />
+                    
+                    <!-- Calendar Headers -->
+                    <UniformGrid Grid.Row="1" Rows="1" TextBlock.FontSize="18" TextBlock.TextAlignment="Center">
+                        <TextBlock Text="Mon"  />
+                        <TextBlock Text="Tue" />
+                        <TextBlock Text="Wed" />
+                        <TextBlock Text="Thu" />
+                        <TextBlock Text="Fri" />
+                        <TextBlock Text="Sat" />
+                        <TextBlock Text="Sun" />
+                    </UniformGrid>
+                    
+                    <!-- Calendar -->
+                    <ListBox x:Name="ScheduleListBox" Grid.Row="2"
+                             SelectionChanged="ScheduleListBox_SelectionChanged"
+                             SelectionMode="Single" 
+                             HorizontalContentAlignment="Stretch"
+                             VerticalContentAlignment="Stretch">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="7" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Background="{Binding StatusBackgroundColor}" Margin="-4 0" >
+                                    <TextBlock Text="{Binding Day.Day}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Grid>
+                                
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!-- TODO: Add legend -->
+                </Grid>
             </TabItem>
 
             <!--Statistics-->
             <TabItem Header="Statistics">
-                <TextBlock Text="Interface for statistics" />
+                <TextBlock Margin="1,0,6.4,5.4" Padding="5" ><InlineUIContainer>
+                        <Grid Height="406" Width="657">
+                        <Grid Margin="10">
+                            <TabControl TabStripPlacement="Left" HorizontalAlignment="Left" Height="414" VerticalAlignment="Top" Width="666" Margin="-13,-12,-16.2,-15.6">
+                                <TabItem Header="Resources per shift">
+                                    <Grid Background="White" Margin="0,0,11.4,0">
+                                        <local:MonthPicker x:Name="StatisticsPerShiftMonthPicker" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedMonthChanged="ScheduleMonthPicker_SelectedMonthChanged" Margin="10,6,0,0" />
+                                        <CheckBox Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0"/>
+                                        <CheckBox Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336"/>
+                                        <CheckBox Content="Evening" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top"/>
+                                        <DataGrid Height="348" Margin="0,38,10,0" VerticalAlignment="Top"/>
+                                    </Grid>
+                                </TabItem>
+                                <TabItem Header="Resources per month">
+                                    <Grid Background="White" Margin="0,0,11.4,0">
+                                        <local:MonthPicker x:Name="StatisticsPerMonthMonthPicker" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedMonthChanged="ScheduleMonthPicker_SelectedMonthChanged" Margin="10,6,0,0" />
+                                        <CheckBox Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0"/>
+                                        <CheckBox Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336"/>
+                                        <CheckBox Content="Evening" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top"/>
+                                        <DataGrid Height="348" Margin="0,38,10,0" VerticalAlignment="Top"/>
+                                    </Grid>
+                                </TabItem>
+                                <TabItem Header="Employee statistics">
+                                    <Grid Background="White" Margin="0,0,11.4,0">
+                                        <local:MonthPicker x:Name="EmployeeStatisticsMonthPicker" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedMonthChanged="ScheduleMonthPicker_SelectedMonthChanged" Margin="10,6,0,0" />
+                                        <CheckBox Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0"/>
+                                        <CheckBox Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336"/>
+                                        <CheckBox Content="Evening" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top"/>
+                                        <DataGrid Height="348" Margin="0,38,10,0" VerticalAlignment="Top"/>
+                                    </Grid>
+                                </TabItem>
+                            </TabControl>
+                        </Grid>
+                        </Grid>
+                    </InlineUIContainer></TextBlock>
 
             </TabItem>
             <TabItem Header="Settings" Loaded="Settings_Tab_Loaded">

@@ -15,7 +15,7 @@ namespace KreemMachineLibrary.Models
         [Key]
         public long Id { get; set; }
 
-        [Column("user_id"), Required]
+        [Column("user_id")]
         public long UserId { get; set; }
 
         [Column("scheduled_shift_id"), Required]
@@ -34,6 +34,10 @@ namespace KreemMachineLibrary.Models
             ScheduledShift = scheduledShift;
             HourlyWage = user.HourlyWage;
 
+        }
+
+        public UserScheduledShift()
+        {
         }
     }
 }

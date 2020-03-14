@@ -54,5 +54,9 @@ namespace KreemMachineLibrary.Models
             MaxStaff = maxStaff;
             PreferredStaff = preferredStaff;
         }
+
+        public Shift()
+        {
+        }
     }
 }
