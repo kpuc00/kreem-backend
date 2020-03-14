@@ -30,22 +30,20 @@ namespace KreemMachineLibrary.Models
         public string PasswordHash { get; set; }
 
         /// <summary>
-        /// String property for the database calculated based on the public enum
-        /// </summary>
+        /// String property for the database
         [Column("role"), Required]
-        private string _role
-        {
-            get => Role.ToString();
-
-            //Parse the string from the database into an enum to expose to the app
-            set => Role = (Role)Enum.Parse(typeof(Role), value, ignoreCase: true);
-        }
+        public string RoleStr { get; private set; }
 
         /// <summary>
         /// Role exposes an enum for the rest of the application
+        /// is calculated entirely based on <code> role </code>
         /// </summary>
         [NotMapped]
-        public Role Role { get; set; }
+        public Role? Role
+        {
+            get => string.IsNullOrEmpty(RoleStr) ? null : Enum.Parse(typeof(Role), RoleStr) as Role? ;
+            set => RoleStr = value.ToString();
+        }
 
         [Column("hourly_wage"), Required]
         public float HourlyWage { get; set; }
@@ -66,9 +64,12 @@ namespace KreemMachineLibrary.Models
         [NotMapped]
         public string Password { get; set; }
 
+        [NotMapped]
+        public string FullName { get => FirstName + " " + LastName; }
+
         public User() { }
 
-        public User(string firstName, string lastName, string email, Role role, float hourlyWage, 
+        public User(string firstName, string lastName, string email, Role role, float hourlyWage,
                     DateTime? birthdate, string adress = null, string phoneNumber = null)
         {
             FirstName = firstName;
