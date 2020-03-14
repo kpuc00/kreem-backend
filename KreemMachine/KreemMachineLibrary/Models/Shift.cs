@@ -35,6 +35,15 @@ namespace KreemMachineLibrary.Models
         [Column("preferred_staff"), Required]
         public int PreferredStaff { get; set; }
 
+        [NotMapped]
+        public TimeSpan Duration => StartHour > EndHour 
+            ? EndHour.Add(new TimeSpan(1, 0, 0, 0, 0)) - StartHour 
+            : StartHour - EndHour;
+
+        internal Shift()
+        {
+        }
+
         internal Shift(long id, string name, TimeSpan startHour, TimeSpan endHour, int minStaff, int maxStaff, int preferredStaff)
         {
             Id = id;

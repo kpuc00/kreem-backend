@@ -22,5 +22,11 @@ namespace KreemMachineLibrary
 
 
         public virtual DbSet<User> Users { get; set; }
+
+        public virtual DbSet<Shift> Shifts { get; set; }
+
+        public virtual DbSet<ScheduledShift> ScheduledShifts { get; set; }
+
+        public virtual DbSet<UserScheduledShift> UserScheduledShifts { get; set; }
     }
 }
