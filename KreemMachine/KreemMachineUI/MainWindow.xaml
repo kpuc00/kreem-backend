@@ -251,9 +251,10 @@
                                         <ColumnDefinition SharedSizeGroup="EmployeeScheduledColumn" Width="auto"/>
                                     </Grid.ColumnDefinitions>
                                     <Image Grid.Column="0" />
-                                    <TextBlock Grid.Column="1" Text="{Binding FullName}" TextDecorations="Underline" />
-                                    <TextBlock Grid.Column="2" Text="11/40" Margin="20 0" />
-                                    <CheckBox Grid.Column="3" IsChecked="False"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding User.FullName}" TextDecorations="Underline" />
+                                    <TextBlock Grid.Column="2" Text="{Binding HoursScheduledThisMonth}" Margin="20 0" />
+                                    <CheckBox Grid.Column="3" IsChecked="{Binding IsScheduled, Mode=OneWay}" 
+                                              Checked="ShiftAssignmentCheckBox_Checked" Unchecked="ShiftAssignmentCheckBox_Unchecked"/>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

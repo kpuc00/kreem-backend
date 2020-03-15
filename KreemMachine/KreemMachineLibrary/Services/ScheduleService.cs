@@ -28,5 +28,43 @@ namespace KreemMachineLibrary.Services
             return shifts;
         }
 
+        public ScheduledShift GetScheduledShiftOrCreateNew(DateTime date, Shift shift)
+        {
+
+            var scheduleFromDb = db.ScheduledShifts.Where(s => s.ShiftId == shift.Id && s.Date == date).FirstOrDefault();
+            return scheduleFromDb ?? Save(new ScheduledShift(date, shift));
+        }
+
+        internal ScheduledShift Save(ScheduledShift scheduledShift)
+        {
+            var shift = db.ScheduledShifts.Add(scheduledShift);
+            db.SaveChanges();
+            return shift;
+        }
+
+        public void AssignUserToShift(User user, ScheduledShift shift)
+        {
+            bool alreadyAssigned = db.UserScheduledShifts
+                .Any(us => us.UserId == user.Id && us.ScheduledShiftId == shift.Id);
+
+            if (!alreadyAssigned)
+            {
+                var userShiftAssignment = new UserScheduledShift(user, shift);
+                db.UserScheduledShifts.Add(userShiftAssignment);
+                db.SaveChanges();
+            }
+        }
+
+        public void RemoveUserFromShift(User user, ScheduledShift shift)
+        {
+
+            var userShiftAssignment = db.UserScheduledShifts.Where(us => us.UserId == user.Id && us.ScheduledShiftId == shift.Id).FirstOrDefault();
+            if(userShiftAssignment != null)
+            {
+                db.UserScheduledShifts.Remove(userShiftAssignment);
+                db.SaveChanges();
+            }
+
+        }
     }
 }

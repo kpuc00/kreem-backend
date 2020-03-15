@@ -82,6 +82,7 @@
     <Compile Include="ScheduleShiftPicker.xaml.cs">
       <DependentUpon>ScheduleShiftPicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\UserSchedulerViewModel.cs" />
     <Compile Include="ViewModels\ScheduleDayViewModel.cs" />
     <Page Include="CreateUserWindow.xaml">
       <SubType>Designer</SubType>

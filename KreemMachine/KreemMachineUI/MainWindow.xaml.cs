@@ -24,6 +24,7 @@ namespace KreemMachine
     public partial class MainWindow : Window
     {
         ObservableCollection<User> AllUsers;
+        ScheduledShift ManuallyScheduledShift;
 
         UserService userService = new UserService();
         ScheduleService scheduleService = new ScheduleService();
@@ -141,12 +142,40 @@ namespace KreemMachine
 
         private void ManualScheduleShiftPicker_SelectedShiftChanged(object sender, DateTime SelectedDay, Shift SelectedShift)
         {
-            var users = userService.GetAllByRole(Role.Employee);
+            
+            ManuallyScheduledShift = scheduleService.GetScheduledShiftOrCreateNew(SelectedDay, SelectedShift);
+
+            SetUpEmployeeRecomendationForManualScheduling();
+
+        }
+
+        private void SetUpEmployeeRecomendationForManualScheduling()
+        {
+            // TODO: Replace with Misho's algorithm for getting employee in recomended order
+
+            var users = userService.GetAllByRole(Role.Employee).Select( u => new UserSchedulerViewModel(u, ManuallyScheduledShift));
             ManuallyScheduleUsersListBox.ItemsSource = users;
         }
 
+        private void ShiftAssignmentCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            var checkbox = sender as CheckBox;
+            var userViewModel = checkbox.DataContext as UserSchedulerViewModel;
+
+            scheduleService.AssignUserToShift(userViewModel.User, ManuallyScheduledShift);
+        }
+
+        private void ShiftAssignmentCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var checkbox = sender as CheckBox;
+            var userViewModel = checkbox.DataContext as UserSchedulerViewModel;
+
+            scheduleService.RemoveUserFromShift(userViewModel.User, ManuallyScheduledShift);
+
+        }
 
         #endregion
+
 
     }
 }
