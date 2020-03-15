@@ -94,7 +94,7 @@
             </TabItem>
 
             <!--Schedule-->
-            <TabItem Header="Schedule" Loaded="ScheduleTab_Loaded">
+            <TabItem Header="Schedule" Selector.Selected="ScheduleTab_Selected">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />

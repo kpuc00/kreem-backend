@@ -208,7 +208,7 @@ namespace KreemMachine
             }
 
         }
-        private void ScheduleTab_Loaded(object sender, RoutedEventArgs e)
+        private void ScheduleTab_Selected(object sender, RoutedEventArgs e)
         {
             ScheduleMonthPicker_SelectedMonthChanged(sender, ScheduleMonthPicker.SelectedMonth);
         }
@@ -239,7 +239,7 @@ namespace KreemMachine
         {
 
             ManuallyScheduledShift = scheduleService.GetScheduledShiftOrCreateNew(SelectedDay, SelectedShift);
-            SelectedStafForSchedulingBinding = ManuallyScheduledShift?.EmployeeScheduledShits.Count ?? 0;
+            SelectedStafForSchedulingBinding = ManuallyScheduledShift?.EmployeeScheduledShits?.Count ?? 0;
             SetUpEmployeeRecomendationForManualScheduling();
 
         }
