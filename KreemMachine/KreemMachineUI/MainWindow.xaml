@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KreemMachine"
         mc:Ignorable="d"
-        Title="Kreem Machine" Height="500" Width="800">
+        x:Name="_this"
+        Title="Kreem Machine" Height="500" Width="1200">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="19*"/>
@@ -224,12 +225,12 @@
                     <StackPanel Orientation="Horizontal" >
                         <local:ScheduleShiftPicker x:Name="ManualScheduleShiftPicker" Margin="5"
                                                    SelectedShiftChanged="ManualScheduleShiftPicker_SelectedShiftChanged" />
-                        
+
                         <TextBlock Text="Staff selected: " VerticalAlignment="Center" />
                         <TextBlock x:Name="StaffSelectedTextBox" Text="1 " VerticalAlignment="Center" />
                         <TextBlock Text="/ " VerticalAlignment="Center" />
                         <TextBlock x:Name="StaffPrefferedTextBox" Text="4" VerticalAlignment="Center" />
-                       
+
                         <TextBlock Text=" (Min:" VerticalAlignment="Center" />
                         <TextBlock x:Name="MinStaffTextBox" Text=" 2" VerticalAlignment="Center" />
                         <TextBlock Text=" Max: " VerticalAlignment="Center" />
@@ -260,6 +261,180 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
+            </TabItem>
+            <TabItem Header="Settings" Loaded="Settings_Tab_Loaded">
+                <TabControl x:Name="InnerSettingsTab"
+                            TabStripPlacement="Left">
+                    <TabItem Header="Schedule settings">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="20" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="20" />
+                            </Grid.RowDefinitions>
+                            <!--Schedule panel-->
+                            <Border Grid.Column="1" Grid.Row="1"
+                              Grid.ColumnSpan="3"
+                              BorderBrush="Transparent" 
+                              BorderThickness="1"
+                              Width="300"
+                              VerticalAlignment="Center"
+                              TextBlock.FontSize="18"
+                              HorizontalAlignment="Left"
+                                    >
+
+                                <StackPanel Orientation="Vertical" Margin="5">
+                                    <TextBlock Text="Shift name"/>
+                                    <!--<TextBox x:Name="ShiftNameTextBox"
+                                     HorizontalAlignment="Left"
+                                     Width="118"
+                                     Margin="0, 5, 0, 0"/> -->
+                                    <ComboBox x:Name="ShiftNameComboBox"
+                                      HorizontalAlignment="Left"
+                                      Width="118"
+                                      Margin="0, 5, 0, 0" 
+                                      DisplayMemberPath="Name"
+                                      SelectedIndex="0"/>
+                                    <TextBlock Text="Shift hours" 
+                                       Margin="0, 10, 0, 0"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox x:Name="ShiftStartTextBox" 
+                                         Margin="0, 10, 0, 0" Width="50" 
+                                         HorizontalAlignment="Left"
+                                         DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem, NotifyOnTargetUpdated=True}"
+                                         Text="{Binding Path=StartHour, Mode=TwoWay, StringFormat={}{0:hh}:{0:mm}}"     
+                                         />
+                                        <TextBlock Text=" - " FontSize="20" 
+                                           VerticalAlignment="Center" 
+                                           HorizontalAlignment="Center" 
+                                           Margin="0, 5, -10, 0"/>
+                                        <TextBox x:Name="ShiftEndTextBox" 
+                                         Margin="10, 10, 0, 0" 
+                                         Width="50" 
+                                         HorizontalAlignment="Right"
+                                         
+                                         DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem}"
+                                         Text="{Binding Path=EndHour, Mode=TwoWay, StringFormat={}{0:hh}:{0:mm}}"
+                                         LostFocus="ShiftTimeTextBox_TextChanged"/>
+                                        <TextBlock x:Name="HoursTextBlock" 
+                                           VerticalAlignment="Center" 
+                                           HorizontalAlignment="Center" 
+                                           Margin="15, 5, -10, 0"
+                                           DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem}"
+                                           Text="{Binding Path=Duration, StringFormat={}({0:hh}h {0:mm}m)}"/>
+
+                                    </StackPanel>
+                                    <TextBlock Text="Minimum staff number" 
+                                       Margin="0, 10, 0, 0"/>
+                                    <TextBox x:Name="MinimumStaffTextBox" 
+                                     Margin="0, 5, 0, 0" 
+                                     Width="40" 
+                                     HorizontalAlignment="Left"
+                                     DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem}"
+                                     Text="{Binding Path=MinStaff, Mode=TwoWay}"/>
+                                    <TextBlock Text="Maximum staff number" 
+                                     Margin="0, 10, 0, 0"/>
+                                    <TextBox x:Name="MaximumStaffTextBox" 
+                                     Margin="0, 5, 0, 0" 
+                                     Width="40" 
+                                     HorizontalAlignment="Left"
+                                     DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem}"
+                                     Text="{Binding Path=MaxStaff, Mode=TwoWay}"/>
+                                    <TextBlock Text="Preferred staff number" 
+                                     Margin="0, 10, 0, 0"/>
+                                    <TextBox x:Name="PreferredStaffTextBox" 
+                                     Margin="0, 5, 0, 0" 
+                                     Width="40" 
+                                     HorizontalAlignment="Left"
+                                     DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem}"
+                                     Text="{Binding Path=PreferredStaff, Mode=TwoWay}"/>
+                                </StackPanel>
+                            </Border>
+                            <Button x:Name="ButtonSaveScheduleSetting" Grid.Column="1"
+                                            Margin="0, 10, 0, 0"
+                                            Content="Save"
+                                            FontSize="20"
+                                            HorizontalAlignment="Center"
+                                            Grid.Row="2"
+                                            Width="100"
+                                            Height="50"
+                                            Click="ButtonSaveScheduleSetting_Click"/>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Connection settings"
+                             TextBlock.FontSize="20" Selector.Selected="TabItem_Selected">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="20" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="20" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Vertical"
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Grid.ColumnSpan="2">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Host" FontSize="18"/>
+                                    <TextBlock Text="Port" FontSize="18"
+                                           Margin="130, 0, 0, 0"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox x:Name="HostTextBox" Width="150"
+                                           Height="35"
+                                           HorizontalAlignment="Left"
+                                           DataContext="{Binding ElementName=_this, Path=ConnectionSettings, Mode=TwoWay}"
+                                           Text="{Binding Path=Host}"
+                                           />
+                                    <TextBox x:Name="PortTextBox" Width="100"
+                                           Height="35"
+                                           Margin="18, 0, 0, 0"
+                                           DataContext="{Binding ElementName=_this, Path=ConnectionSettings, Mode=TwoWay}"
+                                           Text="{Binding Path=Port}"/>
+                                </StackPanel>
+                                <TextBlock Text="Username"
+                                           FontSize="18"
+                                           Margin="0, 25, 0, 0"/>
+                                <TextBox x:Name="ConnectionUsernameTextBox"
+                                           Width="269"
+                                           Height="35"
+                                           HorizontalAlignment="Left"
+                                           DataContext="{Binding ElementName=_this, Path=ConnectionSettings, Mode=TwoWay}"
+                                           Text="{Binding Path=Username}"/>
+                                <TextBlock Text="Password"
+                                           FontSize="18"
+                                           Margin="0, 10, 0, 0"/>
+                                <PasswordBox x:Name="ConnectionPasswordPasswordBox"
+                                            Width="269"
+                                            Height="35"
+                                            HorizontalAlignment="Left"
+                                             />
+                                <Button x:Name="ButtonSaveConnectionSetting" Grid.Column="2"
+                                            Margin="0, 30, 0, 0"
+                                            Content="Save"
+                                            FontSize="20"
+                                            HorizontalAlignment="Left"
+                                            Width="150"
+                                            Height="35"
+                                            Click="ButtonSaveConnectionSetting_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
             </TabItem>
         </TabControl>
     </Grid>

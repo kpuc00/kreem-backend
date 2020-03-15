@@ -1,9 +1,10 @@
-﻿using KreemMachineLibrary.Models;
+using KreemMachineLibrary.Helpers;
+using KreemMachineLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.Entity;
 using System.Linq;
+using System.Data.Entity;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,9 +18,19 @@ namespace KreemMachineLibrary.Services
         {
         }
 
-        public IList<Shift> getAllShifts()
+        public void SaveChanges()
         {
-            return db.Shifts.OrderBy(s => s.StartHour).ToList();   
+            db.SaveChanges();
         }
+
+        internal Shift GetShift(string name)
+        {
+            var shift = db.Shifts.Where(s => s.Name == name).FirstOrDefault();
+            return shift;
+        }
+
+
+        public IList<Shift> GetAllShifts() => db.Shifts.OrderBy(s => s.StartHour).ToList();
+
     }
 }
