@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
+using KreemMachineLibrary.Exceptions;
 
 namespace KreemMachine
 {
@@ -38,22 +39,30 @@ namespace KreemMachine
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            var user = new User(
-                FirstNameTextBox.Text,
-                LastNameTextBox.Text,
-                EmailTextBox.Text,
-                (Role)RoleComboBox.SelectedItem,
-                float.Parse(HourlyWageTextBox.Text),
-                BirthDatePicker.SelectedDate,
-                AddressTextBox.Text,
-                PhoneNumberTextBox.Text);
+            try
+            {
+                var user = new User(
+                    FirstNameTextBox.Text,
+                    LastNameTextBox.Text,
+                    EmailTextBox.Text,
+                    (Role)RoleComboBox.SelectedItem,
+                    float.Parse(HourlyWageTextBox.Text),
+                    BirthDatePicker.SelectedDate,
+                    AddressTextBox.Text,
+                    PhoneNumberTextBox.Text);
 
-            users.Save(user);
+                users.Save(user);
 
-            MessageBox.Show($"Your password is {user.Password}");
+                MessageBox.Show($"Your password is {user.Password}");
+
+                this.Close();
+            }
+            catch (RequiredFieldsEmpty ex) {
+                MessageBox.Show(ex.Message);
+            }
+           
+
         }
-
-
 
         private void FirstNameTextBox_KeyUp(object sender, KeyEventArgs e)
         {

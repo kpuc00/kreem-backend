@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -34,6 +35,8 @@ namespace KreemMachine
             new Thread( () => users = new UserService() ).Start();
         }
 
+
+
         string Email => EmailTextBox.Text;
 
         string Password => SecretPasswordBox.Password;
@@ -47,14 +50,14 @@ namespace KreemMachine
             var user = users?.AuthenticateByCredentials(Email, Password);
 
             if (user != null)
-                DislayMainWindow();
+                DislayMainWindow(user);
             else
                 MessageBox.Show("Either email or password is wrong");
         }
 
-        private void DislayMainWindow()
+        private void DislayMainWindow(User user)
         {
-            var window = new MainWindow();
+            var window = new MainWindow(user);
             window.Show();
 
             this.Hide();

@@ -13,7 +13,7 @@
         </Grid.RowDefinitions>
         <TabControl x:Name="MainContent" TabStripPlacement="Left" Margin="10,10,-0.4,0" Grid.RowSpan="2">
             <!--Style to make the TabHeaders go to left and look somewhat nice-->
-            <TabControl.Resources>
+            <TabControl.Resources >
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="Template">
                         <Setter.Value>
@@ -36,7 +36,7 @@
             </TabControl.Resources>
 
             <!--Users-->
-            <TabItem Header="Users" Loaded="TabItem_Loaded">
+            <TabItem Header="Users" Loaded="TabItem_Loaded" Selector.Selected="TabItem_Selected">
                 <Grid>
                     <Grid.RowDefinitions>
                         <!--Create button and search-->

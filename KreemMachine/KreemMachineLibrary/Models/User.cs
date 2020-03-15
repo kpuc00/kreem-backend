@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KreemMachineLibrary.Exceptions;
 
 namespace KreemMachineLibrary.Models
 {
@@ -45,7 +46,7 @@ namespace KreemMachineLibrary.Models
         /// Role exposes an enum for the rest of the application
         /// </summary>
         [NotMapped]
-        public Role Role { get; set; }
+        public Role Role { get; set;  }
 
         [Column("hourly_wage"), Required]
         public float HourlyWage { get; set; }
@@ -71,14 +72,20 @@ namespace KreemMachineLibrary.Models
         public User(string firstName, string lastName, string email, Role role, float hourlyWage, 
                     DateTime? birthdate, string adress = null, string phoneNumber = null)
         {
-            FirstName = firstName;
-            LastName = lastName;
-            Email = email;
-            Role = role;
-            HourlyWage = hourlyWage;
-            Birthdate = birthdate;
-            Address = adress;
-            PhoneNumber = phoneNumber;
+            if (String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(lastName) || String.IsNullOrWhiteSpace(email) || String.IsNullOrWhiteSpace(role.ToString()) || String.IsNullOrWhiteSpace(hourlyWage.ToString()) || String.IsNullOrWhiteSpace(birthdate.ToString()))
+            {
+                throw new RequiredFieldsEmpty("The required fields are empty");
+            }
+            else {
+                FirstName = firstName;
+                LastName = lastName;
+                Email = email;
+                Role = role;
+                HourlyWage = hourlyWage;
+                Birthdate = birthdate;
+                Address = adress;
+                PhoneNumber = phoneNumber;
+            }
         }
     }
 }
