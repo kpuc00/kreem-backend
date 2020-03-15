@@ -28,8 +28,32 @@ namespace KreemMachine
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         ObservableCollection<User> AllUsers;
-        ScheduledShift ManuallyScheduledShift;
+
         IEnumerable<Shift> AllShifts;
+
+        ScheduledShift manuallyScheduledShift;
+
+        public ScheduledShift ManuallyScheduledShift
+        {
+            get => manuallyScheduledShift;
+            set{
+                manuallyScheduledShift = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+
+        private int selectedStafForSchedulingBinding;
+
+        public int SelectedStafForSchedulingBinding
+        {
+            get => selectedStafForSchedulingBinding;
+            set
+            {
+                selectedStafForSchedulingBinding = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         ConnectionSettingsDTO connectionSettingsDTO;
         public ConnectionSettingsDTO ConnectionSettings
@@ -44,11 +68,11 @@ namespace KreemMachine
                 }
             }
         }
+
         UserService userService = new UserService();
         ShiftService shiftService = new ShiftService();
         ConnectionSettingsService connectionService = new ConnectionSettingsService();
         ScheduleService scheduleService = new ScheduleService();
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -87,9 +111,9 @@ namespace KreemMachine
 
         }
 
-        private  void ShiftStartTextBox_TargetUpdated(object sender, EventArgs e)
+        private void ShiftStartTextBox_TargetUpdated(object sender, EventArgs e)
         {
-            
+
             var shift = ShiftNameComboBox.SelectedItem as Shift;
 
             try
@@ -98,7 +122,7 @@ namespace KreemMachine
                 shift.EndHour = TimeSpan.Parse(ShiftEndTextBox.Text);
             }
             catch (FormatException) { }
-            
+
             HoursTextBlock.DataContext = null;
             HoursTextBlock.DataContext = ShiftNameComboBox.SelectedItem;
         }
@@ -138,7 +162,7 @@ namespace KreemMachine
             addNullPaddingToCallendarDays();
             addMonthDaysToCallendarDays();
             matchScheduledShiftsToCallendarDays();
-            
+
             ScheduleListBox.ItemsSource = calendarDays;
 
             void addNullPaddingToCallendarDays()
@@ -155,7 +179,8 @@ namespace KreemMachine
                     calendarDays.Add(null);
             }
 
-            void addMonthDaysToCallendarDays(){
+            void addMonthDaysToCallendarDays()
+            {
                 for (var day = displayMonth; day < displayMonth.AddMonths(1); day = day.AddDays(1))
                     calendarDays.Add(new ScheduleDayViewModel(day));
             }
@@ -196,7 +221,7 @@ namespace KreemMachine
 
             var selected = e.AddedItems[0] as ScheduleDayViewModel;
 
-            foreach(var shift in selected.Shifts)
+            foreach (var shift in selected.Shifts)
             {
                 Console.WriteLine(shift.Shift.Name, shift.Date);
             }
@@ -212,9 +237,9 @@ namespace KreemMachine
 
         private void ManualScheduleShiftPicker_SelectedShiftChanged(object sender, DateTime SelectedDay, Shift SelectedShift)
         {
-            
-            ManuallyScheduledShift = scheduleService.GetScheduledShiftOrCreateNew(SelectedDay, SelectedShift);
 
+            ManuallyScheduledShift = scheduleService.GetScheduledShiftOrCreateNew(SelectedDay, SelectedShift);
+            SelectedStafForSchedulingBinding = ManuallyScheduledShift?.EmployeeScheduledShits.Count ?? 0;
             SetUpEmployeeRecomendationForManualScheduling();
 
         }
@@ -223,7 +248,8 @@ namespace KreemMachine
         {
             // TODO: Replace with Misho's algorithm for getting employee in recomended order
 
-            var users = userService.GetAllByRole(Role.Employee).Select( u => new UserSchedulerViewModel(u, ManuallyScheduledShift));
+            var users = userService.GetAllByRole(Role.Employee).Select(u => new UserSchedulerViewModel(u, ManuallyScheduledShift));
+
             ManuallyScheduleUsersListBox.ItemsSource = users;
         }
 
@@ -231,8 +257,9 @@ namespace KreemMachine
         {
             var checkbox = sender as CheckBox;
             var userViewModel = checkbox.DataContext as UserSchedulerViewModel;
-
             scheduleService.AssignUserToShift(userViewModel.User, ManuallyScheduledShift);
+            SelectedStafForSchedulingBinding++;
+
         }
 
         private void ShiftAssignmentCheckBox_Unchecked(object sender, RoutedEventArgs e)
@@ -241,6 +268,7 @@ namespace KreemMachine
             var userViewModel = checkbox.DataContext as UserSchedulerViewModel;
 
             scheduleService.RemoveUserFromShift(userViewModel.User, ManuallyScheduledShift);
+            SelectedStafForSchedulingBinding--;
 
         }
 

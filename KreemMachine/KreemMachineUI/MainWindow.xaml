@@ -227,14 +227,16 @@
                                                    SelectedShiftChanged="ManualScheduleShiftPicker_SelectedShiftChanged" />
 
                         <TextBlock Text="Staff selected: " VerticalAlignment="Center" />
-                        <TextBlock x:Name="StaffSelectedTextBox" Text="1 " VerticalAlignment="Center" />
-                        <TextBlock Text="/ " VerticalAlignment="Center" />
-                        <TextBlock x:Name="StaffPrefferedTextBox" Text="4" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding ElementName=_this, Path=SelectedStafForSchedulingBinding}" 
+                                   x:Name="StaffSelectedTextBox" VerticalAlignment="Center" />
+                        <TextBlock Text=" / " VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding ElementName=ManuallyScheduleUsersListBox, Path=ItemsSource.Count}"
+                                   x:Name="StaffPrefferedTextBox" VerticalAlignment="Center" />
 
-                        <TextBlock Text=" (Min:" VerticalAlignment="Center" />
-                        <TextBlock x:Name="MinStaffTextBox" Text=" 2" VerticalAlignment="Center" />
+                        <TextBlock Text=" (Min: " VerticalAlignment="Center" />
+                        <TextBlock x:Name="MinStaffTextBox" Text="{Binding ElementName=_this, Path=ManuallyScheduledShift.Shift.MinStaff}" VerticalAlignment="Center" />
                         <TextBlock Text=" Max: " VerticalAlignment="Center" />
-                        <TextBlock x:Name="MaxStaffTextBox" Text="5" VerticalAlignment="Center" />
+                        <TextBlock x:Name="MaxStaffTextBox" Text="{Binding ElementName=_this, Path=ManuallyScheduledShift.Shift.MaxStaff}" VerticalAlignment="Center" />
                         <TextBlock Text=")" VerticalAlignment="Center" />
                     </StackPanel>
 

@@ -30,8 +30,8 @@ namespace KreemMachine.ViewModels
             IsScheduled = shift?.EmployeeScheduledShits?.Any(us => us.UserId == user.Id) ?? false;
 
             HoursScheduledThisMonth = user?.ScheduledShifts
-                                            .Where(s => s.ScheduledShift.Date > shift.Date.ThisMonth() && s.ScheduledShift.Date < shift.Date.NextMonth())
-                                            .Sum( s => s.ScheduledShift.Duration) ?? 0;
+                                            ?.Where(s => s.ScheduledShift.Date > shift.Date.ThisMonth() && s.ScheduledShift.Date < shift.Date.NextMonth())
+                                            ?.Sum( s => s.ScheduledShift.Duration) ?? 0;
 
         }
     }
