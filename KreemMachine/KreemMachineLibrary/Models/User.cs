@@ -67,6 +67,16 @@ namespace KreemMachineLibrary.Models
         [NotMapped]
         public string FullName { get => FirstName + " " + LastName; }
 
+        /// <summary>
+        /// Temporairly hardcoded, later to be stored in the db
+        /// </summary>
+        public float MaxMonthlyHoours => 40;
+
+        /// <summary>
+        /// Temporairly hardcoded, later to be stored in the db
+        /// </summary>
+        public float MinMonthlyHours => 20;
+
         public User() { }
 
         public User(string firstName, string lastName, string email, Role role, float hourlyWage,
