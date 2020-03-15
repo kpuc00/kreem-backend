@@ -17,8 +17,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -30,6 +28,7 @@ namespace KreemMachine
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         ObservableCollection<User> AllUsers;
+        ScheduledShift ManuallyScheduledShift;
         IEnumerable<Shift> AllShifts;
 
         ConnectionSettingsDTO connectionSettingsDTO;
@@ -48,9 +47,10 @@ namespace KreemMachine
         UserService userService = new UserService();
         ShiftService shiftService = new ShiftService();
         ConnectionSettingsService connectionService = new ConnectionSettingsService();
+        ScheduleService scheduleService = new ScheduleService();
+
 
         public event PropertyChangedEventHandler PropertyChanged;
-        ScheduleService scheduleService = new ScheduleService();
 
         public MainWindow()
         {
@@ -194,7 +194,46 @@ namespace KreemMachine
             Console.WriteLine();
         }
 
+        private void ScheduleManuallyButton_Click(object sender, EventArgs e)
+        {
+            ManuallyGenerateScheduleTabItem.IsSelected = true;
+            ManualScheduleShiftPicker.AvailableShifts = shiftService.GetAllShifts();
 
+        }
+
+        private void ManualScheduleShiftPicker_SelectedShiftChanged(object sender, DateTime SelectedDay, Shift SelectedShift)
+        {
+            
+            ManuallyScheduledShift = scheduleService.GetScheduledShiftOrCreateNew(SelectedDay, SelectedShift);
+
+            SetUpEmployeeRecomendationForManualScheduling();
+
+        }
+
+        private void SetUpEmployeeRecomendationForManualScheduling()
+        {
+            // TODO: Replace with Misho's algorithm for getting employee in recomended order
+
+            var users = userService.GetAllByRole(Role.Employee).Select( u => new UserSchedulerViewModel(u, ManuallyScheduledShift));
+            ManuallyScheduleUsersListBox.ItemsSource = users;
+        }
+
+        private void ShiftAssignmentCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            var checkbox = sender as CheckBox;
+            var userViewModel = checkbox.DataContext as UserSchedulerViewModel;
+
+            scheduleService.AssignUserToShift(userViewModel.User, ManuallyScheduledShift);
+        }
+
+        private void ShiftAssignmentCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var checkbox = sender as CheckBox;
+            var userViewModel = checkbox.DataContext as UserSchedulerViewModel;
+
+            scheduleService.RemoveUserFromShift(userViewModel.User, ManuallyScheduledShift);
+
+        }
 
         #endregion
 

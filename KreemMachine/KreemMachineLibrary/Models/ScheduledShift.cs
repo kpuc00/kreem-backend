@@ -21,17 +21,21 @@ namespace KreemMachineLibrary.Models
         public long ShiftId { get; set; }
 
         [Required]
-        public float Duration { get; set; }
+        public double Duration { get; set; }
     
         public virtual Shift Shift { get; set; }
 
         public virtual ICollection<UserScheduledShift> EmployeeScheduledShits { get; set; }
 
-        public ScheduledShift(long id, DateTime date, Shift shift)
+        public bool isUnderstaffed => EmployeeScheduledShits == null || EmployeeScheduledShits.Count < Shift.MinStaff;
+
+        public bool IsOverstaffed => EmployeeScheduledShits?.Count > Shift.MaxStaff;
+
+        public ScheduledShift(DateTime date, Shift shift)
         {
-            Id = id;
             Date = date;
             Shift = shift;
+            Duration = shift.Duration;
         }
 
         public ScheduledShift()

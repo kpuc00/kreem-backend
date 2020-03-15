@@ -96,6 +96,7 @@
   <ItemGroup>
     <Compile Include="DTO\ConnectionSettings.cs" />
     <Compile Include="DataBaseContext.cs" />
+    <Compile Include="Extensions\DateTimeExtension.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Models\Roles.cs" />
     <Compile Include="Models\ScheduledShift.cs" />

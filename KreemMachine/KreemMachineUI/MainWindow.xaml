@@ -131,15 +131,47 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Grid Background="{Binding StatusBackgroundColor}" Margin="-4 0" >
+                                <Border Background="{Binding StatusBackgroundColor}"  Margin="-5 -2"
+                                        BorderBrush="LightGray" BorderThickness="1">
                                     <TextBlock Text="{Binding Day.Day}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                </Grid>
-                                
+                                </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <!-- TODO: Add legend -->
+                    <!-- Buttons -->
+                    <StackPanel Grid.Row="3" HorizontalAlignment="Left" TextBlock.FontSize="16" >
+                        <!-- Auto schedule -->
+                        <Button Content="Autogenerate" Margin="7" Padding="7 3" />
+                        
+                        <!-- Manually schedule -->
+                        <Button Content="Schedule manually" Click="ScheduleManuallyButton_Click"
+                                Margin="7"  Padding="7 3"  />
+                    </StackPanel>
+
+                    <!-- TODO: extract the colors somewhere else and bind them here and to the backend -->
+                    <Border Grid.Row="3" HorizontalAlignment="Right" Background="LightGray" 
+                                Margin="7" Padding="5 5 35 0" BorderBrush="DarkGray" BorderThickness="2">
+                        <StackPanel>
+                            <TextBlock Text="Legend:" FontSize="16" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5" Foreground="White"  />
+                                <TextBlock Text="Not scheduled" FontSize="14"  VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5"  Foreground="LawnGreen"  />
+                                <TextBlock Text="In order" FontSize="14" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5"  Foreground="Red"  />
+                                <TextBlock Text="Understaffed" FontSize="14" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5"  Foreground="Yellow"  />
+                                <TextBlock Text="Overstaffed" FontSize="14" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
                 </Grid>
             </TabItem>
 
@@ -181,6 +213,54 @@
                         </Grid>
                     </InlineUIContainer></TextBlock>
 
+            </TabItem>
+
+            <!--Manually generate schedule-->
+            <TabItem Visibility="Hidden" x:Name="ManuallyGenerateScheduleTabItem" >
+                <Grid Grid.IsSharedSizeScope="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" >
+                        <local:ScheduleShiftPicker x:Name="ManualScheduleShiftPicker" Margin="5"
+                                                   SelectedShiftChanged="ManualScheduleShiftPicker_SelectedShiftChanged" />
+
+                        <TextBlock Text="Staff selected: " VerticalAlignment="Center" />
+                        <TextBlock x:Name="StaffSelectedTextBox" Text="1 " VerticalAlignment="Center" />
+                        <TextBlock Text="/ " VerticalAlignment="Center" />
+                        <TextBlock x:Name="StaffPrefferedTextBox" Text="4" VerticalAlignment="Center" />
+
+                        <TextBlock Text=" (Min:" VerticalAlignment="Center" />
+                        <TextBlock x:Name="MinStaffTextBox" Text=" 2" VerticalAlignment="Center" />
+                        <TextBlock Text=" Max: " VerticalAlignment="Center" />
+                        <TextBlock x:Name="MaxStaffTextBox" Text="5" VerticalAlignment="Center" />
+                        <TextBlock Text=")" VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <Button Content="Save" HorizontalAlignment="Right" 
+                            Margin="5" FontSize="16" Padding="7 0"/>
+
+                    <ListBox Grid.Row="1" x:Name="ManuallyScheduleUsersListBox" BorderThickness="0" TextBlock.FontSize="18">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0 7">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition SharedSizeGroup="EmployeeNameColumn" Width="auto"/>
+                                        <ColumnDefinition SharedSizeGroup="EmployeeWorkedHoursColumn" Width="auto"/>
+                                        <ColumnDefinition SharedSizeGroup="EmployeeScheduledColumn" Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Grid.Column="0" />
+                                    <TextBlock Grid.Column="1" Text="{Binding User.FullName}" TextDecorations="Underline" />
+                                    <TextBlock Grid.Column="2" Text="{Binding HoursScheduledThisMonth}" Margin="20 0" />
+                                    <CheckBox Grid.Column="3" IsChecked="{Binding IsScheduled, Mode=OneWay}" 
+                                              Checked="ShiftAssignmentCheckBox_Checked" Unchecked="ShiftAssignmentCheckBox_Unchecked"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
             </TabItem>
             <TabItem Header="Settings" Loaded="Settings_Tab_Loaded">
                 <TabControl x:Name="InnerSettingsTab"

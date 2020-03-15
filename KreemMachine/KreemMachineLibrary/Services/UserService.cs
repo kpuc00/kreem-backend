@@ -93,6 +93,12 @@ namespace KreemMachineLibrary.Services
             return employeeEmail;
         }
 
+        public IList<User> GetAllByRole(Role role)
+        {
+            return db.Users.Where(u => u.RoleStr == Role.Employee.ToString()).ToList();
+        
+        }
+
 
 
     }

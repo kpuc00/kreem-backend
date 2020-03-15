@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KreemMachineLibrary.Extensions.Date;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,7 +31,7 @@ namespace KreemMachine
 
 
             // The first day of the current month
-            SelectedMonth = DateTime.Today.AddDays(-DateTime.Today.Day + 1); 
+            SelectedMonth = DateTime.Today.ThisMonth(); 
             DisplayDateTextBlock.Text = SelectedMonth.ToString("MMMM yyyy");
         }
 
