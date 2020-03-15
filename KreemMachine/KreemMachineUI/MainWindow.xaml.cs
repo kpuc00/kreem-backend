@@ -87,11 +87,20 @@ namespace KreemMachine
 
         }
 
-        private void ShiftStartTextBox_TargetUpdated(object sender, DataTransferEventArgs e)
+        private  void ShiftStartTextBox_TargetUpdated(object sender, EventArgs e)
         {
+            
+            var shift = ShiftNameComboBox.SelectedItem as Shift;
+
+            try
+            {
+                shift.StartHour = TimeSpan.Parse(ShiftStartTextBox.Text);
+                shift.EndHour = TimeSpan.Parse(ShiftEndTextBox.Text);
+            }
+            catch (FormatException) { }
+            
             HoursTextBlock.DataContext = null;
             HoursTextBlock.DataContext = ShiftNameComboBox.SelectedItem;
-            Console.WriteLine("gg " + ((Shift)ShiftNameComboBox.SelectedItem).Duration);
         }
 
         private void ButtonSaveConnectionSetting_Click(object sender, RoutedEventArgs e)

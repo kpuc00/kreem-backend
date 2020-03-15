@@ -309,6 +309,7 @@
                                         <TextBox x:Name="ShiftStartTextBox" 
                                          Margin="0, 10, 0, 0" Width="50" 
                                          HorizontalAlignment="Left"
+                                         TextChanged="ShiftStartTextBox_TargetUpdated"
                                          DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem, NotifyOnTargetUpdated=True}"
                                          Text="{Binding Path=StartHour, Mode=TwoWay, StringFormat={}{0:hh}:{0:mm}}"     
                                          />
@@ -320,7 +321,7 @@
                                          Margin="10, 10, 0, 0" 
                                          Width="50" 
                                          HorizontalAlignment="Right"
-                                         
+                                         TextChanged="ShiftStartTextBox_TargetUpdated"
                                          DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem}"
                                          Text="{Binding Path=EndHour, Mode=TwoWay, StringFormat={}{0:hh}:{0:mm}}"
                                          LostFocus="ShiftTimeTextBox_TextChanged"/>
@@ -329,7 +330,7 @@
                                            HorizontalAlignment="Center" 
                                            Margin="15, 5, -10, 0"
                                            DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem}"
-                                           Text="{Binding Path=Duration, StringFormat={}({0:hh}h {0:mm}m)}"/>
+                                           Text="{Binding Path=Duration, StringFormat={}({0}h)}"/>
 
                                     </StackPanel>
                                     <TextBlock Text="Minimum staff number" 
