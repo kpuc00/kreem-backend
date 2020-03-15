@@ -36,9 +36,9 @@ namespace KreemMachineLibrary.Models
         public int PreferredStaff { get; set; }
 
         [NotMapped]
-        public TimeSpan Duration => StartHour > EndHour 
-            ? EndHour.Add(new TimeSpan(1, 0, 0, 0, 0)) - StartHour 
-            : StartHour - EndHour;
+        public double Duration => (StartHour > EndHour 
+                                        ? EndHour.Add(new TimeSpan(1, 0, 0, 0, 0)) - StartHour 
+                                        : StartHour - EndHour).Duration().TotalHours;
 
         internal Shift()
         {
