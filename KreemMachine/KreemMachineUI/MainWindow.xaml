@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
         <TabControl x:Name="MainContent" TabStripPlacement="Left" Margin="10,10,-0.4,0" Grid.RowSpan="2">
             <!--Style to make the TabHeaders go to left and look somewhat nice-->
-            <TabControl.Resources>
+            <TabControl.Resources >
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="Template">
                         <Setter.Value>
@@ -37,7 +37,7 @@
             </TabControl.Resources>
 
             <!--Users-->
-            <TabItem Header="Users" Loaded="TabItem_Loaded">
+            <TabItem Header="Users" Loaded="TabItem_Loaded" Selector.Selected="TabItem_Selected">
                 <Grid>
                     <Grid.RowDefinitions>
                         <!--Create button and search-->
@@ -53,7 +53,7 @@
                     </Grid.ColumnDefinitions>
                     <Button x:Name="CreateUserButton" Click="CreateUserButton_Click"
                             Content="Create" Padding="7 3" Margin="5,3,5,0" Height="24" VerticalAlignment="Top" />
-                    <TextBox Grid.Column="1" Margin="3" />
+                    <TextBox Name="SearchTextBox" Grid.Column="1" Margin="3" KeyUp="SearchTextBox_KeyUp"/>
                     <ListBox Grid.Row="1" Grid.ColumnSpan="2"  x:Name="AllUsersListBox" 
                              TextBlock.FontSize="18" Grid.IsSharedSizeScope="True" 
                              HorizontalContentAlignment="Stretch">
@@ -84,7 +84,7 @@
                                     <TextBlock Grid.Column="3" Text="{Binding Role}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="4" Text="{Binding Email}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="5" Margin="0 0 10 0" />
-                                    <Button Grid.Column="6" Content=" Edit " Margin="0 0 10 0" />
+                                    <Button Grid.Column="6" Content=" Edit " Margin="0 0 10 0" Click="EditUserButton_Click"/>
                                     <Button Grid.Column="7" Content=" Delete " Click="DeleteUserButton_Click" />
                                 </Grid>
                             </DataTemplate>
