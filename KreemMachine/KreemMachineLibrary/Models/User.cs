@@ -15,20 +15,69 @@ namespace KreemMachineLibrary.Models
     [Table("user")]
     public class User
     {
+        //Instance variables
+        private string firstName = "";
+        private string lastName = "";
+        private string email = "";
+        private Role role;
+        private string passwordHash = "";
+        private float hourlyWage = 0;
+        private DateTime birthDate;
+
         [Key]
         public long Id { get; set; }
 
         [Column("first_name"), Required]
-        public string FirstName { get; set; }
+        public string FirstName { 
+            get {
+                return this.firstName;
+            }
+            set {
+                if (String.IsNullOrWhiteSpace(value))
+                {
+                    throw new RequiredFieldsEmpty("You need to fill in the required fields");
+                }
+                else {
+                    this.firstName = value;
+                }
+            } 
+        }
 
         [Column("last_name"), Required]
-        public string LastName { get; set; }
+        public string LastName { 
+            get {
+                return this.lastName;
+            } 
+            set {
+                if (String.IsNullOrWhiteSpace(value))
+                {
+                    throw new RequiredFieldsEmpty("You need to fill in the required fields");
+                }
+                else {
+                    this.lastName = value;
+                }
+            } 
+        }
 
         [Index("UQ_Email", IsUnique = true), Required]
-        public string Email { get; set; }
+        public string Email { 
+            get {
+                return this.email;
+            }
+            set {
+                this.email = value;
+            } 
+        }
 
         [Column("password_hash"), Required]
-        public string PasswordHash { get; set; }
+        public string PasswordHash { 
+            get {
+                return this.passwordHash;
+            } 
+            set {
+                this.passwordHash = value;
+            } 
+        }
 
         /// <summary>
         /// String property for the database calculated based on the public enum
@@ -36,24 +85,85 @@ namespace KreemMachineLibrary.Models
         [Column("role"), Required]
         private string _role
         {
-            get => Role.ToString();
+            get => role.ToString();
 
             //Parse the string from the database into an enum to expose to the app
-            set => Role = (Role)Enum.Parse(typeof(Role), value, ignoreCase: true);
+            set => role = (Role)Enum.Parse(typeof(Role), value, ignoreCase: true);
         }
 
         /// <summary>
         /// Role exposes an enum for the rest of the application
         /// </summary>
         [NotMapped]
-        public Role Role { get; set;  }
+        public Role Role { 
+            get {
+                return this.role;
+            } set {
+                if (String.IsNullOrWhiteSpace(value.ToString()))
+                {
+                    throw new RequiredFieldsEmpty("You need to fill in the required fields");
+                }
+                else {
+                    this.role = value;
+                }
+            }  
+        }
 
         [Column("hourly_wage"), Required]
-        public float HourlyWage { get; set; }
+        public float HourlyWage
+        {
+            get
+            {
+                return this.hourlyWage;
+            }
+            set
+            {
+                int dotCount = 0;
+                bool val = true;
+                foreach (Char c in value.ToString())
+                {
+                    if (c == '.')
+                    {
+                        if (++dotCount > 1)
+                        {
+                            val = false;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (c < '0' || c > '9')
+                        {
+                            val = false;
+                            break;
+                        }
+                    }
+                }
+                if (val)
+                {
+                    this.hourlyWage = value;
+                }
+                else
+                {
+                    throw new HourlyWageMustComtainOnlyNumbers("Invalid value for wage");
+                }
+            }
+        }
 
         [Column("birth_date"), Required]
-        public DateTime? Birthdate { get; set; }
-
+        public DateTime? Birthdate { get {
+                return this.birthDate;
+            } set {
+                if (String.IsNullOrWhiteSpace(value.ToString()))
+                {
+                    throw new RequiredFieldsEmpty("You need to fill in the required fields");
+                }
+                else {
+                    this.birthDate = (DateTime)value;
+                }
+            }
+        }
+        [Column("address")]
         public string Address { get; set; }
 
         [Column("phone_number")]
@@ -72,20 +182,14 @@ namespace KreemMachineLibrary.Models
         public User(string firstName, string lastName, string email, Role role, float hourlyWage, 
                     DateTime? birthdate, string adress = null, string phoneNumber = null)
         {
-            if (String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(lastName) || String.IsNullOrWhiteSpace(email) || String.IsNullOrWhiteSpace(role.ToString()) || String.IsNullOrWhiteSpace(hourlyWage.ToString()) || String.IsNullOrWhiteSpace(birthdate.ToString()))
-            {
-                throw new RequiredFieldsEmpty("The required fields are empty");
-            }
-            else {
-                FirstName = firstName;
-                LastName = lastName;
-                Email = email;
-                Role = role;
-                HourlyWage = hourlyWage;
-                Birthdate = birthdate;
-                Address = adress;
-                PhoneNumber = phoneNumber;
-            }
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+            Role = role;
+            HourlyWage = hourlyWage;
+            Birthdate = birthdate;
+            Address = adress;
+            PhoneNumber = phoneNumber;
         }
     }
 }

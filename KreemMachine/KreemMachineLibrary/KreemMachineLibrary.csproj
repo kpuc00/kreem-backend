@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="DataBaseContext.cs" />
     <Compile Include="Exceptions\DeletAdminAccountException.cs" />
+    <Compile Include="Exceptions\HourlyWageMustComtainOnlyNumbers.cs" />
     <Compile Include="Exceptions\RequiredFieldsEmpty.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Models\Roles.cs" />

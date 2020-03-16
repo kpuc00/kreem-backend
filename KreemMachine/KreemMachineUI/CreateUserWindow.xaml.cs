@@ -35,13 +35,22 @@ namespace KreemMachine
         {
             RoleComboBox.ItemsSource = Enum.GetValues(typeof(Role));
             RoleComboBox.SelectedItem = Role.Employee;
+
+            FirstNameTextBox.Text = "";
+            LastNameTextBox.Text = "";
+            EmailTextBox.Text = "";
+            HourlyWageTextBox.Text = "";
+            BirthDatePicker.SelectedDate = null;
+            AddressTextBox.Text = "";
+            PhoneNumberTextBox.Text = "";
+
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var user = new User(
+                User user = new User(
                     FirstNameTextBox.Text,
                     LastNameTextBox.Text,
                     EmailTextBox.Text,
@@ -57,11 +66,17 @@ namespace KreemMachine
 
                 this.Close();
             }
-            catch (RequiredFieldsEmpty ex) {
+            catch (HourlyWageMustComtainOnlyNumbers ex)
+            {
                 MessageBox.Show(ex.Message);
             }
-           
-
+            catch (RequiredFieldsEmpty ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void FirstNameTextBox_KeyUp(object sender, KeyEventArgs e)

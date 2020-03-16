@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KreemMachineLibrary.Models;
 using KreemMachineLibrary.Services;
+using KreemMachineLibrary.Exceptions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -44,18 +45,31 @@ namespace KreemMachine
 
         private void UpdateUserButton_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                this.user.FirstName = FirstNameTextBox.Text;
+                this.user.LastName = LastNameTextBox.Text;
+                this.user.Email = EmailTextBox.Text;
+                this.user.Role = (Role)RoleComboBox.SelectedItem;
+                this.user.HourlyWage = float.Parse(HourlyWageTextBox.Text);
+                this.user.Address = AddressTextBox.Text;
+                this.user.PhoneNumber = PhoneNumberTextBox.Text;
 
-            this.user.FirstName = FirstNameTextBox.Text;
-            this.user.LastName = LastNameTextBox.Text;
-            this.user.Email = EmailTextBox.Text;
-            this.user.Role = (Role)RoleComboBox.SelectedItem;
-            this.user.HourlyWage = float.Parse(HourlyWageTextBox.Text);
-            this.user.Address = AddressTextBox.Text;
-            this.user.PhoneNumber = PhoneNumberTextBox.Text;
+                this.userService.UpdateEmployee(this.user);
 
-            this.userService.UpdateEmployee(this.user);
-
-            this.Close();
+                this.Close();
+            }
+            catch (HourlyWageMustComtainOnlyNumbers ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (RequiredFieldsEmpty ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex) {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void FirstNameTextBox_KeyUp(object sender, KeyEventArgs e)
