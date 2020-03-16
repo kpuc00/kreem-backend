@@ -73,6 +73,7 @@ namespace KreemMachine
         ShiftService shiftService = new ShiftService();
         ConnectionSettingsService connectionService = new ConnectionSettingsService();
         ScheduleService scheduleService = new ScheduleService();
+        StatisticsService statisticsService = new StatisticsService();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -274,6 +275,48 @@ namespace KreemMachine
 
         #endregion
 
+        #region Statistics
 
+        private void ResPerShiftTab_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //StatisticsService.
+        }
+
+        //Resources per shift
+
+        private void ResPerShiftTab_Loaded(object sender, RoutedEventArgs e)
+        {
+            StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
+        }
+
+        private void StatisticsPerShiftMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
+        {
+            statisticsService.GetShiftPerMonth(displayMonth);
+        }
+
+        //Resources per month
+
+        private void ResPerMonthTab_Loaded(object sender, RoutedEventArgs e)
+        {
+            StatisticsPerMonthMonthPicker_SelectedMonthChanged(sender, StatisticsPerMonthMonthPicker.SelectedMonth);
+        }
+
+        private void StatisticsPerMonthMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
+        {
+
+        }
+
+        //Employee statistics
+
+        private void EmplStatsTab_Loaded(object sender, RoutedEventArgs e)
+        {
+            EmployeeStatisticsMonthPicker_SelectedMonthChanged(sender, EmployeeStatisticsMonthPicker.SelectedMonth);
+        }
+        private void EmployeeStatisticsMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
+        {
+
+        }
+
+        #endregion
     }
 }

@@ -109,6 +109,7 @@
     <Compile Include="Services\ConnectionSettingsService.cs" />
     <Compile Include="Services\ShiftService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
+    <Compile Include="Services\StatisticsService.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
