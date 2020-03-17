@@ -255,11 +255,9 @@ namespace KreemMachine
 
             var selected = e.AddedItems[0] as ScheduleDayViewModel;
 
-            foreach (var shift in selected.Shifts)
-            {
-                Console.WriteLine(shift.Shift.Name, shift.Date);
-            }
-            Console.WriteLine();
+            ScheduleManuallyButton_Click(null, null);
+            ManualScheduleShiftPicker.SelectedDay = selected.Day;
+
         }
 
         private void ScheduleManuallyButton_Click(object sender, EventArgs e)
