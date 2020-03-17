@@ -37,7 +37,8 @@
             </TabControl.Resources>
 
             <!--Users-->
-            <TabItem Header="Users" Loaded="TabItem_Loaded" Selector.Selected="UsersTabItem_Selected">
+            <TabItem Header="Users" Loaded="TabItem_Loaded" Visibility="{Binding ElementName=_this, Path=CanViewUsersTab, Converter={StaticResource BoolToVis}}"
+                     Selector.Selected="UsersTabItem_Selected">
                 <Grid>
                     <Grid.RowDefinitions>
                         <!--Create button and search-->
@@ -52,7 +53,8 @@
                         <!-- Search bar-->
                     </Grid.ColumnDefinitions>
                     <Button x:Name="CreateUserButton" Click="CreateUserButton_Click"
-                            Content="Create" Padding="7 3" Margin="5,3,5,0" Height="24" VerticalAlignment="Top" />
+                            Content="Create" Padding="7 3" Margin="5,3,5,0" Height="24" VerticalAlignment="Top"
+                            IsEnabled="{Binding ElementName=_this, Path=CanCreateUser}" />
                     <TextBox Name="SearchTextBox" Grid.Column="1" Margin="3" KeyUp="SearchTextBox_KeyUp"/>
                     <ListBox Grid.Row="1" Grid.ColumnSpan="2"  x:Name="AllUsersListBox" 
                              TextBlock.FontSize="18" Grid.IsSharedSizeScope="True" 
@@ -84,8 +86,10 @@
                                     <TextBlock Grid.Column="3" Text="{Binding Role}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="4" Text="{Binding Email}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="5" Margin="0 0 10 0" />
-                                    <Button Grid.Column="6" Content=" Edit " Margin="0 0 10 0" Click="EditUserButton_Click"/>
-                                    <Button Grid.Column="7" Content=" Delete " Click="DeleteUserButton_Click" />
+                                    <Button Grid.Column="6" Content=" Edit " Margin="0 0 10 0" Click="EditUserButton_Click"
+                                            IsEnabled="{Binding ElementName=_this, Path=CanEditUser}"/>
+                                    <Button Grid.Column="7" Content=" Delete " Click="DeleteUserButton_Click"
+                                            IsEnabled="{Binding ElementName=_this, Path=CanDeleteUser}"/>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -94,7 +98,8 @@
             </TabItem>
 
             <!--Schedule-->
-            <TabItem Header="Schedule" Selector.Selected="ScheduleTab_Selected">
+            <TabItem Header="Schedule" Selector.Selected="ScheduleTab_Selected"
+                     Visibility="{Binding ElementName=_this, Path=CanViewScheduleTab, Converter={StaticResource BoolToVis}}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
@@ -142,11 +147,11 @@
                     <!-- Buttons -->
                     <StackPanel Grid.Row="3" HorizontalAlignment="Left" TextBlock.FontSize="16" >
                         <!-- Auto schedule -->
-                        <Button Content="Autogenerate" Margin="7" Padding="7 3" />
+                        <Button Content="Autogenerate" Margin="7" Padding="7 3" IsEnabled="{Binding ElementName=_this, Path=CanEditSchedule}" />
                         
                         <!-- Manually schedule -->
                         <Button Content="Schedule manually" Click="ScheduleManuallyButton_Click"
-                                Margin="7"  Padding="7 3"  />
+                                Margin="7"  Padding="7 3" />
                     </StackPanel>
 
                     <!-- TODO: extract the colors somewhere else and bind them here and to the backend -->
@@ -176,7 +181,7 @@
             </TabItem>
 
             <!--Statistics-->
-            <TabItem Header="Statistics">
+            <TabItem Header="Statistics" Visibility="{Binding ElementName=_this, Path=CanViewStatisticsTab, Converter={StaticResource BoolToVis}}" >
                 <TextBlock Margin="1,0,6.4,5.4" Padding="5" ><InlineUIContainer>
                         <Grid Height="406" Width="657">
                         <Grid Margin="10">
@@ -266,7 +271,8 @@
                                     <TextBlock Grid.Column="1" Text="{Binding User.FullName}" TextDecorations="Underline" />
                                     <TextBlock Grid.Column="2" Text="{Binding HoursScheduledThisWeek, StringFormat={}{0}h }" Margin="20 0" />
                                     <CheckBox Grid.Column="3" IsChecked="{Binding IsScheduled, Mode=OneWay}" 
-                                              Checked="ShiftAssignmentCheckBox_Checked" Unchecked="ShiftAssignmentCheckBox_Unchecked"/>
+                                              Checked="ShiftAssignmentCheckBox_Checked" Unchecked="ShiftAssignmentCheckBox_Unchecked"
+                                              IsEnabled="{Binding ElementName=_this, Path=CanEditSchedule}" />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

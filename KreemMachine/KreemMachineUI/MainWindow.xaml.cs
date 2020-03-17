@@ -34,6 +34,15 @@ namespace KreemMachine
 
         IEnumerable<Shift> AllShifts;
 
+        public bool CanViewUsersTab => SecurityContext.HasPermissions(Permission.ViewUsers);
+        public bool CanViewScheduleTab => SecurityContext.HasPermissions(Permission.ViewSchedule);
+        public bool CanViewStatisticsTab => SecurityContext.HasPermissions(Permission.ViewSchedule);
+        public bool CanCreateUser => SecurityContext.HasPermissions(Permission.CreateUsers);
+        public bool CanEditUser => SecurityContext.HasPermissions(Permission.EditUsers);
+        public bool CanDeleteUser => SecurityContext.HasPermissions(Permission.DeleteUsers);
+        public bool CanEditSchedule => SecurityContext.HasPermissions(Permission.EditSchedule);
+        
+
         ScheduledShift manuallyScheduledShift;
 
         public ScheduledShift ManuallyScheduledShift
@@ -44,7 +53,6 @@ namespace KreemMachine
                 NotifyPropertyChanged();
             }
         }
-
 
         private int selectedStafForSchedulingBinding;
 

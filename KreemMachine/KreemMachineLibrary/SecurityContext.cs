@@ -25,6 +25,9 @@ namespace KreemMachineLibrary
             CurrentUser = user;
         }
 
+        /// <summary>
+        /// Returns true if user has all given permission and false otherwise
+        /// </summary>
         public static bool HasPermissions(params Permission[] permissions)
         {
             if (!CurrentUser.Role.HasValue) return false;
@@ -32,8 +35,10 @@ namespace KreemMachineLibrary
             return PermissionTable[CurrentUser.Role.Value].Intersect(permissions).Count() == permissions.Length;
         }
 
-        public static bool HasRole(Role? role) =>
-            CurrentUser.Role == role;
+        /// <summary>
+        /// Returns true if user has either of given roles
+        /// </summary>
+        public static bool HasRole(params Role?[] roles) => roles.Contains(CurrentUser.Role);
         
     }
 }

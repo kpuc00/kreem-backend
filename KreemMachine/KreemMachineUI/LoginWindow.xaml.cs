@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using KreemMachineLibrary;
 using KreemMachineLibrary.Models;
 using KreemMachineLibrary.Services;
 
@@ -49,11 +50,15 @@ namespace KreemMachine
             //users might still be null, hence safe navigation operator ?.
             var user = users?.AuthenticateByCredentials(Email, Password);
 
-            if (user != null)
+            if (UserLogInIsValid(user))
                 DislayMainWindow(user);
             else
                 MessageBox.Show("Either email or password is wrong");
         }
+
+        private static bool UserLogInIsValid(User user) =>
+            user != null && SecurityContext.HasRole(Role.Administrator, Role.Depot, Role.Manager);
+        
 
         private void DislayMainWindow(User user)
         {

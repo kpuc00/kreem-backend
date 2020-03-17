@@ -107,6 +107,7 @@
     <Compile Include="Models\Shift.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserScheduledShift.cs" />
+    <Compile Include="Permission.cs" />
     <Compile Include="SecurityContext.cs" />
     <Compile Include="Helpers\PasswordHashHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
