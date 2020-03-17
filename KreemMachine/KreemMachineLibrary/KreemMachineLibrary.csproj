@@ -98,6 +98,9 @@
   <ItemGroup>
     <Compile Include="DTO\ConnectionSettings.cs" />
     <Compile Include="DataBaseContext.cs" />
+    <Compile Include="DTO\ResourcesPerEmployeeDTO.cs" />
+    <Compile Include="DTO\ResourcesPerMonthDTO.cs" />
+    <Compile Include="DTO\ResourcesPerShiftDTO.cs" />
     <Compile Include="Extensions\DateTimeExtension.cs" />
     <Compile Include="Exceptions\DeletAdminAccountException.cs" />
     <Compile Include="Exceptions\HourlyWageMustComtainOnlyNumbers.cs" />

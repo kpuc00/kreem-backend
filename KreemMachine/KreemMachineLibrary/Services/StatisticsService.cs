@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KreemMachineLibrary.Models;
+using KreemMachineLibrary.DTO;
 
 namespace KreemMachineLibrary.Services
 {
@@ -13,43 +14,151 @@ namespace KreemMachineLibrary.Services
     {
         DataBaseContext db = Globals.db;
 
-        public ScheduledShift GetShiftPerMonth(DateTime displayMonth)
+        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftAll(DateTime dateTime)
         {
-            //var shift = db.ScheduledShifts.Where(s => s.Date == displayMonth).FirstOrDefault();
-
-            var nextMonth = displayMonth.AddMonths(1);
+            var nextMonth = dateTime.AddMonths(1);
 
             var result = from ss in db.ScheduledShifts
                          join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
-                         where ss.Date >= displayMonth && ss.Date < nextMonth //SqlMethods.Like(ss.Date.ToString(), "2020/01/__")
+                         where ss.Date >= dateTime && ss.Date < nextMonth 
                          select new { SS = ss, US = us } into joined
                          group joined by new {
                              joined.SS.Date,
                              joined.SS.Shift
                          } into g
-                         select new {
+                         select new ResourcesPerShiftDTO {
                              empCount = g.Count(),
                              empCost = g.Sum(us => us.US.HourlyWage),
                              date = g.Key.Date,
-                             shift = g.Key.Shift
+                             shift = g.Key.Shift.Name
                          };
 
-            Console.WriteLine("results:");
-            foreach (var x in result) {
-                Console.WriteLine(x.empCost + " " + x.empCount + " " + x.date + " " + x.shift.Name);
-            }
-
-
-            
-
-            /*var results = from s in db.UserScheduledShifts
-                          join u in db.Users on s.UserId equals u.Id
-                          where s.
-                          group s.UserId  by p.PersonId into g
-                          select new { PersonId = g.Key, Cars = g.ToList() };*/
-            return null;
+            return new ObservableCollection<ResourcesPerShiftDTO>(result);
         }
 
-        
+        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftMorning(DateTime dateTime)
+        {
+            var nextMonth = dateTime.AddMonths(1);
+
+            var result = from ss in db.ScheduledShifts
+                         join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
+                         where ss.Date >= dateTime && ss.Date < nextMonth && ss.Shift.ToString() == "Morning"
+                         select new { SS = ss, US = us } into joined
+                         group joined by new
+                         {
+                             joined.SS.Date,
+                             joined.SS.Shift
+                         } into g
+                         select new ResourcesPerShiftDTO
+                         {
+                             empCount = g.Count(),
+                             empCost = g.Sum(us => us.US.HourlyWage),
+                             date = g.Key.Date,
+                             shift = g.Key.Shift.Name
+                         };
+
+            return new ObservableCollection<ResourcesPerShiftDTO>(result);
+        }
+
+        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftNoon(DateTime dateTime)
+        {
+            var nextMonth = dateTime.AddMonths(1);
+
+            var result = from ss in db.ScheduledShifts
+                         join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
+                         where ss.Date >= dateTime && ss.Date < nextMonth && ss.Shift.ToString() == "Noon"
+                         select new { SS = ss, US = us } into joined
+                         group joined by new
+                         {
+                             joined.SS.Date,
+                             joined.SS.Shift
+                         } into g
+                         select new ResourcesPerShiftDTO
+                         {
+                             empCount = g.Count(),
+                             empCost = g.Sum(us => us.US.HourlyWage),
+                             date = g.Key.Date,
+                             shift = g.Key.Shift.Name
+                         };
+
+            return new ObservableCollection<ResourcesPerShiftDTO>(result);
+        }
+
+        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftEvening(DateTime dateTime)
+        {
+            var nextMonth = dateTime.AddMonths(1);
+
+            var result = from ss in db.ScheduledShifts
+                         join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
+                         where ss.Date >= dateTime && ss.Date < nextMonth && ss.Shift.ToString() == "Evening"
+                         select new { SS = ss, US = us } into joined
+                         group joined by new
+                         {
+                             joined.SS.Date,
+                             joined.SS.Shift
+                         } into g
+                         select new ResourcesPerShiftDTO
+                         {
+                             empCount = g.Count(),
+                             empCost = g.Sum(us => us.US.HourlyWage),
+                             date = g.Key.Date,
+                             shift = g.Key.Shift.Name
+                         };
+
+            return new ObservableCollection<ResourcesPerShiftDTO>(result);
+        }
+
+        public ObservableCollection<ResourcesPerMonthDTO> GetResourcesPerMonth()
+        {
+            var result = from ss in db.ScheduledShifts
+                         join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
+                         where ss.Date >= new DateTime(2020, 03, 01) && ss.Date <= new DateTime(2020, 03, 31)
+                         select new { SS = ss, US = us } into joined
+                         group joined by new
+                         {
+                             joined.SS.Date.Month
+                         } into g
+                         select new ResourcesPerMonthDTO
+                         {
+                             empCount = g.Count(),
+                             empCost = g.Sum(us => us.US.HourlyWage)
+                         };
+
+            /*Console.WriteLine("result:");
+            foreach (var x in result) { 
+                Console.WriteLine(x.empCount + " " + x.empCost);
+            }*/
+
+            return new ObservableCollection<ResourcesPerMonthDTO>(result);
+        }
+
+        public ObservableCollection<ResourcesPerEmployeeDTO> GetResourcesPerEmployee(DateTime dateTime) 
+        {
+            var nextMonth = dateTime.AddMonths(1);
+
+            var result = from ss in db.ScheduledShifts
+                         join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
+                         where ss.Date >= dateTime && ss.Date < nextMonth
+                         select new { SS = ss, US = us } into joined
+                         group joined by new
+                         {
+                             user = joined.US.User,
+                         } into g
+                         select new ResourcesPerEmployeeDTO
+                         {
+                             name = g.Key.user.FirstName + " " +g.Key.user.LastName,
+                             shiftCount = g.Count(),
+                             hourSum = g.Sum(y => y.SS.Duration),
+                             empCost = g.Sum(x => x.US.HourlyWage)
+                         };
+
+            Console.WriteLine("result:");
+            foreach (var x in result)
+            {
+                Console.WriteLine(x.name + " " + x.shiftCount + " " + x.hourSum + " " + x.empCost);
+            }
+
+            return new ObservableCollection<ResourcesPerEmployeeDTO>(result);
+        }
     }
 }

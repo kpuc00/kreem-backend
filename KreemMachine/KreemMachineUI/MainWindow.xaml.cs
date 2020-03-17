@@ -40,7 +40,8 @@ namespace KreemMachine
         public ScheduledShift ManuallyScheduledShift
         {
             get => manuallyScheduledShift;
-            set{
+            set
+            {
                 manuallyScheduledShift = value;
                 NotifyPropertyChanged();
             }
@@ -86,7 +87,7 @@ namespace KreemMachine
         {
             InitializeComponent();
             logedUSer = user;
-            
+
 
         }
 
@@ -164,14 +165,16 @@ namespace KreemMachine
             try
             {
                 int i = userService.DeleteEmployee(user, logedUSer);
-                if (i == -1) {
+                if (i == -1)
+                {
                     Window window = new LoginWindow();
                     window.Show();
 
                     this.Close();
                 }
             }
-            catch (DeletAdminAccountException dex) {
+            catch (DeletAdminAccountException dex)
+            {
                 MessageBox.Show(dex.Message);
             }
 
@@ -189,7 +192,7 @@ namespace KreemMachine
         private void UsersTabItem_Selected(object sender, RoutedEventArgs e)
         {
             AllUsersListBox.ItemsSource = null;
-            AllUsersListBox.ItemsSource = AllUsers; 
+            AllUsersListBox.ItemsSource = AllUsers;
         }
 
 
@@ -331,8 +334,37 @@ namespace KreemMachine
 
         private void StatisticsPerShiftMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
         {
-            //Look here
-            ResourcesPerShiftDTO resourcesPerShiftDTO =  statisticsService.GetResourcesPerShift(displayMonth);
+            if (cbMorningShift.IsChecked == true)
+            {
+                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftMorning(displayMonth);
+            }
+            else if (cbNoonShift.IsChecked == true)
+            {
+                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftNoon(displayMonth);
+            }
+            else if (cbEveningShift.IsChecked == true)
+            {
+                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftEvening(displayMonth);
+            }
+            else
+            {
+                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftAll(displayMonth);
+            }
+        }
+
+        private void cbMorningShift_Checked(object sender, RoutedEventArgs e)
+        {
+            StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
+        }
+
+        private void cbNoonShift_Checked(object sender, RoutedEventArgs e)
+        {
+            StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
+        }
+
+        private void cbEveningShift_Checked(object sender, RoutedEventArgs e)
+        {
+            StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
         }
 
         //Resources per month
@@ -341,10 +373,10 @@ namespace KreemMachine
         {
             StatisticsPerMonthMonthPicker_SelectedMonthChanged(sender, StatisticsPerMonthMonthPicker.SelectedMonth);
         }
-        
+
         private void StatisticsPerMonthMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
         {
-            //statisticsService.GetResourcesPerShift(displayMonth);
+            ResPerMonthDataGrid.ItemsSource = statisticsService.GetResourcesPerMonth();
         }
 
         //Employee statistics
@@ -355,9 +387,12 @@ namespace KreemMachine
         }
         private void EmployeeStatisticsMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
         {
-
+            EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployee(displayMonth);
         }
 
+
         #endregion
+
+
     }
 }

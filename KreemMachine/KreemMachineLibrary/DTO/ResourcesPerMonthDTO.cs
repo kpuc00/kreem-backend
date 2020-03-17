@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace KreemMachineLibrary.DTO
 {
-    public class ResourcesPerShiftDTO
+    public class ResourcesPerMonthDTO
     {
+        public string month { get; set; }
         public int empCount { get; set; }
         public float empCost { get; set; }
-        public DateTime date { get; set; }
-        public string shift { get; set; }
-
-        public ResourcesPerShiftDTO() { }
-
     }
 }
