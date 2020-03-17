@@ -192,7 +192,7 @@
                                 </TabItem>
                                 <TabItem x:Name="ResPerMonthTab" Header="Resources per month" Loaded="ResPerMonthTab_Loaded">
                                     <Grid Background="White" Margin="0,0,11.4,0">
-                                        <local:MonthPicker x:Name="StatisticsPerMonthMonthPicker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,6,0,0" SelectedMonthChanged="StatisticsPerMonthMonthPicker_SelectedMonthChanged" />
+                                        <local:MonthPicker x:Name="StatisticsPerMonthMonthPicker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,6,0,0" SelectedMonthChanged="StatisticsPerMonthMonthPicker_SelectedMonthChanged" /> 
                                         <CheckBox Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0"/>
                                         <CheckBox Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336"/>
                                         <CheckBox Content="Evening" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top"/>

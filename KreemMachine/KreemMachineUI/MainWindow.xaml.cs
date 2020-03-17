@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using System.IO;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using KreemMachineLibrary.DTO;
 
 namespace KreemMachine
 {
@@ -291,7 +292,8 @@ namespace KreemMachine
 
         private void StatisticsPerShiftMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
         {
-            statisticsService.GetShiftPerMonth(displayMonth);
+            //Look here
+            ResourcesPerShiftDTO resourcesPerShiftDTO =  statisticsService.GetResourcesPerShift(displayMonth);
         }
 
         //Resources per month
@@ -300,10 +302,10 @@ namespace KreemMachine
         {
             StatisticsPerMonthMonthPicker_SelectedMonthChanged(sender, StatisticsPerMonthMonthPicker.SelectedMonth);
         }
-
+        
         private void StatisticsPerMonthMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
         {
-
+            //statisticsService.GetResourcesPerShift(displayMonth);
         }
 
         //Employee statistics
