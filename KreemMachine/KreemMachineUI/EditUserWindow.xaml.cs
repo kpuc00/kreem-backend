@@ -1,8 +1,9 @@
-﻿using KreemMachineLibrary.Models;
-using KreemMachineLibrary.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KreemMachineLibrary.Models;
+using KreemMachineLibrary.Services;
+using KreemMachineLibrary.Exceptions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,55 +15,47 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
-using KreemMachineLibrary.Exceptions;
 
 namespace KreemMachine
 {
     /// <summary>
-    /// Interaction logic for CreateUserWindow.xaml
+    /// Interaction logic for EditUserWindow.xaml
     /// </summary>
-    public partial class CreateUserWindow : Window
-    {
-
-        UserService users = new UserService();
-
-        public CreateUserWindow()
+    public partial class EditUserWindow : Window
+    {   
+        User user;
+        UserService userService;
+        
+        public EditUserWindow(User user, UserService userService)
         {
             InitializeComponent();
-        }
+            this.user = user;
+            this.userService = userService;
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
+            FirstNameTextBox.Text = this.user.FirstName;
+            LastNameTextBox.Text = this.user.LastName;
+            EmailTextBox.Text = this.user.Email;
             RoleComboBox.ItemsSource = Enum.GetValues(typeof(Role));
-            RoleComboBox.SelectedItem = Role.Employee;
-
-            FirstNameTextBox.Text = "";
-            LastNameTextBox.Text = "";
-            EmailTextBox.Text = "";
-            HourlyWageTextBox.Text = "";
-            BirthDatePicker.SelectedDate = null;
-            AddressTextBox.Text = "";
-            PhoneNumberTextBox.Text = "";
-
+            RoleComboBox.SelectedItem = this.user.Role;
+            HourlyWageTextBox.Text = this.user.HourlyWage.ToString();
+            BirthDatePicker.SelectedDate = (DateTime)this.user.Birthdate;
+            AddressTextBox.Text = this.user.Address;
+            PhoneNumberTextBox.Text = this.user.PhoneNumber;
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private void UpdateUserButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                User user = new User(
-                    FirstNameTextBox.Text,
-                    LastNameTextBox.Text,
-                    EmailTextBox.Text,
-                    (Role)RoleComboBox.SelectedItem,
-                    float.Parse(HourlyWageTextBox.Text),
-                    BirthDatePicker.SelectedDate,
-                    AddressTextBox.Text,
-                    PhoneNumberTextBox.Text);
+                this.user.FirstName = FirstNameTextBox.Text;
+                this.user.LastName = LastNameTextBox.Text;
+                this.user.Email = EmailTextBox.Text;
+                this.user.Role = (Role)RoleComboBox.SelectedItem;
+                this.user.HourlyWage = float.Parse(HourlyWageTextBox.Text);
+                this.user.Address = AddressTextBox.Text;
+                this.user.PhoneNumber = PhoneNumberTextBox.Text;
 
-                users.Save(user);
-
-                MessageBox.Show($"Your password is {user.Password}");
+                this.userService.UpdateEmployee(this.user);
 
                 this.Close();
             }
@@ -85,21 +78,23 @@ namespace KreemMachine
             string firstName = tempFirstLastName[0];
             string lastName = tempFirstLastName[1];
 
-            string employeeEmail = users.GenerateEmployeeEmail(firstName, lastName);
+            string employeeEmail = userService.GenerateEmployeeEmail(firstName, lastName);
             EmailTextBox.Text = employeeEmail;
         }
 
         private void LastNameTextBox_KeyUp(object sender, KeyEventArgs e)
         {
+            
             string[] tempFirstLastName = CheckFirstLastNameTextBox();
             string firstName = tempFirstLastName[0];
             string lastName = tempFirstLastName[1];
 
-            string employeeEmail = users.GenerateEmployeeEmail(firstName, lastName);
+            string employeeEmail = userService.GenerateEmployeeEmail(firstName, lastName);
             EmailTextBox.Text = employeeEmail;
         }
 
-        private string[] CheckFirstLastNameTextBox() {
+        private string[] CheckFirstLastNameTextBox()
+        {
             string firstName = "example";
             string lastName = "example";
             string[] retVal = new string[2];
@@ -118,8 +113,5 @@ namespace KreemMachine
 
             return retVal;
         }
-
-
     }
-
 }

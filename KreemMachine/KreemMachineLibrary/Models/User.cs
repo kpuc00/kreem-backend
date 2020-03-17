@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KreemMachineLibrary.Exceptions;
 
 namespace KreemMachineLibrary.Models
 {
@@ -14,43 +15,166 @@ namespace KreemMachineLibrary.Models
     [Table("user")]
     public class User
     {
+        //Instance variables
+        private string firstName = "";
+        private string lastName = "";
+        private string email = "";
+        private Role role;
+        private string passwordHash = "";
+        private float hourlyWage = 0;
+        private DateTime birthDate;
+
         [Key]
         public long Id { get; set; }
 
         [Column("first_name"), Required]
-        public string FirstName { get; set; }
+        public string FirstName { 
+            get {
+                return this.firstName;
+            }
+            set {
+                if (String.IsNullOrWhiteSpace(value))
+                {
+                    throw new RequiredFieldsEmpty("You need to fill in the required fields");
+                }
+                else {
+                    this.firstName = value;
+                }
+            } 
+        }
 
         [Column("last_name"), Required]
-        public string LastName { get; set; }
+        public string LastName { 
+            get {
+                return this.lastName;
+            } 
+            set {
+                if (String.IsNullOrWhiteSpace(value))
+                {
+                    throw new RequiredFieldsEmpty("You need to fill in the required fields");
+                }
+                else {
+                    this.lastName = value;
+                }
+            } 
+        }
 
         [Index("UQ_Email", IsUnique = true), Required]
-        public string Email { get; set; }
+        public string Email { 
+            get {
+                return this.email;
+            }
+            set {
+                this.email = value;
+            } 
+        }
 
         [Column("password_hash"), Required]
-        public string PasswordHash { get; set; }
+        public string PasswordHash { 
+            get {
+                return this.passwordHash;
+            } 
+            set {
+                this.passwordHash = value;
+            } 
+        }
 
         /// <summary>
         /// String property for the database
         [Column("role"), Required]
+<<<<<<< HEAD
         public string RoleStr { get; private set; }
+=======
+        private string _role
+        {
+            get => role.ToString();
+
+            //Parse the string from the database into an enum to expose to the app
+            set => role = (Role)Enum.Parse(typeof(Role), value, ignoreCase: true);
+        }
+>>>>>>> michael_gvdw
 
         /// <summary>
         /// Role exposes an enum for the rest of the application
         /// is calculated entirely based on <code> role </code>
         /// </summary>
         [NotMapped]
+<<<<<<< HEAD
         public Role? Role
         {
             get => string.IsNullOrEmpty(RoleStr) ? null : Enum.Parse(typeof(Role), RoleStr) as Role? ;
             set => RoleStr = value.ToString();
+=======
+        public Role Role { 
+            get {
+                return this.role;
+            } set {
+                if (String.IsNullOrWhiteSpace(value.ToString()))
+                {
+                    throw new RequiredFieldsEmpty("You need to fill in the required fields");
+                }
+                else {
+                    this.role = value;
+                }
+            }  
+>>>>>>> michael_gvdw
         }
 
         [Column("hourly_wage"), Required]
-        public float HourlyWage { get; set; }
+        public float HourlyWage
+        {
+            get
+            {
+                return this.hourlyWage;
+            }
+            set
+            {
+                int dotCount = 0;
+                bool val = true;
+                foreach (Char c in value.ToString())
+                {
+                    if (c == '.')
+                    {
+                        if (++dotCount > 1)
+                        {
+                            val = false;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (c < '0' || c > '9')
+                        {
+                            val = false;
+                            break;
+                        }
+                    }
+                }
+                if (val)
+                {
+                    this.hourlyWage = value;
+                }
+                else
+                {
+                    throw new HourlyWageMustComtainOnlyNumbers("Invalid value for wage");
+                }
+            }
+        }
 
         [Column("birth_date"), Required]
-        public DateTime? Birthdate { get; set; }
-
+        public DateTime? Birthdate { get {
+                return this.birthDate;
+            } set {
+                if (String.IsNullOrWhiteSpace(value.ToString()))
+                {
+                    throw new RequiredFieldsEmpty("You need to fill in the required fields");
+                }
+                else {
+                    this.birthDate = (DateTime)value;
+                }
+            }
+        }
+        [Column("address")]
         public string Address { get; set; }
 
         [Column("phone_number")]
