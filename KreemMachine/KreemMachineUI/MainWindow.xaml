@@ -326,7 +326,7 @@
                                          TextChanged="ShiftStartTextBox_TargetUpdated"
                                          DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem}"
                                          Text="{Binding Path=EndHour, Mode=TwoWay, StringFormat={}{0:hh}:{0:mm}}"
-                                         LostFocus="ShiftTimeTextBox_TextChanged"/>
+                                         />
                                         <TextBlock x:Name="HoursTextBlock" 
                                            VerticalAlignment="Center" 
                                            HorizontalAlignment="Center" 
