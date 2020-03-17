@@ -220,6 +220,7 @@
                 <Grid Grid.IsSharedSizeScope="True">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" >
@@ -240,10 +241,18 @@
                         <TextBlock Text=")" VerticalAlignment="Center" />
                     </StackPanel>
 
-                    <Button Content="Save" HorizontalAlignment="Right" 
-                            Margin="5" FontSize="16" Padding="7 0"/>
-
-                    <ListBox Grid.Row="1" x:Name="ManuallyScheduleUsersListBox" BorderThickness="0" TextBlock.FontSize="18">
+                    <Grid Grid.Row="1" TextBlock.FontSize="14" TextBlock.FontWeight="Medium">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition SharedSizeGroup="EmployeeNameColumn" />
+                            <ColumnDefinition SharedSizeGroup="EmployeeWorkedHoursColumn" />
+                            <ColumnDefinition SharedSizeGroup="EmployeeScheduledColumn" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Employee" Grid.Column="1"/>
+                        <TextBlock Text="Worked hours" Grid.Column="2" Margin="10 0"/>
+                        <TextBlock Text="Schedule" Grid.Column="3"/>
+                    </Grid>
+                    <ListBox Grid.Row="2" x:Name="ManuallyScheduleUsersListBox" BorderThickness="0" TextBlock.FontSize="18">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0 7">
@@ -255,7 +264,7 @@
                                     </Grid.ColumnDefinitions>
                                     <Image Grid.Column="0" />
                                     <TextBlock Grid.Column="1" Text="{Binding User.FullName}" TextDecorations="Underline" />
-                                    <TextBlock Grid.Column="2" Text="{Binding HoursScheduledThisMonth}" Margin="20 0" />
+                                    <TextBlock Grid.Column="2" Text="{Binding HoursScheduledThisWeek, StringFormat={}{0}h }" Margin="20 0" />
                                     <CheckBox Grid.Column="3" IsChecked="{Binding IsScheduled, Mode=OneWay}" 
                                               Checked="ShiftAssignmentCheckBox_Checked" Unchecked="ShiftAssignmentCheckBox_Unchecked"/>
                                 </Grid>
