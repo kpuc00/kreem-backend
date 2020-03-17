@@ -132,13 +132,13 @@ namespace KreemMachineLibrary.Services
             return new ObservableCollection<ResourcesPerMonthDTO>(result);
         }
 
-        public ObservableCollection<ResourcesPerEmployeeDTO> GetResourcesPerEmployee(DateTime dateTime) 
+        public ObservableCollection<ResourcesPerEmployeeDTO> GetResourcesPerEmployee() 
         {
-            var nextMonth = dateTime.AddMonths(1);
+            //var nextMonth = dateTime.AddMonths(1);
 
             var result = from ss in db.ScheduledShifts
                          join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
-                         where ss.Date >= dateTime && ss.Date < nextMonth
+                         //where ss.Date >= dateTime && ss.Date < nextMonth
                          select new { SS = ss, US = us } into joined
                          group joined by new
                          {

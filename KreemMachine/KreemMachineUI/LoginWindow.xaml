@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:KreemMachine"
         mc:Ignorable="d"
         Title="Kreem Machine: Log In" Height="300" Width="300"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" Icon="kreem_icon.png">
 
     <StackPanel Margin="20 0" TextBlock.FontSize="18">
 

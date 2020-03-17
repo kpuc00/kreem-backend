@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         x:Name="_this"
         Title="Kreem Machine" Height="500" Width="1200"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" Icon="kreem_icon.png">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="19*"/>
@@ -112,7 +112,7 @@
                     <!-- Month picker-->
                     <local:MonthPicker x:Name="ScheduleMonthPicker" Grid.Row="0" 
                                        HorizontalAlignment="Center" SelectedMonthChanged="ScheduleMonthPicker_SelectedMonthChanged" />
-                    
+
                     <!-- Calendar Headers -->
                     <UniformGrid Grid.Row="1" Rows="1" TextBlock.FontSize="18" TextBlock.TextAlignment="Center">
                         <TextBlock Text="Mon"  />
@@ -123,7 +123,7 @@
                         <TextBlock Text="Sat" />
                         <TextBlock Text="Sun" />
                     </UniformGrid>
-                    
+
                     <!-- Calendar -->
                     <ListBox x:Name="ScheduleListBox" Grid.Row="2"
                              SelectionChanged="ScheduleListBox_SelectionChanged"
@@ -149,7 +149,7 @@
                     <StackPanel Grid.Row="3" HorizontalAlignment="Left" TextBlock.FontSize="16" >
                         <!-- Auto schedule -->
                         <Button Content="Autogenerate" Margin="7" Padding="7 3" IsEnabled="{Binding ElementName=_this, Path=CanEditSchedule}" />
-                        
+
                         <!-- Manually schedule -->
                         <Button Content="Schedule manually" Click="ScheduleManuallyButton_Click"
                                 Margin="7"  Padding="7 3" />
@@ -204,8 +204,11 @@
                                 </TabItem>
                                 <TabItem x:Name="EmplStatsTab" Header="Employee statistics" Loaded="EmplStatsTab_Loaded">
                                     <Grid Background="White" Margin="0,0,11.4,0">
-                                        <local:MonthPicker x:Name="EmployeeStatisticsMonthPicker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,6,0,0" SelectedMonthChanged="EmployeeStatisticsMonthPicker_SelectedMonthChanged" />
                                         <DataGrid Height="397" Margin="0,38,9.6,0" Name="EmplStatsDataGrid" VerticalAlignment="Top"/>
+                                        <DatePicker HorizontalAlignment="Left" Margin="94,8,0,0" VerticalAlignment="Top"/>
+                                        <DatePicker HorizontalAlignment="Left" Margin="273,8,0,0" VerticalAlignment="Top"/>
+                                        <Label Content="From:" HorizontalAlignment="Left" Margin="46,7,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+                                        <Label Content="To:" HorizontalAlignment="Left" Margin="241,7,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                                     </Grid>
                                 </TabItem>
                             </TabControl>
