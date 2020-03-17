@@ -67,6 +67,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Management" />
@@ -97,6 +98,9 @@
   <ItemGroup>
     <Compile Include="DTO\ConnectionSettings.cs" />
     <Compile Include="DataBaseContext.cs" />
+    <Compile Include="DTO\ResourcesPerEmployeeDTO.cs" />
+    <Compile Include="DTO\ResourcesPerMonthDTO.cs" />
+    <Compile Include="DTO\ResourcesPerShiftDTO.cs" />
     <Compile Include="Extensions\DateTimeExtension.cs" />
     <Compile Include="Exceptions\DeletAdminAccountException.cs" />
     <Compile Include="Exceptions\HourlyWageMustComtainOnlyNumbers.cs" />
@@ -114,6 +118,7 @@
     <Compile Include="Services\ConnectionSettingsService.cs" />
     <Compile Include="Services\ShiftService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
+    <Compile Include="Services\StatisticsService.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>

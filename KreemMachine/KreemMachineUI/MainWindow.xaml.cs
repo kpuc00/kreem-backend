@@ -22,6 +22,7 @@ using System.IO;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Threading;
+using KreemMachineLibrary.DTO;
 
 namespace KreemMachine
 {
@@ -48,7 +49,8 @@ namespace KreemMachine
         public ScheduledShift ManuallyScheduledShift
         {
             get => manuallyScheduledShift;
-            set{
+            set
+            {
                 manuallyScheduledShift = value;
                 NotifyPropertyChanged();
             }
@@ -84,6 +86,7 @@ namespace KreemMachine
         ShiftService shiftService = new ShiftService();
         ConnectionSettingsService connectionService = new ConnectionSettingsService();
         ScheduleService scheduleService = new ScheduleService();
+        StatisticsService statisticsService = new StatisticsService();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -92,7 +95,7 @@ namespace KreemMachine
         {
             InitializeComponent();
             logedUSer = user;
-            
+
 
         }
 
@@ -165,14 +168,16 @@ namespace KreemMachine
             try
             {
                 int i = userService.DeleteEmployee(user, logedUSer);
-                if (i == -1) {
+                if (i == -1)
+                {
                     Window window = new LoginWindow();
                     window.Show();
 
                     this.Close();
                 }
             }
-            catch (DeletAdminAccountException dex) {
+            catch (DeletAdminAccountException dex)
+            {
                 MessageBox.Show(dex.Message);
             }
 
@@ -190,7 +195,7 @@ namespace KreemMachine
         private void UsersTabItem_Selected(object sender, RoutedEventArgs e)
         {
             AllUsersListBox.ItemsSource = null;
-            AllUsersListBox.ItemsSource = AllUsers; 
+            AllUsersListBox.ItemsSource = AllUsers;
         }
 
 
@@ -311,6 +316,81 @@ namespace KreemMachine
             SelectedStafForSchedulingBinding--;
 
         }
+
+        #endregion
+
+        #region Statistics
+
+        private void ResPerShiftTab_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //StatisticsService.
+        }
+
+        //Resources per shift
+
+        private void ResPerShiftTab_Loaded(object sender, RoutedEventArgs e)
+        {
+            StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
+        }
+
+        private void StatisticsPerShiftMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
+        {
+            if (cbMorningShift.IsChecked == true)
+            {
+                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftMorning(displayMonth);
+            }
+            else if (cbNoonShift.IsChecked == true)
+            {
+                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftNoon(displayMonth);
+            }
+            else if (cbEveningShift.IsChecked == true)
+            {
+                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftEvening(displayMonth);
+            }
+            else
+            {
+                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftAll(displayMonth);
+            }
+        }
+
+        private void cbMorningShift_Checked(object sender, RoutedEventArgs e)
+        {
+            StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
+        }
+
+        private void cbNoonShift_Checked(object sender, RoutedEventArgs e)
+        {
+            StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
+        }
+
+        private void cbEveningShift_Checked(object sender, RoutedEventArgs e)
+        {
+            StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
+        }
+
+        //Resources per month
+
+        private void ResPerMonthTab_Loaded(object sender, RoutedEventArgs e)
+        {
+            StatisticsPerMonthMonthPicker_SelectedMonthChanged(sender, StatisticsPerMonthMonthPicker.SelectedMonth);
+        }
+
+        private void StatisticsPerMonthMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
+        {
+            ResPerMonthDataGrid.ItemsSource = statisticsService.GetResourcesPerMonth();
+        }
+
+        //Employee statistics
+
+        private void EmplStatsTab_Loaded(object sender, RoutedEventArgs e)
+        {
+            EmployeeStatisticsMonthPicker_SelectedMonthChanged(sender, EmployeeStatisticsMonthPicker.SelectedMonth);
+        }
+        private void EmployeeStatisticsMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
+        {
+            EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployee(displayMonth);
+        }
+
 
         #endregion
 
