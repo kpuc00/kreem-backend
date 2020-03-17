@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:KreemMachine"
         mc:Ignorable="d"
         x:Name="_this"
-        Title="Kreem Machine" Height="500" Width="1200">
+        Title="Kreem Machine" Height="500" Width="1200"
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="19*"/>

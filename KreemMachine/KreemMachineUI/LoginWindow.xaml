@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KreemMachine"
         mc:Ignorable="d"
-        Title="Kreem Machine: Log In" Height="300" Width="300">
+        Title="Kreem Machine: Log In" Height="300" Width="300"
+        WindowStartupLocation="CenterScreen">
 
     <StackPanel Margin="20 0" TextBlock.FontSize="18">
 
