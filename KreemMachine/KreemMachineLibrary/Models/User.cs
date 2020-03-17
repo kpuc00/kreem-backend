@@ -82,42 +82,19 @@ namespace KreemMachineLibrary.Models
         /// <summary>
         /// String property for the database
         [Column("role"), Required]
-<<<<<<< HEAD
         public string RoleStr { get; private set; }
-=======
-        private string _role
-        {
-            get => role.ToString();
 
-            //Parse the string from the database into an enum to expose to the app
-            set => role = (Role)Enum.Parse(typeof(Role), value, ignoreCase: true);
-        }
->>>>>>> michael_gvdw
 
         /// <summary>
         /// Role exposes an enum for the rest of the application
-        /// is calculated entirely based on <code> role </code>
+        /// is calculated entirely based on <code> RoleStr </code>
         /// </summary>
         [NotMapped]
-<<<<<<< HEAD
         public Role? Role
         {
             get => string.IsNullOrEmpty(RoleStr) ? null : Enum.Parse(typeof(Role), RoleStr) as Role? ;
             set => RoleStr = value.ToString();
-=======
-        public Role Role { 
-            get {
-                return this.role;
-            } set {
-                if (String.IsNullOrWhiteSpace(value.ToString()))
-                {
-                    throw new RequiredFieldsEmpty("You need to fill in the required fields");
-                }
-                else {
-                    this.role = value;
-                }
-            }  
->>>>>>> michael_gvdw
+
         }
 
         [Column("hourly_wage"), Required]

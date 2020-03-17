@@ -37,7 +37,7 @@
             </TabControl.Resources>
 
             <!--Users-->
-            <TabItem Header="Users" Loaded="TabItem_Loaded" Selector.Selected="TabItem_Selected">
+            <TabItem Header="Users" Loaded="TabItem_Loaded" Selector.Selected="UsersTabItem_Selected">
                 <Grid>
                     <Grid.RowDefinitions>
                         <!--Create button and search-->
