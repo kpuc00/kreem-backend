@@ -42,7 +42,7 @@ namespace KreemMachine
         public bool CanEditUser => SecurityContext.HasPermissions(Permission.EditUsers);
         public bool CanDeleteUser => SecurityContext.HasPermissions(Permission.DeleteUsers);
         public bool CanEditSchedule => SecurityContext.HasPermissions(Permission.EditSchedule);
-        
+
 
         ScheduledShift manuallyScheduledShift;
 
@@ -163,24 +163,26 @@ namespace KreemMachine
         }
         private void DeleteUserButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            var user = button.DataContext as User;
-            try
+            if (MessageBox.Show("Are you sure you want to delete this user?", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                int i = userService.DeleteEmployee(user, logedUSer);
-                if (i == -1)
+                var button = sender as Button;
+                var user = button.DataContext as User;
+                try
                 {
-                    Window window = new LoginWindow();
-                    window.Show();
+                    int i = userService.DeleteEmployee(user, logedUSer);
+                    if (i == -1)
+                    {
+                        Window window = new LoginWindow();
+                        window.Show();
 
-                    this.Close();
+                        this.Close();
+                    }
+                }
+                catch (DeletAdminAccountException dex)
+                {
+                    MessageBox.Show(dex.Message);
                 }
             }
-            catch (DeletAdminAccountException dex)
-            {
-                MessageBox.Show(dex.Message);
-            }
-
         }
 
         private void EditUserButton_Click(object sender, RoutedEventArgs e)
@@ -384,13 +386,8 @@ namespace KreemMachine
 
         private void EmplStatsTab_Loaded(object sender, RoutedEventArgs e)
         {
-            EmployeeStatisticsMonthPicker_SelectedMonthChanged(sender, EmployeeStatisticsMonthPicker.SelectedMonth);
+            EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployee();
         }
-        private void EmployeeStatisticsMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
-        {
-            EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployee(displayMonth);
-        }
-
 
         #endregion
 
