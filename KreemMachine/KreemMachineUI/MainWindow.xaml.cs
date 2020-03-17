@@ -1,11 +1,8 @@
 ﻿using KreemMachine.ViewModels;
 using KreemMachineLibrary.Models;
 using KreemMachineLibrary.Services;
-<<<<<<< HEAD
 using KreemMachineLibrary;
-=======
 using KreemMachineLibrary.Exceptions;
->>>>>>> michael_gvdw
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,13 +18,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-<<<<<<< HEAD
 using System.IO;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-=======
 using System.Windows.Threading;
->>>>>>> michael_gvdw
 
 namespace KreemMachine
 {
@@ -94,12 +88,6 @@ namespace KreemMachine
 
         }
 
-<<<<<<< HEAD
-=======
-
-
-        
->>>>>>> michael_gvdw
         private void TabItem_Loaded(object sender, RoutedEventArgs e)
         {
             AllUsersListBox.ItemsSource = null;
@@ -196,7 +184,7 @@ namespace KreemMachine
             window.Show();
         }
 
-        private void TabItem_Selected(object sender, RoutedEventArgs e)
+        private void UsersTabItem_Selected(object sender, RoutedEventArgs e)
         {
             AllUsersListBox.ItemsSource = null;
             AllUsersListBox.ItemsSource = AllUsers; 

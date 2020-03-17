@@ -92,7 +92,7 @@ namespace KreemMachineLibrary.Services
         }
 
         public int DeleteEmployee(User user, User logedUser) {
-            Role[] notDeletableEmployeeRoles = new Role[] { Role.Administrator, Role.Manager };
+            Role?[] notDeletableEmployeeRoles = new Role?[] { Role.Administrator, Role.Manager };
             if (user == logedUser) {
                 DialogResult result = MessageBox.Show("Are you sure you want to delet you own accout? You will be logged out!", MessageBoxButtons.YesNoCancel.ToString());
                 if(result == DialogResult.OK)
@@ -103,7 +103,7 @@ namespace KreemMachineLibrary.Services
                 }
                 
             }
-            else if (notDeletableEmployeeRoles.Contains(user.Role)) {
+            else if (notDeletableEmployeeRoles.Contains(user.Role) ) {
                 throw new DeletAdminAccountException("You are not allow to delet an employee with power");
             } else {
                 db.Users.Remove(user);
@@ -122,22 +122,22 @@ namespace KreemMachineLibrary.Services
             return employeeEmail;
         }
 
-<<<<<<< HEAD
+
         public IList<User> GetAllByRole(Role role)
         {
             return db.Users.Where(u => u.RoleStr == Role.Employee.ToString()).ToList();
-        
-=======
-        public ObservableCollection<User> FilterEmployees(string p) {
-            db.Users.Load();
-            if (!String.IsNullOrWhiteSpace(p)) {
-                return new ObservableCollection<User>( db.Users.Local.Where(u => u.FirstName.ToLower().Contains(p.ToLower())));
-            }
-            return db.Users.Local;
->>>>>>> michael_gvdw
         }
 
 
+        public ObservableCollection<User> FilterEmployees(string p)
+        {
+            db.Users.Load();
+            if (!String.IsNullOrWhiteSpace(p))
+            {
+                return new ObservableCollection<User>(db.Users.Local.Where(u => u.FirstName.ToLower().Contains(p.ToLower())));
+            }
+            return db.Users.Local;
+        }
 
     }
 

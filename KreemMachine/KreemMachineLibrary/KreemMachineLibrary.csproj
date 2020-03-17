@@ -97,13 +97,10 @@
   <ItemGroup>
     <Compile Include="DTO\ConnectionSettings.cs" />
     <Compile Include="DataBaseContext.cs" />
-<<<<<<< HEAD
     <Compile Include="Extensions\DateTimeExtension.cs" />
-=======
     <Compile Include="Exceptions\DeletAdminAccountException.cs" />
     <Compile Include="Exceptions\HourlyWageMustComtainOnlyNumbers.cs" />
     <Compile Include="Exceptions\RequiredFieldsEmpty.cs" />
->>>>>>> michael_gvdw
     <Compile Include="Globals.cs" />
     <Compile Include="Models\Roles.cs" />
     <Compile Include="Models\ScheduledShift.cs" />
