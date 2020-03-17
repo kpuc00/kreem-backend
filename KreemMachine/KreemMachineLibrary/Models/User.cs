@@ -171,11 +171,13 @@ namespace KreemMachineLibrary.Models
         /// <summary>
         /// Temporairly hardcoded, later to be stored in the db
         /// </summary>
+        [NotMapped]
         public float MaxMonthlyHoours => 40;
 
         /// <summary>
         /// Temporairly hardcoded, later to be stored in the db
         /// </summary>
+        [NotMapped]
         public float MinMonthlyHours => 20;
 
         public User() { }

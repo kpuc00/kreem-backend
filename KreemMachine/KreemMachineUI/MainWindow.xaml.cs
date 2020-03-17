@@ -119,11 +119,6 @@ namespace KreemMachine
             ShiftNameComboBox.ItemsSource = AllShifts;
         }
 
-        private void ShiftTimeTextBox_TextChanged(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void ShiftStartTextBox_TargetUpdated(object sender, EventArgs e)
         {
 
