@@ -280,10 +280,8 @@ namespace KreemMachine
 
         private void SetUpEmployeeRecomendationForManualScheduling()
         {
-            // TODO: Replace with Misho's algorithm for getting employee in recomended order
 
-            var users = userService.GetAllByRole(Role.Employee).Select(u => new UserSchedulerViewModel(u, ManuallyScheduledShift));
-
+            var users = scheduleService.GetSuggestedEmployees(ManuallyScheduledShift).Select(u => new UserSchedulerViewModel(u, ManuallyScheduledShift));
             ManuallyScheduleUsersListBox.ItemsSource = users;
         }
 
