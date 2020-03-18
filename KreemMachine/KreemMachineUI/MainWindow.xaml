@@ -198,8 +198,8 @@
                                 </TabItem>
                                 <TabItem x:Name="ResPerMonthTab" Header="Resources per month" Loaded="ResPerMonthTab_Loaded">
                                     <Grid Background="White" Margin="0,0,11.4,0">
-                                        <local:MonthPicker x:Name="StatisticsPerMonthMonthPicker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,6,0,0" SelectedMonthChanged="StatisticsPerMonthMonthPicker_SelectedMonthChanged" />
                                         <DataGrid Height="397" Margin="0,38,9.6,0" Name="ResPerMonthDataGrid" VerticalAlignment="Top"/>
+                                        <local:YearPicker x:Name="StatisticsPerMonthYearPicker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,6,0,0" SelectedYearChanged="StatisticsPerMonthYearPicker_SelectedYearChanged"/>
                                     </Grid>
                                 </TabItem>
                                 <TabItem x:Name="EmplStatsTab" Header="Employee statistics" Loaded="EmplStatsTab_Loaded">

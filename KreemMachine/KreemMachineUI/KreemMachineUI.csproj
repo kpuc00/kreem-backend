@@ -82,6 +82,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="YearPicker.xaml.cs">
+      <DependentUpon>YearPicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ScheduleShiftPicker.xaml.cs">
       <DependentUpon>ScheduleShiftPicker.xaml</DependentUpon>
     </Compile>
@@ -114,6 +117,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="YearPicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

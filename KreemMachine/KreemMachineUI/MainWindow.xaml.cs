@@ -374,12 +374,12 @@ namespace KreemMachine
 
         private void ResPerMonthTab_Loaded(object sender, RoutedEventArgs e)
         {
-            StatisticsPerMonthMonthPicker_SelectedMonthChanged(sender, StatisticsPerMonthMonthPicker.SelectedMonth);
+            StatisticsPerMonthYearPicker_SelectedYearChanged(sender, StatisticsPerMonthYearPicker.SelectedYear);
         }
 
-        private void StatisticsPerMonthMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
+        private void StatisticsPerMonthYearPicker_SelectedYearChanged(object sender, DateTime displayYear)
         {
-            ResPerMonthDataGrid.ItemsSource = statisticsService.GetResourcesPerMonth();
+            ResPerMonthDataGrid.ItemsSource = statisticsService.GetResourcesPerMonth(displayYear);
         }
 
         //Employee statistics
