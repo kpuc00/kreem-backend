@@ -24,9 +24,9 @@ namespace KreemMachineLibrary.Models
         [Column("hourly_wage"), Required]
         public float HourlyWage { get; set; }
 
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
-        public ScheduledShift ScheduledShift { get; set; }
+        public virtual ScheduledShift ScheduledShift { get; set; }
 
         public UserScheduledShift(User user, ScheduledShift scheduledShift)
         {

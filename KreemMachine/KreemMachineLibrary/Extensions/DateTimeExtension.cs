@@ -17,5 +17,14 @@ namespace KreemMachineLibrary.Extensions.Date
 
         public static DateTime ThisMonth(this DateTime date) =>
             date.Date.AddDays(-DateTime.Today.Day + 1);
+
+        public static DateTime StartOfWeek(this DateTime dt, DayOfWeek startOfWeek = DayOfWeek.Monday)
+        {
+            int diff = (7 + (dt.DayOfWeek - startOfWeek)) % 7;
+            return dt.AddDays(-1 * diff).Date;
+        }
+
+        public static DateTime NextWeek(this DateTime dt, DayOfWeek startOfWeek = DayOfWeek.Monday) =>
+            dt.StartOfWeek().AddDays(7);
     }
 }

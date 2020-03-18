@@ -22,6 +22,7 @@ using System.IO;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Threading;
+using KreemMachineLibrary.DTO;
 
 namespace KreemMachine
 {
@@ -34,17 +35,26 @@ namespace KreemMachine
 
         IEnumerable<Shift> AllShifts;
 
+        public bool CanViewUsersTab => SecurityContext.HasPermissions(Permission.ViewUsers);
+        public bool CanViewScheduleTab => SecurityContext.HasPermissions(Permission.ViewSchedule);
+        public bool CanViewStatisticsTab => SecurityContext.HasPermissions(Permission.ViewSchedule);
+        public bool CanCreateUser => SecurityContext.HasPermissions(Permission.CreateUsers);
+        public bool CanEditUser => SecurityContext.HasPermissions(Permission.EditUsers);
+        public bool CanDeleteUser => SecurityContext.HasPermissions(Permission.DeleteUsers);
+        public bool CanEditSchedule => SecurityContext.HasPermissions(Permission.EditSchedule);
+
+
         ScheduledShift manuallyScheduledShift;
 
         public ScheduledShift ManuallyScheduledShift
         {
             get => manuallyScheduledShift;
-            set{
+            set
+            {
                 manuallyScheduledShift = value;
                 NotifyPropertyChanged();
             }
         }
-
 
         private int selectedStafForSchedulingBinding;
 
@@ -76,6 +86,7 @@ namespace KreemMachine
         ShiftService shiftService = new ShiftService();
         ConnectionSettingsService connectionService = new ConnectionSettingsService();
         ScheduleService scheduleService = new ScheduleService();
+        StatisticsService statisticsService = new StatisticsService();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -84,7 +95,7 @@ namespace KreemMachine
         {
             InitializeComponent();
             logedUSer = user;
-            
+
 
         }
 
@@ -117,11 +128,6 @@ namespace KreemMachine
             AllShifts = shiftService.GetAllShifts();
 
             ShiftNameComboBox.ItemsSource = AllShifts;
-        }
-
-        private void ShiftTimeTextBox_TextChanged(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void ShiftStartTextBox_TargetUpdated(object sender, EventArgs e)
@@ -157,22 +163,26 @@ namespace KreemMachine
         }
         private void DeleteUserButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            var user = button.DataContext as User;
-            try
+            if (MessageBox.Show("Are you sure you want to delete this user?", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                int i = userService.DeleteEmployee(user, logedUSer);
-                if (i == -1) {
-                    Window window = new LoginWindow();
-                    window.Show();
+                var button = sender as Button;
+                var user = button.DataContext as User;
+                try
+                {
+                    int i = userService.DeleteEmployee(user, logedUSer);
+                    if (i == -1)
+                    {
+                        Window window = new LoginWindow();
+                        window.Show();
 
-                    this.Close();
+                        this.Close();
+                    }
+                }
+                catch (DeletAdminAccountException dex)
+                {
+                    MessageBox.Show(dex.Message);
                 }
             }
-            catch (DeletAdminAccountException dex) {
-                MessageBox.Show(dex.Message);
-            }
-
         }
 
         private void EditUserButton_Click(object sender, RoutedEventArgs e)
@@ -187,7 +197,7 @@ namespace KreemMachine
         private void UsersTabItem_Selected(object sender, RoutedEventArgs e)
         {
             AllUsersListBox.ItemsSource = null;
-            AllUsersListBox.ItemsSource = AllUsers; 
+            AllUsersListBox.ItemsSource = AllUsers;
         }
 
 
@@ -247,7 +257,7 @@ namespace KreemMachine
             }
 
         }
-        private void ScheduleTab_Loaded(object sender, RoutedEventArgs e)
+        private void ScheduleTab_Selected(object sender, RoutedEventArgs e)
         {
             ScheduleMonthPicker_SelectedMonthChanged(sender, ScheduleMonthPicker.SelectedMonth);
         }
@@ -260,11 +270,9 @@ namespace KreemMachine
 
             var selected = e.AddedItems[0] as ScheduleDayViewModel;
 
-            foreach (var shift in selected.Shifts)
-            {
-                Console.WriteLine(shift.Shift.Name, shift.Date);
-            }
-            Console.WriteLine();
+            ScheduleManuallyButton_Click(null, null);
+            ManualScheduleShiftPicker.SelectedDay = selected.Day;
+
         }
 
         private void ScheduleManuallyButton_Click(object sender, EventArgs e)
@@ -278,7 +286,7 @@ namespace KreemMachine
         {
 
             ManuallyScheduledShift = scheduleService.GetScheduledShiftOrCreateNew(SelectedDay, SelectedShift);
-            SelectedStafForSchedulingBinding = ManuallyScheduledShift?.EmployeeScheduledShits.Count ?? 0;
+            SelectedStafForSchedulingBinding = ManuallyScheduledShift?.EmployeeScheduledShits?.Count ?? 0;
             SetUpEmployeeRecomendationForManualScheduling();
 
         }
@@ -309,6 +317,76 @@ namespace KreemMachine
             scheduleService.RemoveUserFromShift(userViewModel.User, ManuallyScheduledShift);
             SelectedStafForSchedulingBinding--;
 
+        }
+
+        #endregion
+
+        #region Statistics
+
+        private void ResPerShiftTab_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //StatisticsService.
+        }
+
+        //Resources per shift
+
+        private void ResPerShiftTab_Loaded(object sender, RoutedEventArgs e)
+        {
+            StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
+        }
+
+        private void StatisticsPerShiftMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
+        {
+            if (cbMorningShift.IsChecked == true)
+            {
+                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftMorning(displayMonth);
+            }
+            else if (cbNoonShift.IsChecked == true)
+            {
+                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftNoon(displayMonth);
+            }
+            else if (cbEveningShift.IsChecked == true)
+            {
+                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftEvening(displayMonth);
+            }
+            else
+            {
+                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftAll(displayMonth);
+            }
+        }
+
+        private void cbMorningShift_Checked(object sender, RoutedEventArgs e)
+        {
+            StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
+        }
+
+        private void cbNoonShift_Checked(object sender, RoutedEventArgs e)
+        {
+            StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
+        }
+
+        private void cbEveningShift_Checked(object sender, RoutedEventArgs e)
+        {
+            StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
+        }
+
+        //Resources per month
+
+        private void ResPerMonthTab_Loaded(object sender, RoutedEventArgs e)
+        {
+            StatisticsPerMonthMonthPicker_SelectedMonthChanged(sender, StatisticsPerMonthMonthPicker.SelectedMonth);
+        }
+
+        private void StatisticsPerMonthMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
+        {
+            ResPerMonthDataGrid.ItemsSource = statisticsService.GetResourcesPerMonth();
+        }
+
+        //Employee statistics
+
+        private void EmplStatsTab_Loaded(object sender, RoutedEventArgs e)
+        {
+            EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployee();
         }
 
         #endregion
