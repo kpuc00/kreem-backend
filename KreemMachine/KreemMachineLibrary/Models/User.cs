@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KreemMachineLibrary.Exceptions;
+using KreemMachineLibrary.Services;
 
 namespace KreemMachineLibrary.Models
 {
@@ -15,11 +17,13 @@ namespace KreemMachineLibrary.Models
     [Table("user")]
     public class User
     {
+        UserService userService = new UserService();
+
         //Instance variables
         private string firstName = "";
         private string lastName = "";
         private string email = "";
-        private Role role;
+        //private Role role;
         private string passwordHash = "";
         private float hourlyWage = 0;
         private DateTime birthDate;
@@ -65,7 +69,21 @@ namespace KreemMachineLibrary.Models
                 return this.email;
             }
             set {
-                this.email = value;
+                //int emailCount = 0;
+                string mail = value;
+                /*List<User> AllUsers = userService.GetAll().ToList();
+                foreach (User u in AllUsers)
+                {
+                    if (mail == u.email)
+                    {
+                        emailCount++;
+                    }
+                }
+                if (emailCount > 0)
+                {
+                    mail = value[0] + emailCount.ToString() + value.Substring(1);
+                }*/
+                this.email = mail;
             } 
         }
 
