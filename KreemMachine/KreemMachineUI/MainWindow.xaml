@@ -190,9 +190,9 @@
                                 <TabItem x:Name="ResPerShiftTab" Header="Resources per shift" MouseDown="ResPerShiftTab_MouseDown" Loaded="ResPerShiftTab_Loaded">
                                     <Grid Background="White" Margin="0,0,23,-0.2">
                                         <local:MonthPicker x:Name="StatisticsPerShiftMonthPicker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,6,0,0" SelectedMonthChanged="StatisticsPerShiftMonthPicker_SelectedMonthChanged" />
-                                        <CheckBox x:Name="cbMorningShift" Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0" Checked="cbMorningShift_Checked"/>
-                                        <CheckBox x:Name="cbNoonShift" Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336" Checked="cbNoonShift_Checked"/>
-                                        <CheckBox x:Name="cbEveningShift" Content="Evening" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top" Checked="cbEveningShift_Checked"/>
+                                        <CheckBox x:Name="cbMorningShift" Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0" Checked="cbMorningShift_Changed" Unchecked="cbMorningShift_Changed"/>
+                                        <CheckBox x:Name="cbNoonShift" Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336" Checked="cbNoonShift_Changed" Unchecked="cbNoonShift_Changed"/>
+                                        <CheckBox x:Name="cbNightShift" Content="Night" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top" Checked="cbNightShift_Changed" Unchecked="cbNightShift_Changed"/>
                                         <DataGrid Height="398" Margin="0,38,10,0" Name="ResPerShiftDataGrid" VerticalAlignment="Top"/>
                                     </Grid>
                                 </TabItem>

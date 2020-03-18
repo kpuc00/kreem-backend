@@ -345,7 +345,7 @@ namespace KreemMachine
             {
                 ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftNoon(displayMonth);
             }
-            else if (cbEveningShift.IsChecked == true)
+            else if (cbNightShift.IsChecked == true)
             {
                 ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftEvening(displayMonth);
             }
@@ -355,17 +355,17 @@ namespace KreemMachine
             }
         }
 
-        private void cbMorningShift_Checked(object sender, RoutedEventArgs e)
+        private void cbMorningShift_Changed(object sender, RoutedEventArgs e)
         {
             StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
         }
 
-        private void cbNoonShift_Checked(object sender, RoutedEventArgs e)
+        private void cbNoonShift_Changed(object sender, RoutedEventArgs e)
         {
             StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
         }
 
-        private void cbEveningShift_Checked(object sender, RoutedEventArgs e)
+        private void cbNightShift_Changed(object sender, RoutedEventArgs e)
         {
             StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
         }

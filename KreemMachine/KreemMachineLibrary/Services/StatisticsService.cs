@@ -42,7 +42,7 @@ namespace KreemMachineLibrary.Services
 
             var result = from ss in db.ScheduledShifts
                          join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
-                         where ss.Date >= dateTime && ss.Date < nextMonth && ss.Shift.ToString() == "Morning"
+                         where ss.Date >= dateTime && ss.Date < nextMonth && ss.Shift.Name == "Morning"
                          select new { SS = ss, US = us } into joined
                          group joined by new
                          {
@@ -66,7 +66,7 @@ namespace KreemMachineLibrary.Services
 
             var result = from ss in db.ScheduledShifts
                          join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
-                         where ss.Date >= dateTime && ss.Date < nextMonth && ss.Shift.ToString() == "Noon"
+                         where ss.Date >= dateTime && ss.Date < nextMonth && ss.Shift.Name == "Noon"
                          select new { SS = ss, US = us } into joined
                          group joined by new
                          {
@@ -90,7 +90,7 @@ namespace KreemMachineLibrary.Services
 
             var result = from ss in db.ScheduledShifts
                          join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
-                         where ss.Date >= dateTime && ss.Date < nextMonth && ss.Shift.ToString() == "Evening"
+                         where ss.Date >= dateTime && ss.Date < nextMonth && ss.Shift.Name == "Night"
                          select new { SS = ss, US = us } into joined
                          group joined by new
                          {
