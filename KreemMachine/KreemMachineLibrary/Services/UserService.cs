@@ -51,6 +51,25 @@ namespace KreemMachineLibrary.Services
 
         internal User SaveToDatabase (User user)
         {
+            string mail = user.Email;
+
+            var temp = from u in db.Users
+                           select u.Email;
+            List<string> allMail = temp.ToList();
+
+            int mailCount = 0;
+            if (allMail.Contains(mail))
+            {
+                foreach (string e in allMail)
+                {
+                    if (e == mail)
+                    {
+                        mailCount++;
+                    }
+                }
+                string newMail = mail[0] + mailCount.ToString() + mail.Substring(1);
+                user.Email = newMail;
+            }
 
             var fromDb = db.Users.Add(user);
             db.SaveChanges();

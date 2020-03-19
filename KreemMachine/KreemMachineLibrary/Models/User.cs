@@ -69,21 +69,7 @@ namespace KreemMachineLibrary.Models
                 return this.email;
             }
             set {
-                //int emailCount = 0;
-                string mail = value;
-                /*List<User> AllUsers = userService.GetAll().ToList();
-                foreach (User u in AllUsers)
-                {
-                    if (mail == u.email)
-                    {
-                        emailCount++;
-                    }
-                }
-                if (emailCount > 0)
-                {
-                    mail = value[0] + emailCount.ToString() + value.Substring(1);
-                }*/
-                this.email = mail;
+                this.email = value;
             } 
         }
 
