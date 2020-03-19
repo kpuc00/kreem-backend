@@ -272,6 +272,7 @@ namespace KreemMachine
 
             ScheduleManuallyButton_Click(null, null);
             ManualScheduleShiftPicker.SelectedDay = selected.Day;
+            ManualScheduleShiftPicker_SelectedShiftChanged(this, selected.Day, ManualScheduleShiftPicker.SelectedShift);
 
         }
 
