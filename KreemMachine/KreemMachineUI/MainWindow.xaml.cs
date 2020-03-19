@@ -272,6 +272,7 @@ namespace KreemMachine
 
             ScheduleManuallyButton_Click(null, null);
             ManualScheduleShiftPicker.SelectedDay = selected.Day;
+            ManualScheduleShiftPicker_SelectedShiftChanged(this, selected.Day, ManualScheduleShiftPicker.SelectedShift);
 
         }
 
@@ -293,10 +294,8 @@ namespace KreemMachine
 
         private void SetUpEmployeeRecomendationForManualScheduling()
         {
-            // TODO: Replace with Misho's algorithm for getting employee in recomended order
 
-            var users = userService.GetAllByRole(Role.Employee).Select(u => new UserSchedulerViewModel(u, ManuallyScheduledShift));
-
+            var users = scheduleService.GetSuggestedEmployees(ManuallyScheduledShift).Select(u => new UserSchedulerViewModel(u, ManuallyScheduledShift));
             ManuallyScheduleUsersListBox.ItemsSource = users;
         }
 
@@ -345,7 +344,7 @@ namespace KreemMachine
             {
                 ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftNoon(displayMonth);
             }
-            else if (cbEveningShift.IsChecked == true)
+            else if (cbNightShift.IsChecked == true)
             {
                 ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftEvening(displayMonth);
             }
@@ -355,17 +354,17 @@ namespace KreemMachine
             }
         }
 
-        private void cbMorningShift_Checked(object sender, RoutedEventArgs e)
+        private void cbMorningShift_Changed(object sender, RoutedEventArgs e)
         {
             StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
         }
 
-        private void cbNoonShift_Checked(object sender, RoutedEventArgs e)
+        private void cbNoonShift_Changed(object sender, RoutedEventArgs e)
         {
             StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
         }
 
-        private void cbEveningShift_Checked(object sender, RoutedEventArgs e)
+        private void cbNightShift_Changed(object sender, RoutedEventArgs e)
         {
             StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
         }
@@ -374,12 +373,12 @@ namespace KreemMachine
 
         private void ResPerMonthTab_Loaded(object sender, RoutedEventArgs e)
         {
-            StatisticsPerMonthMonthPicker_SelectedMonthChanged(sender, StatisticsPerMonthMonthPicker.SelectedMonth);
+            StatisticsPerMonthYearPicker_SelectedYearChanged(sender, StatisticsPerMonthYearPicker.SelectedYear);
         }
 
-        private void StatisticsPerMonthMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
+        private void StatisticsPerMonthYearPicker_SelectedYearChanged(object sender, DateTime displayYear)
         {
-            ResPerMonthDataGrid.ItemsSource = statisticsService.GetResourcesPerMonth();
+            ResPerMonthDataGrid.ItemsSource = statisticsService.GetResourcesPerMonth(displayYear);
         }
 
         //Employee statistics

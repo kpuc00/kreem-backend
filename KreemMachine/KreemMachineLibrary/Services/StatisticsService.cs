@@ -14,13 +14,13 @@ namespace KreemMachineLibrary.Services
     {
         DataBaseContext db = Globals.db;
 
-        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftAll(DateTime dateTime)
+        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftAll(DateTime displayMonth)
         {
-            var nextMonth = dateTime.AddMonths(1);
+            var nextMonth = displayMonth.AddMonths(1);
 
             var result = from ss in db.ScheduledShifts
                          join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
-                         where ss.Date >= dateTime && ss.Date < nextMonth 
+                         where ss.Date >= displayMonth && ss.Date < nextMonth 
                          select new { SS = ss, US = us } into joined
                          group joined by new {
                              joined.SS.Date,
@@ -36,13 +36,13 @@ namespace KreemMachineLibrary.Services
             return new ObservableCollection<ResourcesPerShiftDTO>(result);
         }
 
-        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftMorning(DateTime dateTime)
+        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftMorning(DateTime displayMonth)
         {
-            var nextMonth = dateTime.AddMonths(1);
+            var nextMonth = displayMonth.AddMonths(1);
 
             var result = from ss in db.ScheduledShifts
                          join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
-                         where ss.Date >= dateTime && ss.Date < nextMonth && ss.Shift.ToString() == "Morning"
+                         where ss.Date >= displayMonth && ss.Date < nextMonth && ss.Shift.Name == "Morning"
                          select new { SS = ss, US = us } into joined
                          group joined by new
                          {
@@ -60,13 +60,13 @@ namespace KreemMachineLibrary.Services
             return new ObservableCollection<ResourcesPerShiftDTO>(result);
         }
 
-        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftNoon(DateTime dateTime)
+        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftNoon(DateTime displayMonth)
         {
-            var nextMonth = dateTime.AddMonths(1);
+            var nextMonth = displayMonth.AddMonths(1);
 
             var result = from ss in db.ScheduledShifts
                          join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
-                         where ss.Date >= dateTime && ss.Date < nextMonth && ss.Shift.ToString() == "Noon"
+                         where ss.Date >= displayMonth && ss.Date < nextMonth && ss.Shift.Name == "Noon"
                          select new { SS = ss, US = us } into joined
                          group joined by new
                          {
@@ -84,13 +84,13 @@ namespace KreemMachineLibrary.Services
             return new ObservableCollection<ResourcesPerShiftDTO>(result);
         }
 
-        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftEvening(DateTime dateTime)
+        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftEvening(DateTime displayMonth)
         {
-            var nextMonth = dateTime.AddMonths(1);
+            var nextMonth = displayMonth.AddMonths(1);
 
             var result = from ss in db.ScheduledShifts
                          join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
-                         where ss.Date >= dateTime && ss.Date < nextMonth && ss.Shift.ToString() == "Evening"
+                         where ss.Date >= displayMonth && ss.Date < nextMonth && ss.Shift.Name == "Night"
                          select new { SS = ss, US = us } into joined
                          group joined by new
                          {
@@ -108,11 +108,13 @@ namespace KreemMachineLibrary.Services
             return new ObservableCollection<ResourcesPerShiftDTO>(result);
         }
 
-        public ObservableCollection<ResourcesPerMonthDTO> GetResourcesPerMonth()
+        public ObservableCollection<ResourcesPerMonthDTO> GetResourcesPerMonth(DateTime displayYear)
         {
+            var nextYear = displayYear.AddYears(1);
+
             var result = from ss in db.ScheduledShifts
                          join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
-                         where ss.Date >= new DateTime(2020, 03, 01) && ss.Date <= new DateTime(2020, 03, 31)
+                         where ss.Date >= displayYear && ss.Date <= nextYear
                          select new { SS = ss, US = us } into joined
                          group joined by new
                          {

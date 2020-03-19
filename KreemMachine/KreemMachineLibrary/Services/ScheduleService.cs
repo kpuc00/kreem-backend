@@ -1,6 +1,8 @@
-﻿using KreemMachineLibrary.Models;
+﻿using KreemMachineLibrary.Extensions.Date;
+using KreemMachineLibrary.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +12,7 @@ namespace KreemMachineLibrary.Services
     public class ScheduleService
     {
         private DataBaseContext db = Globals.db;
+        ShiftService ShiftService = new ShiftService();
 
         /// <summary>
         /// Returns all shifts scheduled between <code>start</code> and <code>end</code> dates
@@ -65,6 +68,90 @@ namespace KreemMachineLibrary.Services
                 db.SaveChanges();
             }
 
+        }
+        public IEnumerable<User> GetSuggestedEmployees(ScheduledShift shift)
+        {
+            var employees = db.Users.Where(u => u.RoleStr == Role.Employee.ToString())
+                .Include(u => u.ScheduledShifts.Select(us => us.ScheduledShift)).ToList();
+
+            foreach (User employee in employees)
+            {
+                if (CanUserWorkShift(employee, shift))
+                {
+                    yield return employee;
+                }
+            }
+        }
+
+        internal bool CanUserWorkShift(User user, ScheduledShift scheduledShift)
+        {
+            if (IsUserAssignedToShift(user, scheduledShift))
+                return true;
+
+            if (HasReachedWorkingHoursLimit(user, scheduledShift.Date))
+                return false;
+
+            if (IsUserScheduledForDay(user, scheduledShift.Date))
+                return false;
+
+            if (HasUserWorkedPreviousNightShift(user, scheduledShift))
+                return false;
+            if (HasUserWorkedNextMorningShift(user, scheduledShift))
+                return false;
+
+            return true;
+        }
+
+        internal bool IsUserAssignedToShift(User user, ScheduledShift scheduledShift)
+        {
+            return user.ScheduledShifts.Select(us => us.ScheduledShift).Contains(scheduledShift);
+        }
+        internal bool HasReachedWorkingHoursLimit(User user, DateTime shiftDate)
+        {
+            DateTime startOfWeek = shiftDate.Date.StartOfWeek();
+            DateTime nextWeek = shiftDate.Date.NextWeek();
+
+            double workedHoursInTheWeek = user.ScheduledShifts
+                .Where(us => us.ScheduledShift.Date >= startOfWeek && us.ScheduledShift.Date < nextWeek)
+                .Sum( us => us.ScheduledShift.Duration);
+            Console.WriteLine(user.FullName + " " + workedHoursInTheWeek.ToString());
+            return workedHoursInTheWeek >= user.MaxMonthlyHoours;
+        }
+        internal bool IsUserScheduledForDay(User user, DateTime day)
+        {
+            return user.ScheduledShifts.Any(us => us.ScheduledShift.Date == day);
+        }
+        internal bool HasUserWorkedPreviousNightShift(User user, ScheduledShift scheduledShift)
+        {
+            Shift morningShift = ShiftService.GetAllShifts().First();
+            Shift nightShift = ShiftService.GetAllShifts().Last();
+
+            if (scheduledShift.Shift != morningShift)
+                return false;
+
+            DateTime previousDay = scheduledShift.Date.AddDays(-1);
+
+            bool hasWorkedPreviousNight = user.ScheduledShifts.Where(us => us.ScheduledShift.Date == previousDay)
+                .Select( us => us.ScheduledShift.Shift)
+                .Contains(nightShift);
+
+            return hasWorkedPreviousNight;
+        }
+        internal bool HasUserWorkedNextMorningShift(User user, ScheduledShift scheduledShift)
+        {
+            Shift morningShift = ShiftService.GetAllShifts().First();
+            Shift nightShift = ShiftService.GetAllShifts().Last();
+
+            if (scheduledShift.Shift != nightShift)
+                return false;
+
+            DateTime nextDay = scheduledShift.Date.AddDays(1);
+
+            bool hasWorkedNextMorning = user.ScheduledShifts.Where(us => us.ScheduledShift.Date == nextDay)
+                .Select(us => us.ScheduledShift.Shift)
+                .Contains(morningShift);
+
+            return hasWorkedNextMorning;
         }
     }
 }
