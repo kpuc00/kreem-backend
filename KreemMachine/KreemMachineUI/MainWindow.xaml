@@ -187,12 +187,12 @@
                         <Grid Height="406" Width="657">
                         <Grid Margin="10">
                             <TabControl TabStripPlacement="Left" Height="451" VerticalAlignment="Top" Margin="-13,-12,-428.2,-52.6" HorizontalAlignment="Left" Width="1078">
-                                <TabItem x:Name="ResPerShiftTab" Header="Resources per shift" MouseDown="ResPerShiftTab_MouseDown" Loaded="ResPerShiftTab_Loaded">
+                                <TabItem x:Name="ResPerShiftTab" Header="Resources per shift" Loaded="ResPerShiftTab_Loaded">
                                     <Grid Background="White" Margin="0,0,23,-0.2">
                                         <local:MonthPicker x:Name="StatisticsPerShiftMonthPicker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,6,0,0" SelectedMonthChanged="StatisticsPerShiftMonthPicker_SelectedMonthChanged" />
-                                        <CheckBox x:Name="cbMorningShift" Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0" Checked="cbMorningShift_Changed" Unchecked="cbMorningShift_Changed"/>
-                                        <CheckBox x:Name="cbNoonShift" Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336" Checked="cbNoonShift_Changed" Unchecked="cbNoonShift_Changed"/>
-                                        <CheckBox x:Name="cbNightShift" Content="Night" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top" Checked="cbNightShift_Changed" Unchecked="cbNightShift_Changed"/>
+                                        <CheckBox x:Name="cbMorningShift" Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0" Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
+                                        <CheckBox x:Name="cbNoonShift" Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336" Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
+                                        <CheckBox x:Name="cbNightShift" Content="Night" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top" Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
                                         <DataGrid Height="398" Margin="0,38,10,0" Name="ResPerShiftDataGrid" VerticalAlignment="Top"/>
                                     </Grid>
                                 </TabItem>
@@ -205,8 +205,8 @@
                                 <TabItem x:Name="EmplStatsTab" Header="Employee statistics" Loaded="EmplStatsTab_Loaded">
                                     <Grid Background="White" Margin="0,0,11.4,0">
                                         <DataGrid Height="397" Margin="0,38,9.6,0" Name="EmplStatsDataGrid" VerticalAlignment="Top"/>
-                                        <DatePicker HorizontalAlignment="Left" Margin="94,8,0,0" VerticalAlignment="Top"/>
-                                        <DatePicker HorizontalAlignment="Left" Margin="273,8,0,0" VerticalAlignment="Top"/>
+                                        <DatePicker x:Name="fromDatePicker" HorizontalAlignment="Left" Margin="94,8,0,0" VerticalAlignment="Top" SelectedDateChanged="fromDatePicker_SelectedDateChanged"/>
+                                        <DatePicker x:Name="toDatePicker" HorizontalAlignment="Left" Margin="273,8,0,0" VerticalAlignment="Top" SelectedDateChanged="toDatePicker_SelectedDateChanged"/>
                                         <Label Content="From:" HorizontalAlignment="Left" Margin="46,7,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                                         <Label Content="To:" HorizontalAlignment="Left" Margin="241,7,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
                                     </Grid>
