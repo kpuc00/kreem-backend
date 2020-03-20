@@ -14,35 +14,15 @@ namespace KreemMachineLibrary.Services
     {
         DataBaseContext db = Globals.db;
 
-        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftAll(DateTime displayMonth)
+        //Statistics per shift
+
+        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShift(DateTime displayMonth, string cbMornnig, string cbNoon, string cbEvening)
         {
             var nextMonth = displayMonth.AddMonths(1);
 
             var result = from ss in db.ScheduledShifts
                          join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
-                         where ss.Date >= displayMonth && ss.Date < nextMonth 
-                         select new { SS = ss, US = us } into joined
-                         group joined by new {
-                             joined.SS.Date,
-                             joined.SS.Shift
-                         } into g
-                         select new ResourcesPerShiftDTO {
-                             empCount = g.Count(),
-                             empCost = g.Sum(us => us.US.HourlyWage),
-                             date = g.Key.Date,
-                             shift = g.Key.Shift.Name
-                         };
-
-            return new ObservableCollection<ResourcesPerShiftDTO>(result);
-        }
-
-        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftMorning(DateTime displayMonth)
-        {
-            var nextMonth = displayMonth.AddMonths(1);
-
-            var result = from ss in db.ScheduledShifts
-                         join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
-                         where ss.Date >= displayMonth && ss.Date < nextMonth && ss.Shift.Name == "Morning"
+                         where ss.Date >= displayMonth && ss.Date < nextMonth && (ss.Shift.Name == cbMornnig || ss.Shift.Name == cbNoon || ss.Shift.Name == cbEvening)
                          select new { SS = ss, US = us } into joined
                          group joined by new
                          {
@@ -51,22 +31,22 @@ namespace KreemMachineLibrary.Services
                          } into g
                          select new ResourcesPerShiftDTO
                          {
-                             empCount = g.Count(),
-                             empCost = g.Sum(us => us.US.HourlyWage),
-                             date = g.Key.Date,
-                             shift = g.Key.Shift.Name
+                             Date = g.Key.Date,
+                             Shift = g.Key.Shift.Name,
+                             Employees = g.Count(),
+                             Cost = g.Sum(us => us.US.HourlyWage)
                          };
 
             return new ObservableCollection<ResourcesPerShiftDTO>(result);
         }
 
-        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftNoon(DateTime displayMonth)
+        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShift(DateTime displayMonth)
         {
             var nextMonth = displayMonth.AddMonths(1);
 
             var result = from ss in db.ScheduledShifts
                          join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
-                         where ss.Date >= displayMonth && ss.Date < nextMonth && ss.Shift.Name == "Noon"
+                         where ss.Date >= displayMonth && ss.Date < nextMonth
                          select new { SS = ss, US = us } into joined
                          group joined by new
                          {
@@ -75,38 +55,16 @@ namespace KreemMachineLibrary.Services
                          } into g
                          select new ResourcesPerShiftDTO
                          {
-                             empCount = g.Count(),
-                             empCost = g.Sum(us => us.US.HourlyWage),
-                             date = g.Key.Date,
-                             shift = g.Key.Shift.Name
+                             Date = g.Key.Date,
+                             Shift = g.Key.Shift.Name,
+                             Employees = g.Count(),
+                             Cost = g.Sum(us => us.US.HourlyWage)
                          };
 
             return new ObservableCollection<ResourcesPerShiftDTO>(result);
         }
 
-        public ObservableCollection<ResourcesPerShiftDTO> GetResourcesPerShiftEvening(DateTime displayMonth)
-        {
-            var nextMonth = displayMonth.AddMonths(1);
-
-            var result = from ss in db.ScheduledShifts
-                         join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
-                         where ss.Date >= displayMonth && ss.Date < nextMonth && ss.Shift.Name == "Night"
-                         select new { SS = ss, US = us } into joined
-                         group joined by new
-                         {
-                             joined.SS.Date,
-                             joined.SS.Shift
-                         } into g
-                         select new ResourcesPerShiftDTO
-                         {
-                             empCount = g.Count(),
-                             empCost = g.Sum(us => us.US.HourlyWage),
-                             date = g.Key.Date,
-                             shift = g.Key.Shift.Name
-                         };
-
-            return new ObservableCollection<ResourcesPerShiftDTO>(result);
-        }
+        //Statistics per month
 
         public ObservableCollection<ResourcesPerMonthDTO> GetResourcesPerMonth(DateTime displayYear)
         {
@@ -122,8 +80,9 @@ namespace KreemMachineLibrary.Services
                          } into g
                          select new ResourcesPerMonthDTO
                          {
-                             empCount = g.Count(),
-                             empCost = g.Sum(us => us.US.HourlyWage)
+                             //Month = g.Key.Month.ToString(),
+                             EmployeeShifts = g.Count(),
+                             Cost = g.Sum(us => us.US.HourlyWage)
                          };
 
             /*Console.WriteLine("result:");
@@ -134,7 +93,9 @@ namespace KreemMachineLibrary.Services
             return new ObservableCollection<ResourcesPerMonthDTO>(result);
         }
 
-        public ObservableCollection<ResourcesPerEmployeeDTO> GetResourcesPerEmployee() 
+        //Employee statistics
+
+        public ObservableCollection<ResourcesPerEmployeeDTO> GetResourcesPerEmployee()
         {
             //var nextMonth = dateTime.AddMonths(1);
 
@@ -148,16 +109,45 @@ namespace KreemMachineLibrary.Services
                          } into g
                          select new ResourcesPerEmployeeDTO
                          {
-                             name = g.Key.user.FirstName + " " +g.Key.user.LastName,
-                             shiftCount = g.Count(),
-                             hourSum = g.Sum(y => y.SS.Duration),
-                             empCost = g.Sum(x => x.US.HourlyWage)
+                             Employee = g.Key.user.FirstName + " " + g.Key.user.LastName,
+                             Shifts = g.Count(),
+                             HoursWorked = g.Sum(y => y.SS.Duration),
+                             Cost = g.Sum(x => x.US.HourlyWage)
                          };
 
             Console.WriteLine("result:");
             foreach (var x in result)
             {
-                Console.WriteLine(x.name + " " + x.shiftCount + " " + x.hourSum + " " + x.empCost);
+                Console.WriteLine(x.Employee + " " + x.Shifts + " " + x.HoursWorked + " " + x.Cost);
+            }
+
+            return new ObservableCollection<ResourcesPerEmployeeDTO>(result);
+        }
+
+        public ObservableCollection<ResourcesPerEmployeeDTO> GetResourcesPerEmployeeDate(DateTime fromDate, DateTime toDate)
+        {
+            //var nextMonth = dateTime.AddMonths(1);
+
+            var result = from ss in db.ScheduledShifts
+                         join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
+                         where ss.Date >= fromDate && ss.Date < toDate
+                         select new { SS = ss, US = us } into joined
+                         group joined by new
+                         {
+                             user = joined.US.User,
+                         } into g
+                         select new ResourcesPerEmployeeDTO
+                         {
+                             Employee = g.Key.user.FirstName + " " + g.Key.user.LastName,
+                             Shifts = g.Count(),
+                             HoursWorked = g.Sum(y => y.SS.Duration),
+                             Cost = g.Sum(x => x.US.HourlyWage)
+                         };
+
+            Console.WriteLine("result:");
+            foreach (var x in result)
+            {
+                Console.WriteLine(x.Employee + " " + x.Shifts + " " + x.HoursWorked + " " + x.Cost);
             }
 
             return new ObservableCollection<ResourcesPerEmployeeDTO>(result);

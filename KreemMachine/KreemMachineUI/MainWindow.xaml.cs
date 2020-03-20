@@ -95,8 +95,8 @@ namespace KreemMachine
         {
             InitializeComponent();
             logedUSer = user;
-
-
+            fromDatePicker.SelectedDate = DateTime.Today.AddDays(1 - DateTime.Today.Day);
+            toDatePicker.SelectedDate = DateTime.Now.Date;
         }
 
         private void TabItem_Loaded(object sender, RoutedEventArgs e)
@@ -322,11 +322,6 @@ namespace KreemMachine
 
         #region Statistics
 
-        private void ResPerShiftTab_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            //StatisticsService.
-        }
-
         //Resources per shift
 
         private void ResPerShiftTab_Loaded(object sender, RoutedEventArgs e)
@@ -336,35 +331,33 @@ namespace KreemMachine
 
         private void StatisticsPerShiftMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
         {
-            if (cbMorningShift.IsChecked == true)
+            string cbMorning = "";
+            string cbNoon = "";
+            string cbNight = "";
+            if ((bool)cbMorningShift.IsChecked)
             {
-                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftMorning(displayMonth);
+                cbMorning = cbMorningShift.Content.ToString();
             }
-            else if (cbNoonShift.IsChecked == true)
+            if ((bool)cbNoonShift.IsChecked)
             {
-                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftNoon(displayMonth);
+                cbNoon = cbNoonShift.Content.ToString();
             }
-            else if (cbNightShift.IsChecked == true)
+            if ((bool)cbNightShift.IsChecked)
             {
-                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftEvening(displayMonth);
+                cbNight = cbNightShift.Content.ToString();
+            }
+
+            if (String.IsNullOrWhiteSpace(cbMorning) && String.IsNullOrWhiteSpace(cbNoon) && String.IsNullOrWhiteSpace(cbNight))
+            {
+                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShift(displayMonth);
             }
             else
             {
-                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShiftAll(displayMonth);
+                ResPerShiftDataGrid.ItemsSource = statisticsService.GetResourcesPerShift(displayMonth, cbMorning, cbNoon, cbNight);
             }
         }
 
-        private void cbMorningShift_Changed(object sender, RoutedEventArgs e)
-        {
-            StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
-        }
-
-        private void cbNoonShift_Changed(object sender, RoutedEventArgs e)
-        {
-            StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
-        }
-
-        private void cbNightShift_Changed(object sender, RoutedEventArgs e)
+        private void cbShift_CheckChange(object sender, RoutedEventArgs e)
         {
             StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
         }
@@ -388,8 +381,19 @@ namespace KreemMachine
             EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployee();
         }
 
+        private void fromDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployeeDate(fromDatePicker.SelectedDate ?? default(DateTime), toDatePicker.SelectedDate ?? default(DateTime));
+        }
+
+        private void toDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployeeDate(fromDatePicker.SelectedDate ?? default(DateTime), toDatePicker.SelectedDate ?? default(DateTime));
+        }
+
+
         #endregion
 
-
+        
     }
 }
