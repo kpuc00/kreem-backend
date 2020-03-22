@@ -80,7 +80,7 @@ namespace KreemMachineLibrary.Services
                          } into g
                          select new ResourcesPerMonthDTO
                          {
-                             //Month = g.Key.Month.ToString(),
+                             Month = g.FirstOrDefault().SS.Date,
                              NumberOfEmployees = g.Count(),
                              Cost = g.Sum(us => us.US.HourlyWage)
                          };

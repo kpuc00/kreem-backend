@@ -391,6 +391,11 @@ namespace KreemMachine
             EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployeeDate(fromDatePicker.SelectedDate ?? default(DateTime), toDatePicker.SelectedDate ?? default(DateTime));
         }
 
+        private void ResPerMonthDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.PropertyName == nameof(ResourcesPerMonthDTO.Month))
+                (e.Column as DataGridTextColumn).Binding.StringFormat = "MMM";
+        }
 
         #endregion
 

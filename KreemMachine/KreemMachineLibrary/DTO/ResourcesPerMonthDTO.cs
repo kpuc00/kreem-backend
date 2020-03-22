@@ -8,7 +8,7 @@ namespace KreemMachineLibrary.DTO
 {
     public class ResourcesPerMonthDTO
     {
-        public string Month { get; set; }
+        public DateTime? Month { get; set; }
         public int NumberOfEmployees { get; set; }
         public float Cost { get; set; }
     }
