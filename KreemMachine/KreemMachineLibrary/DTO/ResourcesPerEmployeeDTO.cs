@@ -8,8 +8,8 @@ namespace KreemMachineLibrary.DTO
 {
     public class ResourcesPerEmployeeDTO
     {
-        public string Employee { get; set; }
-        public int Shifts { get; set; }
+        public string EmployeeName { get; set; }
+        public int NumberOfScheduledShifts { get; set; }
         public double HoursWorked { get; set; }
         public float Cost { get; set; }
 

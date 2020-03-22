@@ -33,7 +33,7 @@ namespace KreemMachineLibrary.Services
                          {
                              Date = g.Key.Date,
                              Shift = g.Key.Shift.Name,
-                             Employees = g.Count(),
+                             NumberOfEmployees = g.Count(),
                              Cost = g.Sum(us => us.US.HourlyWage)
                          };
 
@@ -57,7 +57,7 @@ namespace KreemMachineLibrary.Services
                          {
                              Date = g.Key.Date,
                              Shift = g.Key.Shift.Name,
-                             Employees = g.Count(),
+                             NumberOfEmployees = g.Count(),
                              Cost = g.Sum(us => us.US.HourlyWage)
                          };
 
@@ -81,7 +81,7 @@ namespace KreemMachineLibrary.Services
                          select new ResourcesPerMonthDTO
                          {
                              //Month = g.Key.Month.ToString(),
-                             EmployeeShifts = g.Count(),
+                             NumberOfEmployees = g.Count(),
                              Cost = g.Sum(us => us.US.HourlyWage)
                          };
 
@@ -109,8 +109,8 @@ namespace KreemMachineLibrary.Services
                          } into g
                          select new ResourcesPerEmployeeDTO
                          {
-                             Employee = g.Key.user.FirstName + " " + g.Key.user.LastName,
-                             Shifts = g.Count(),
+                             EmployeeName = g.Key.user.FirstName + " " + g.Key.user.LastName,
+                             NumberOfScheduledShifts = g.Count(),
                              HoursWorked = g.Sum(y => y.SS.Duration),
                              Cost = g.Sum(x => x.US.HourlyWage)
                          };
@@ -118,7 +118,7 @@ namespace KreemMachineLibrary.Services
             Console.WriteLine("result:");
             foreach (var x in result)
             {
-                Console.WriteLine(x.Employee + " " + x.Shifts + " " + x.HoursWorked + " " + x.Cost);
+                Console.WriteLine(x.EmployeeName + " " + x.NumberOfScheduledShifts + " " + x.HoursWorked + " " + x.Cost);
             }
 
             return new ObservableCollection<ResourcesPerEmployeeDTO>(result);
@@ -138,8 +138,8 @@ namespace KreemMachineLibrary.Services
                          } into g
                          select new ResourcesPerEmployeeDTO
                          {
-                             Employee = g.Key.user.FirstName + " " + g.Key.user.LastName,
-                             Shifts = g.Count(),
+                             EmployeeName = g.Key.user.FirstName + " " + g.Key.user.LastName,
+                             NumberOfScheduledShifts = g.Count(),
                              HoursWorked = g.Sum(y => y.SS.Duration),
                              Cost = g.Sum(x => x.US.HourlyWage)
                          };
@@ -147,7 +147,7 @@ namespace KreemMachineLibrary.Services
             Console.WriteLine("result:");
             foreach (var x in result)
             {
-                Console.WriteLine(x.Employee + " " + x.Shifts + " " + x.HoursWorked + " " + x.Cost);
+                Console.WriteLine(x.EmployeeName + " " + x.NumberOfScheduledShifts + " " + x.HoursWorked + " " + x.Cost);
             }
 
             return new ObservableCollection<ResourcesPerEmployeeDTO>(result);
