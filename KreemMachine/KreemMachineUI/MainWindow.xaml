@@ -147,12 +147,13 @@
 
                     <!-- Buttons -->
                     <StackPanel Grid.Row="3" HorizontalAlignment="Left" TextBlock.FontSize="16" >
-                        <!-- Auto schedule -->
-                        <Button Content="Autogenerate" Margin="7" Padding="7 3" IsEnabled="{Binding ElementName=_this, Path=CanEditSchedule}" />
-
                         <!-- Manually schedule -->
                         <Button Content="Schedule manually" Click="ScheduleManuallyButton_Click"
                                 Margin="7"  Padding="7 3" />
+                        <!-- Auto schedule -->
+                        <Button Content="Autogenerate" Margin="7" Padding="7 3" IsEnabled="{Binding ElementName=_this, Path=CanEditSchedule}" Visibility="Hidden" />
+
+                        
                     </StackPanel>
 
                     <!-- TODO: extract the colors somewhere else and bind them here and to the backend -->
