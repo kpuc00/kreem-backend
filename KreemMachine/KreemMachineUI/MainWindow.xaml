@@ -388,7 +388,8 @@
                         </Grid>
                     </TabItem>
                     <TabItem Header="Connection settings"
-                             TextBlock.FontSize="20" Selector.Selected="TabItem_Selected">
+                             TextBlock.FontSize="20" Selector.Selected="TabItem_Selected"
+                             Visibility="Hidden">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="20" />
