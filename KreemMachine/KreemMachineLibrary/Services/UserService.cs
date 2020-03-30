@@ -18,17 +18,6 @@ namespace KreemMachineLibrary.Services
     {
         
         DataBaseContext db = Globals.db;
-        
-        
- 
-        public UserService()
-        {
-            // Load all the roles into memory, 
-            // since it's just a few of them that are probable to be used anyway
-            // it's better to load them in memory in advance
-            // than to have a sepparate query when we actually need them
-            // db.Roles.Load();
-        }
 
         public User Save(User user)
         {

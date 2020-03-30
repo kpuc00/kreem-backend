@@ -14,6 +14,13 @@ namespace KreemMachineLibrary.Services
         private DataBaseContext db = Globals.db;
         ShiftService ShiftService = new ShiftService();
 
+        public ScheduleService()
+        {
+            db.Shifts.Load();
+        }
+
+
+
         /// <summary>
         /// Returns all shifts scheduled between <b>start</b> and <b>end</b> dates
         /// Clients may depend on the fact that the result is sorted ascending by date
@@ -117,7 +124,6 @@ namespace KreemMachineLibrary.Services
             double workedHoursInTheWeek = user.ScheduledShifts
                 .Where(us => us.ScheduledShift.Date >= startOfWeek && us.ScheduledShift.Date < nextWeek)
                 .Sum( us => us.ScheduledShift.Duration);
-            Console.WriteLine(user.FullName + " " + workedHoursInTheWeek.ToString());
             return workedHoursInTheWeek >= user.MaxMonthlyHoours;
         }
         internal bool IsUserScheduledForDay(User user, DateTime day)
