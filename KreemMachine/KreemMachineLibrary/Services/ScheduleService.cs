@@ -15,7 +15,7 @@ namespace KreemMachineLibrary.Services
         ShiftService ShiftService = new ShiftService();
 
         /// <summary>
-        /// Returns all shifts scheduled between <code>start</code> and <code>end</code> dates
+        /// Returns all shifts scheduled between <b>start</b> and <b>end</b> dates
         /// Clients may depend on the fact that the result is sorted ascending by date
         /// </summary>
         /// <param name="start"> The first date to be included in the results (i.e. incluseive bound) </param>
@@ -24,8 +24,11 @@ namespace KreemMachineLibrary.Services
         public IEnumerable<ScheduledShift> GetScheduledShifts(DateTime start, DateTime end)
         {
             var shifts = db.ScheduledShifts
-                            .Where(s => s.Date >= start && s.Date < end)
-                            .OrderBy(s => s.Date);
+                            .Where(ss => ss.Date >= start && ss.Date < end)
+                            .Include(ss => ss.EmployeeScheduledShits)
+                            .Include(ss => ss.Shift)
+                            .OrderBy(ss => ss.Date)
+                            .ToList();
 
 
             return shifts;
