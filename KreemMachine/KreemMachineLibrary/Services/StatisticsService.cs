@@ -115,11 +115,11 @@ namespace KreemMachineLibrary.Services
                              Cost = g.Sum(x => x.US.HourlyWage)
                          };
 
-            Console.WriteLine("result:");
-            foreach (var x in result)
-            {
-                Console.WriteLine(x.EmployeeName + " " + x.NumberOfScheduledShifts + " " + x.HoursWorked + " " + x.Cost);
-            }
+            //Console.WriteLine("result:");
+            //foreach (var x in result)
+            //{
+            //    Console.WriteLine(x.EmployeeName + " " + x.NumberOfScheduledShifts + " " + x.HoursWorked + " " + x.Cost);
+            //}
 
             return new ObservableCollection<ResourcesPerEmployeeDTO>(result);
         }
@@ -144,11 +144,11 @@ namespace KreemMachineLibrary.Services
                              Cost = g.Sum(x => x.US.HourlyWage)
                          };
 
-            Console.WriteLine("result:");
-            foreach (var x in result)
-            {
-                Console.WriteLine(x.EmployeeName + " " + x.NumberOfScheduledShifts + " " + x.HoursWorked + " " + x.Cost);
-            }
+            //Console.WriteLine("result:");
+            //foreach (var x in result)
+            //{
+            //    Console.WriteLine(x.EmployeeName + " " + x.NumberOfScheduledShifts + " " + x.HoursWorked + " " + x.Cost);
+            //}
 
             return new ObservableCollection<ResourcesPerEmployeeDTO>(result);
         }

@@ -187,26 +187,26 @@
                 <TextBlock Margin="1,0,6.4,5.4" Padding="5" ><InlineUIContainer>
                         <Grid Height="406" Width="657">
                         <Grid Margin="10">
-                            <TabControl TabStripPlacement="Left" Height="451" VerticalAlignment="Top" Margin="-13,-12,-397.2,-52.6" HorizontalAlignment="Left" Width="1047">
+                            <TabControl TabStripPlacement="Left" Margin="-13,-12,-397.2,-52.6">
                                 <TabItem x:Name="ResPerShiftTab" Header="Resources per shift" Loaded="ResPerShiftTab_Loaded">
-                                    <Grid Background="White" Margin="0,0,0,-0.4" HorizontalAlignment="Left" Width="860" Height="446" VerticalAlignment="Top">
+                                    <Grid Background="White" Margin="0,0,-8,-0.4">
                                         <local:MonthPicker x:Name="StatisticsPerShiftMonthPicker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,6,0,0" SelectedMonthChanged="StatisticsPerShiftMonthPicker_SelectedMonthChanged" />
                                         <CheckBox x:Name="cbMorningShift" Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0" Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
                                         <CheckBox x:Name="cbNoonShift" Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336" Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
                                         <CheckBox x:Name="cbNightShift" Content="Night" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top" Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
-                                        <DataGrid Height="398" Margin="0,38,10,0" Name="ResPerShiftDataGrid" VerticalAlignment="Top" IsReadOnly="True"/>
+                                        <DataGrid Margin="0,38,10,10" Name="ResPerShiftDataGrid" IsReadOnly="True"/>
                                     </Grid>
                                 </TabItem>
                                 <TabItem x:Name="ResPerMonthTab" Header="Resources per month" Loaded="ResPerMonthTab_Loaded">
-                                    <Grid Background="White" Margin="0,0,0,-0.4" HorizontalAlignment="Left" Width="855" Height="446" VerticalAlignment="Top">
-                                        <DataGrid Height="397" Margin="0,38,10,0" Name="ResPerMonthDataGrid" VerticalAlignment="Top" IsReadOnly="True"
+                                    <Grid Background="White" Margin="0,0,-3,-0.4">
+                                        <DataGrid Margin="0,38,10,11" Name="ResPerMonthDataGrid" IsReadOnly="True"
                                                   AutoGeneratingColumn="ResPerMonthDataGrid_AutoGeneratingColumn" />
                                         <local:YearPicker x:Name="StatisticsPerMonthYearPicker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,6,0,0" SelectedYearChanged="StatisticsPerMonthYearPicker_SelectedYearChanged"/>
                                     </Grid>
                                 </TabItem>
                                 <TabItem x:Name="EmplStatsTab" Header="Employee statistics" Loaded="EmplStatsTab_Loaded">
-                                    <Grid Background="White" Margin="0,0,0,-0.4" HorizontalAlignment="Left" Width="852" Height="446" VerticalAlignment="Top">
-                                        <DataGrid Height="397" Margin="0,38,10,0" Name="EmplStatsDataGrid" VerticalAlignment="Top" IsReadOnly="True"/>
+                                    <Grid Background="White" Margin="0,0,0,-0.4">
+                                        <DataGrid Margin="0,38,10,11" Name="EmplStatsDataGrid" IsReadOnly="True"/>
                                         <DatePicker x:Name="fromDatePicker" HorizontalAlignment="Left" Margin="94,8,0,0" VerticalAlignment="Top" SelectedDateChanged="fromDatePicker_SelectedDateChanged"/>
                                         <DatePicker x:Name="toDatePicker" HorizontalAlignment="Left" Margin="273,8,0,0" VerticalAlignment="Top" SelectedDateChanged="toDatePicker_SelectedDateChanged"/>
                                         <Label Content="From:" HorizontalAlignment="Left" Margin="46,7,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
