@@ -30,12 +30,15 @@ namespace KreemMachineLibrary.Services
             // db.Roles.Load();
         }
 
-        public User Save(User user)
+        public User Save(string firstName, string lastName, string email, Role role, string hourlyWage, DateTime birthDate, string address, string phoneNumber)
         {
+            User user = this.VerifyInputDataUser(firstName, lastName, email, role, hourlyWage, birthDate, address, phoneNumber);
             HashPassword(user);
             user = SaveToDatabase(user);
             return user;
         }
+
+
 
         internal void HashPassword(User user)
         {
@@ -47,6 +50,56 @@ namespace KreemMachineLibrary.Services
             }
             user.Password = randomPassword;
             user.PasswordHash = PasswordHashHelper.CreateHash(randomPassword);
+        }
+
+        //This method checks the input values of a user
+        private User VerifyInputDataUser(string firstName, string lastName, string email, Role role, string hourlyWage, DateTime birthDate, string address, string phoneNumber)
+        {
+            if (String.IsNullOrWhiteSpace(firstName))
+            {
+                throw new RequiredFieldsEmpty("You need to fill in all required fields");
+            }
+            if (String.IsNullOrWhiteSpace(lastName))
+            {
+                throw new RequiredFieldsEmpty("You need to fill in all required fields");
+            }
+            if (String.IsNullOrWhiteSpace(hourlyWage))
+            {
+                throw new RequiredFieldsEmpty("You need to fill in all required fields");
+            }
+            if (String.IsNullOrWhiteSpace(birthDate.ToString())) {
+                throw new RequiredFieldsEmpty("You need to fill in all required fields");
+            }
+
+            //Checks if a string is a number
+            int dotCount = 0;
+            bool valH = true;
+            foreach (Char c in hourlyWage) {
+                if (c == '.') {
+                    if (++dotCount > 1) {
+                        valH = false;
+                        break;
+                    }
+                }
+                else {
+                    if (c < '0' || c > '9') {
+                        valH = false;
+                        break;
+                    }
+                }
+            }
+            if (!valH)
+            {
+                throw new HourlyWageMustComtainOnlyNumbers("The hourly wage can only be a number");
+            }
+
+            foreach (Char c in phoneNumber) {
+                if (c < '0' || c > '9') {
+                    throw new PhoneNumberException("Phone number can only be numbers");
+                }
+            }
+
+            return new User(firstName, lastName, email, role, float.Parse(hourlyWage), birthDate, address, phoneNumber);
         }
 
         internal User SaveToDatabase (User user)
@@ -105,7 +158,17 @@ namespace KreemMachineLibrary.Services
             return db.Users.Local;
         }
 
-        public void UpdateEmployee(User user) {
+        public void UpdateEmployee(User user, string firstName, string lastName, string email, Role role, string hourlyWage, DateTime birthDate, string address, string phoneNumber) {
+            this.VerifyInputDataUser(firstName, lastName, email, role, hourlyWage, birthDate, address, phoneNumber);
+
+            user.FirstName = firstName;
+            user.LastName = lastName;
+            user.Role = role;
+            user.HourlyWage = float.Parse(hourlyWage);
+            user.Birthdate = birthDate;
+            user.Address = address;
+            user.PhoneNumber = phoneNumber;
+
             db.Entry(user).State = EntityState.Modified;
             db.SaveChanges();
         }

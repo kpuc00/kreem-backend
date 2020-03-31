@@ -33,34 +33,15 @@ namespace KreemMachineLibrary.Models
 
         [Column("first_name"), Required]
         public string FirstName { 
-            get {
-                return this.firstName;
-            }
-            set {
-                if (String.IsNullOrWhiteSpace(value))
-                {
-                    throw new RequiredFieldsEmpty("You need to fill in the required fields");
-                }
-                else {
-                    this.firstName = value;
-                }
-            } 
+            get { return this.firstName; }
+            set { this.firstName = value; } 
         }
 
         [Column("last_name"), Required]
         public string LastName { 
-            get {
-                return this.lastName;
-            } 
-            set {
-                if (String.IsNullOrWhiteSpace(value))
-                {
-                    throw new RequiredFieldsEmpty("You need to fill in the required fields");
-                }
-                else {
-                    this.lastName = value;
-                }
-            } 
+            get { return this.lastName; } 
+            set { this.lastName = value; }
+            
         }
 
         [Index("UQ_Email", IsUnique = true), Required]
@@ -75,12 +56,8 @@ namespace KreemMachineLibrary.Models
 
         [Column("password_hash"), Required]
         public string PasswordHash { 
-            get {
-                return this.passwordHash;
-            } 
-            set {
-                this.passwordHash = value;
-            } 
+            get { return this.passwordHash; } 
+            set { this.passwordHash = value; } 
         }
 
         /// <summary>
@@ -104,56 +81,15 @@ namespace KreemMachineLibrary.Models
         [Column("hourly_wage"), Required]
         public float HourlyWage
         {
-            get
-            {
-                return this.hourlyWage;
-            }
-            set
-            {
-                int dotCount = 0;
-                bool val = true;
-                foreach (Char c in value.ToString())
-                {
-                    if (c == '.')
-                    {
-                        if (++dotCount > 1)
-                        {
-                            val = false;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        if (c < '0' || c > '9')
-                        {
-                            val = false;
-                            break;
-                        }
-                    }
-                }
-                if (val)
-                {
-                    this.hourlyWage = value;
-                }
-                else
-                {
-                    throw new HourlyWageMustComtainOnlyNumbers("Invalid value for wage");
-                }
-            }
+            get => this.hourlyWage; 
+            set => this.hourlyWage = value; 
         }
 
         [Column("birth_date"), Required]
-        public DateTime? Birthdate { get {
-                return this.birthDate;
-            } set {
-                if (String.IsNullOrWhiteSpace(value.ToString()))
-                {
-                    throw new RequiredFieldsEmpty("You need to fill in the required fields");
-                }
-                else {
-                    this.birthDate = (DateTime)value;
-                }
-            }
+        public DateTime? Birthdate 
+        { 
+            get { return this.birthDate; } 
+            set { this.birthDate = (DateTime)value; }
         }
         [Column("address")]
         public string Address { get; set; }

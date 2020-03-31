@@ -47,15 +47,7 @@ namespace KreemMachine
         {
             try
             {
-                this.user.FirstName = FirstNameTextBox.Text;
-                this.user.LastName = LastNameTextBox.Text;
-                this.user.Email = EmailTextBox.Text;
-                this.user.Role = (Role)RoleComboBox.SelectedItem;
-                this.user.HourlyWage = float.Parse(HourlyWageTextBox.Text);
-                this.user.Address = AddressTextBox.Text;
-                this.user.PhoneNumber = PhoneNumberTextBox.Text;
-
-                this.userService.UpdateEmployee(this.user);
+                this.userService.UpdateEmployee(this.user, FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, (Role)RoleComboBox.SelectedItem, HourlyWageTextBox.Text, (DateTime)BirthDatePicker.SelectedDate, AddressTextBox.Text, PhoneNumberTextBox.Text);
 
                 this.Close();
             }
@@ -63,11 +55,12 @@ namespace KreemMachine
             {
                 MessageBox.Show(ex.Message);
             }
-            catch (RequiredFieldsEmpty ex)
+            catch (PhoneNumberException ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            catch (Exception ex) {
+            catch (RequiredFieldsEmpty ex)
+            {
                 MessageBox.Show(ex.Message);
             }
         }
