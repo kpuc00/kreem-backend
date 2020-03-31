@@ -56,14 +56,14 @@ namespace KreemMachine
             }
         }
 
-        private int selectedStafForSchedulingBinding;
+        private int scheduleGeneratorCurrentDayNumberOfEmployees;
 
-        public int SelectedStafForSchedulingBinding
+        public int ScheduleGeneratorCurrentDayNumberOfEmployees
         {
-            get => selectedStafForSchedulingBinding;
+            get => scheduleGeneratorCurrentDayNumberOfEmployees;
             set
             {
-                selectedStafForSchedulingBinding = value;
+                scheduleGeneratorCurrentDayNumberOfEmployees = value;
                 NotifyPropertyChanged();
             }
         }
@@ -285,9 +285,9 @@ namespace KreemMachine
 
         private void ManualScheduleShiftPicker_SelectedShiftChanged(object sender, DateTime SelectedDay, Shift SelectedShift)
         {
-
+             
             ManuallyScheduledShift = scheduleService.GetScheduledShiftOrCreateNew(SelectedDay, SelectedShift);
-            SelectedStafForSchedulingBinding = ManuallyScheduledShift?.EmployeeScheduledShits?.Count ?? 0;
+            ScheduleGeneratorCurrentDayNumberOfEmployees = ManuallyScheduledShift?.EmployeeScheduledShits?.Count ?? 0;
             SetUpEmployeeRecomendationForManualScheduling();
 
         }
@@ -304,7 +304,7 @@ namespace KreemMachine
             var checkbox = sender as CheckBox;
             var userViewModel = checkbox.DataContext as UserSchedulerViewModel;
             scheduleService.AssignUserToShift(userViewModel.User, ManuallyScheduledShift);
-            SelectedStafForSchedulingBinding++;
+            ScheduleGeneratorCurrentDayNumberOfEmployees++;
 
         }
 
@@ -314,7 +314,7 @@ namespace KreemMachine
             var userViewModel = checkbox.DataContext as UserSchedulerViewModel;
 
             scheduleService.RemoveUserFromShift(userViewModel.User, ManuallyScheduledShift);
-            SelectedStafForSchedulingBinding--;
+            ScheduleGeneratorCurrentDayNumberOfEmployees--;
 
         }
 
