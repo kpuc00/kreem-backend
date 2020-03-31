@@ -30,7 +30,7 @@ namespace KreemMachineLibrary.Services
         }
 
 
-        public IList<Shift> GetAllShifts() => db.Shifts.OrderBy(s => s.StartHour).ToList();
+        public IList<Shift> GetAllShifts() => db.Shifts.Local.OrderBy(s => s.StartHour).ToList();
 
     }
 }
