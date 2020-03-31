@@ -16,7 +16,7 @@ namespace KreemMachineLibrary.Models
         public long Id { get; set; }
 
         [Column("user_id")]
-        public long UserId { get; set; }
+        public long? UserId { get; set; }
 
         [Column("scheduled_shift_id"), Required]
         public long ScheduledShiftId { get; set; }
