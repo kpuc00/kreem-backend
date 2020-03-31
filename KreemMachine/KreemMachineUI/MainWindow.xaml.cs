@@ -42,6 +42,12 @@ namespace KreemMachine
         public bool CanEditUser => SecurityContext.HasPermissions(Permission.EditUsers);
         public bool CanDeleteUser => SecurityContext.HasPermissions(Permission.DeleteUsers);
         public bool CanEditSchedule => SecurityContext.HasPermissions(Permission.EditSchedule);
+        public string ServerField => HostTextBox.Text;
+        public string UsernameField => ConnectionUsernameTextBox.Text;
+        public string PasswordField => ConnectionPasswordPasswordBox.Password;
+        public string DatabaseNameField => ConnectionDatabaseNameTextBox.Text;
+
+
 
 
         ScheduledShift manuallyScheduledShift;
@@ -148,7 +154,7 @@ namespace KreemMachine
 
         private void ButtonSaveConnectionSetting_Click(object sender, RoutedEventArgs e)
         {
-            connectionService.SaveChanges(ConnectionSettings);
+            connectionService.ChangeConnectionString(ServerField, UsernameField, PasswordField, DatabaseNameField);
         }
 
         private void TabItem_Selected(object sender, RoutedEventArgs e)
