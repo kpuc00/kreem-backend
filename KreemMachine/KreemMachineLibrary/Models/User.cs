@@ -17,48 +17,21 @@ namespace KreemMachineLibrary.Models
     [Table("user")]
     public class User
     {
-        UserService userService = new UserService();
-
-        //Instance variables
-        private string firstName = "";
-        private string lastName = "";
-        private string email = "";
-        //private Role role;
-        private string passwordHash = "";
-        private float hourlyWage = 0;
-        private DateTime birthDate;
 
         [Key]
         public long Id { get; set; }
 
         [Column("first_name"), Required]
-        public string FirstName { 
-            get { return this.firstName; }
-            set { this.firstName = value; } 
-        }
+        public string FirstName { get; set; }
 
         [Column("last_name"), Required]
-        public string LastName { 
-            get { return this.lastName; } 
-            set { this.lastName = value; }
-            
-        }
+        public string LastName { get; set; }
 
         [Index("UQ_Email", IsUnique = true), Required]
-        public string Email { 
-            get {
-                return this.email;
-            }
-            set {
-                this.email = value;
-            } 
-        }
+        public string Email { get; set; }
 
         [Column("password_hash"), Required]
-        public string PasswordHash { 
-            get { return this.passwordHash; } 
-            set { this.passwordHash = value; } 
-        }
+        public string PasswordHash { get; set; }
 
         /// <summary>
         /// String property for the database
@@ -75,27 +48,24 @@ namespace KreemMachineLibrary.Models
         {
             get => string.IsNullOrEmpty(RoleStr) ? null : Enum.Parse(typeof(Role), RoleStr) as Role? ;
             set => RoleStr = value.ToString();
-
         }
 
         [Column("hourly_wage"), Required]
-        public float HourlyWage
-        {
-            get => this.hourlyWage; 
-            set => this.hourlyWage = value; 
-        }
+        public float HourlyWage { get; set; }
 
         [Column("birth_date"), Required]
-        public DateTime? Birthdate 
-        { 
-            get { return this.birthDate; } 
-            set { this.birthDate = (DateTime)value; }
-        }
+        public DateTime? Birthdate { get; set; }
+
         [Column("address")]
         public string Address { get; set; }
 
         [Column("phone_number")]
         public string PhoneNumber { get; set; }
+
+        [Column("department_id")]    
+        public long? DepatmentId { get; set; }
+
+        public virtual Department Department { get; set; }
 
         public virtual IList<UserScheduledShift> ScheduledShifts { get; set; }
 
@@ -123,7 +93,7 @@ namespace KreemMachineLibrary.Models
         public User() { }
 
         public User(string firstName, string lastName, string email, Role role, float hourlyWage,
-                    DateTime? birthdate, string adress = null, string phoneNumber = null)
+                    DateTime? birthdate, string adress = null, string phoneNumber = null, Department department = null)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -133,6 +103,8 @@ namespace KreemMachineLibrary.Models
             Birthdate = birthdate;
             Address = adress;
             PhoneNumber = phoneNumber;
+            Department = department;
         }
+
     }
 }
