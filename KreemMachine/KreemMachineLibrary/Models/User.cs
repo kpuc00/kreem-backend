@@ -27,7 +27,7 @@ namespace KreemMachineLibrary.Models
         [Column("last_name"), Required]
         public string LastName { get; set; }
 
-        [Index("UQ_Email", IsUnique = true), Required]
+        [Index("email", IsUnique = true), Required]
         public string Email { get; set; }
 
         [Column("password_hash"), Required]
@@ -62,8 +62,8 @@ namespace KreemMachineLibrary.Models
         [Column("phone_number")]
         public string PhoneNumber { get; set; }
 
-        [Column("department_id")]    
-        public long? DepatmentId { get; set; }
+        [Column("Department_Id")]
+        public long? DepartmentId { get; set; }
 
         public virtual Department Department { get; set; }
 

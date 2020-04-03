@@ -23,6 +23,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Threading;
 using KreemMachineLibrary.DTO;
+using System.Timers;
 
 namespace KreemMachine
 {
@@ -31,7 +32,7 @@ namespace KreemMachine
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        ObservableCollection<User> AllUsers;
+        List<User> AllUsers;
 
         IEnumerable<Shift> AllShifts;
 
@@ -92,19 +93,17 @@ namespace KreemMachine
         public event PropertyChangedEventHandler PropertyChanged;
 
         User logedUSer;
+
+        Timer RefreshUsersViewTimer = new Timer(5000);
+
         public MainWindow(User user)
         {
             InitializeComponent();
             logedUSer = user;
             fromDatePicker.SelectedDate = DateTime.Today.AddDays(1 - DateTime.Today.Day);
             toDatePicker.SelectedDate = DateTime.Now.Date;
-        }
+            RefreshUsersViewTimer.Elapsed += (sender,e) => Dispatcher.Invoke( ()=> RefreshUsersTableView() );
 
-        private void TabItem_Loaded(object sender, RoutedEventArgs e)
-        {
-            AllUsersListBox.ItemsSource = null;
-            AllUsers = userService.GetAll();
-            AllUsersListBox.ItemsSource = AllUsers;
         }
 
         private void SearchTextBox_KeyUp(object sender, KeyEventArgs e)
@@ -197,8 +196,20 @@ namespace KreemMachine
 
         private void UsersTabItem_Selected(object sender, RoutedEventArgs e)
         {
+            RefreshUsersTableView();
+            RefreshUsersViewTimer.Start();
+        }
+
+        private void UsersTabItem_Unselected(object sender, RoutedEventArgs e)
+        {
+            RefreshUsersViewTimer.Stop();
+        }
+
+        private void RefreshUsersTableView(object sender = null, EventArgs args = null)
+        {
+            Console.WriteLine("Refreshing users");
             AllUsersListBox.ItemsSource = null;
-            AllUsersListBox.ItemsSource = AllUsers;
+            AllUsersListBox.ItemsSource = userService.GetAll();
         }
 
 
@@ -409,5 +420,7 @@ namespace KreemMachine
         }
 
         #endregion
+
+
     }
 }

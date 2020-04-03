@@ -34,8 +34,8 @@
             </TabControl.Resources>
 
             <!--Users-->
-            <TabItem Header="Users" Loaded="TabItem_Loaded" Visibility="{Binding ElementName=_this, Path=CanViewUsersTab, Converter={StaticResource BoolToVis}}"
-                     Selector.Selected="UsersTabItem_Selected">
+            <TabItem Header="Users" Visibility="{Binding ElementName=_this, Path=CanViewUsersTab, Converter={StaticResource BoolToVis}}"
+                     Selector.Selected="UsersTabItem_Selected" Selector.Unselected="UsersTabItem_Unselected">
                 <Grid Grid.IsSharedSizeScope="True" >
                     <Grid.RowDefinitions>
                         <!--Create button and search-->
