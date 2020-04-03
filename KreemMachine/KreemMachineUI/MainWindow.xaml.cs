@@ -87,6 +87,7 @@ namespace KreemMachine
         ConnectionSettingsService connectionService = new ConnectionSettingsService();
         ScheduleService scheduleService = new ScheduleService();
         StatisticsService statisticsService = new StatisticsService();
+        ProductServices productServices = new ProductServices();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -397,8 +398,16 @@ namespace KreemMachine
                 (e.Column as DataGridTextColumn).Binding.StringFormat = "MMM";
         }
 
+
         #endregion
 
-        
+        #region Stock
+
+        private void StocKTabItem_Selected(object sender, RoutedEventArgs e)
+        {
+            AllProductsListBox.ItemsSource = productServices.GetAllProducts();
+        }
+
+        #endregion
     }
 }
