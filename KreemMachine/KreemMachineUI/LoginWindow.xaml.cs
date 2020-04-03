@@ -70,5 +70,21 @@ namespace KreemMachine
             // after 'MainWindow' is closed, also close This Window
             window.Closed += (Sender, E) => this.Close();
         }
+
+        private void EmailTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                LogInButton_Click(this, new RoutedEventArgs());
+            }
+        }
+
+        private void SecretPasswordBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                LogInButton_Click(this, new RoutedEventArgs());
+            }
+        }
     }
 }
