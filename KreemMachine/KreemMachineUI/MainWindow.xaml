@@ -9,7 +9,11 @@
         Title="Kreem Machine" Height="500" Width="1200"
         WindowStartupLocation="CenterScreen" Icon="kreem_icon.png">
     <Grid>
-        <TabControl x:Name="MainContent" TabStripPlacement="Left" Margin="10,10,-0.4,0" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TabControl x:Name="MainContent" TabStripPlacement="Left" Margin="10,10,-0.4,0.4" Grid.ColumnSpan="2" >
             <!--Style to make the TabHeaders go to left and look somewhat nice-->
             <TabControl.Resources >
                 <Style TargetType="{x:Type TabItem}">
@@ -196,24 +200,24 @@
                     <Grid.RowDefinitions>
                         <!-- Buttons and search -->
                         <RowDefinition Height="auto" />
-                        
+
                         <!-- Table heasers -->
                         <RowDefinition Height="auto" />
-                        
+
                         <!-- Table -->
                         <RowDefinition Height="*" />
-                        
+
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <!-- Create button -->
                         <ColumnDefinition Width="Auto" />
-                        
+
                         <!--Request Button-->
                         <ColumnDefinition Width="Auto" />
-                        
+
                         <!-- Search bar-->
                         <ColumnDefinition Width="*" />
-                        
+
                     </Grid.ColumnDefinitions>
 
                     <Button Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0"/>
@@ -264,42 +268,53 @@
                     </ListBox>
                 </Grid>
             </TabItem>
-            
+
             <!--Statistics-->
             <TabItem Header="Statistics" Visibility="{Binding ElementName=_this, Path=CanViewStatisticsTab, Converter={StaticResource BoolToVis}}" >
-                <TextBlock Margin="1,0,6.4,5.4" Padding="5" ><InlineUIContainer>
-                        <Grid Height="406" Width="657">
-                        <Grid Margin="10">
-                            <TabControl TabStripPlacement="Left" Margin="-13,-12,-397.2,-52.6">
-                                <TabItem x:Name="ResPerShiftTab" Header="Resources per shift" Loaded="ResPerShiftTab_Loaded">
-                                    <Grid Background="White" Margin="0,0,-8,-0.4">
-                                        <local:MonthPicker x:Name="StatisticsPerShiftMonthPicker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,6,0,0" SelectedMonthChanged="StatisticsPerShiftMonthPicker_SelectedMonthChanged" />
-                                        <CheckBox x:Name="cbMorningShift" Content="Morning" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="204,15,0,0" Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
-                                        <CheckBox x:Name="cbNoonShift" Content="Noon" HorizontalAlignment="Left" Margin="289,15,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.499,16.336" Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
-                                        <CheckBox x:Name="cbNightShift" Content="Night" HorizontalAlignment="Left" Margin="359,15,0,0" VerticalAlignment="Top" Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
-                                        <DataGrid Margin="0,38,10,10" Name="ResPerShiftDataGrid" IsReadOnly="True"/>
-                                    </Grid>
-                                </TabItem>
-                                <TabItem x:Name="ResPerMonthTab" Header="Resources per month" Loaded="ResPerMonthTab_Loaded">
-                                    <Grid Background="White" Margin="0,0,-3,-0.4">
-                                        <DataGrid Margin="0,38,10,11" Name="ResPerMonthDataGrid" IsReadOnly="True"
-                                                  AutoGeneratingColumn="ResPerMonthDataGrid_AutoGeneratingColumn" />
-                                        <local:YearPicker x:Name="StatisticsPerMonthYearPicker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,6,0,0" SelectedYearChanged="StatisticsPerMonthYearPicker_SelectedYearChanged"/>
-                                    </Grid>
-                                </TabItem>
-                                <TabItem x:Name="EmplStatsTab" Header="Employee statistics" Loaded="EmplStatsTab_Loaded">
-                                    <Grid Background="White" Margin="0,0,0,-0.4">
-                                        <DataGrid Margin="0,38,10,11" Name="EmplStatsDataGrid" IsReadOnly="True"/>
-                                        <DatePicker x:Name="fromDatePicker" HorizontalAlignment="Left" Margin="94,8,0,0" VerticalAlignment="Top" SelectedDateChanged="fromDatePicker_SelectedDateChanged"/>
-                                        <DatePicker x:Name="toDatePicker" HorizontalAlignment="Left" Margin="273,8,0,0" VerticalAlignment="Top" SelectedDateChanged="toDatePicker_SelectedDateChanged"/>
-                                        <Label Content="From:" HorizontalAlignment="Left" Margin="46,7,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                                        <Label Content="To:" HorizontalAlignment="Left" Margin="241,7,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
-                                    </Grid>
-                                </TabItem>
-                            </TabControl>
-                        </Grid>
-                        </Grid>
-                    </InlineUIContainer></TextBlock>
+                <Grid>
+                    <TabControl TabStripPlacement="Left">
+                        <TabItem x:Name="ResPerShiftTab" Header="Resources per shift" Selector.Selected="ResPerShiftTab_Selected">
+                            <Grid Background="White">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal">
+                                    <local:MonthPicker x:Name="StatisticsPerShiftMonthPicker" Margin="5" SelectedMonthChanged="StatisticsPerShiftMonthPicker_SelectedMonthChanged" />
+                                    <CheckBox x:Name="cbMorningShift" Content="Morning" VerticalAlignment="Center" Margin="30,5,5,5"  Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
+                                    <CheckBox x:Name="cbNoonShift" Content="Noon" VerticalAlignment="Center" Margin="5"  Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
+                                    <CheckBox x:Name="cbNightShift" Content="Night" VerticalAlignment="Center" Margin="5" Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
+                                </StackPanel>
+                                <DataGrid Name="ResPerShiftDataGrid" Grid.Row="1" GridLinesVisibility="None" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True" AutoGeneratingColumn="ResPerShiftDataGrid_AutoGeneratingColumn"/>
+                            </Grid>
+                        </TabItem>
+                        <TabItem x:Name="ResPerMonthTab" Header="Resources per month" Selector.Selected="ResPerMonthTab_Selected">
+                            <Grid Background="White">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <local:YearPicker x:Name="StatisticsPerMonthYearPicker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5" SelectedYearChanged="StatisticsPerMonthYearPicker_SelectedYearChanged"/>
+                                <DataGrid Name="ResPerMonthDataGrid" Grid.Row="1" GridLinesVisibility="None" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True" AutoGeneratingColumn="ResPerMonthDataGrid_AutoGeneratingColumn" />
+                            </Grid>
+                        </TabItem>
+                        <TabItem x:Name="EmplStatsTab" Header="Employee statistics" Selector.Selected="EmplStatsTab_Selected">
+                            <Grid Background="White">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="From:" Margin="5" VerticalAlignment="Center" FontWeight="Bold"/>
+                                    <DatePicker x:Name="fromDatePicker" Margin="0,5,0,5" VerticalAlignment="Center" SelectedDateChanged="fromDatePicker_SelectedDateChanged"/>
+                                    <Label Content="To:" Margin="30,5,5,5" VerticalAlignment="Center" FontWeight="Bold"/>
+                                    <DatePicker x:Name="toDatePicker" Margin="0,5,0,5" VerticalAlignment="Center" SelectedDateChanged="fromDatePicker_SelectedDateChanged"/>
+                                </StackPanel>
+                                <DataGrid x:Name="EmplStatsDataGrid" Grid.Row="1" GridLinesVisibility="None" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True"/>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
 
             </TabItem>
 

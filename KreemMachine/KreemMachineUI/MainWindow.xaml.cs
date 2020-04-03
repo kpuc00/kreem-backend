@@ -297,7 +297,7 @@ namespace KreemMachine
 
         private void ManualScheduleShiftPicker_SelectedShiftChanged(object sender, DateTime SelectedDay, Shift SelectedShift)
         {
-             
+
             ManuallyScheduledShift = scheduleService.GetScheduledShiftOrCreateNew(SelectedDay, SelectedShift);
             ScheduleGeneratorCurrentDayNumberOfEmployees = ManuallyScheduledShift?.EmployeeScheduledShits?.Count ?? 0;
             SetUpEmployeeRecomendationForManualScheduling();
@@ -336,16 +336,16 @@ namespace KreemMachine
 
         //Resources per shift
 
-        private void ResPerShiftTab_Loaded(object sender, RoutedEventArgs e)
+        private void ResPerShiftTab_Selected(object sender, RoutedEventArgs e)
         {
             StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
         }
 
         private void StatisticsPerShiftMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
         {
-            string cbMorning = "";
-            string cbNoon = "";
-            string cbNight = "";
+            string cbMorning = null;
+            string cbNoon = null;
+            string cbNight = null;
             if ((bool)cbMorningShift.IsChecked)
             {
                 cbMorning = cbMorningShift.Content.ToString();
@@ -374,9 +374,17 @@ namespace KreemMachine
             StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
         }
 
+        private void ResPerShiftDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.PropertyName == nameof(ResourcesPerShiftDTO.Date))
+            {
+                (e.Column as DataGridTextColumn).Binding.StringFormat = "dd/MM/yyyy";
+            }
+        }
+
         //Resources per month
 
-        private void ResPerMonthTab_Loaded(object sender, RoutedEventArgs e)
+        private void ResPerMonthTab_Selected(object sender, RoutedEventArgs e)
         {
             StatisticsPerMonthYearPicker_SelectedYearChanged(sender, StatisticsPerMonthYearPicker.SelectedYear);
         }
@@ -386,29 +394,23 @@ namespace KreemMachine
             ResPerMonthDataGrid.ItemsSource = statisticsService.GetResourcesPerMonth(displayYear);
         }
 
+        private void ResPerMonthDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.PropertyName == nameof(ResourcesPerMonthDTO.Month))
+                (e.Column as DataGridTextColumn).Binding.StringFormat = "MMMM";
+        }
+
         //Employee statistics
 
-        private void EmplStatsTab_Loaded(object sender, RoutedEventArgs e)
+        private void EmplStatsTab_Selected(object sender, RoutedEventArgs e)
         {
-            EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployee();
+            EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployeeDate(fromDatePicker.SelectedDate ?? default(DateTime), toDatePicker.SelectedDate ?? default(DateTime));
         }
 
         private void fromDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployeeDate(fromDatePicker.SelectedDate ?? default(DateTime), toDatePicker.SelectedDate ?? default(DateTime));
         }
-
-        private void toDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployeeDate(fromDatePicker.SelectedDate ?? default(DateTime), toDatePicker.SelectedDate ?? default(DateTime));
-        }
-
-        private void ResPerMonthDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-            if (e.PropertyName == nameof(ResourcesPerMonthDTO.Month))
-                (e.Column as DataGridTextColumn).Binding.StringFormat = "MMM";
-        }
-
 
         #endregion
 
@@ -420,7 +422,5 @@ namespace KreemMachine
         }
 
         #endregion
-
-
     }
 }
