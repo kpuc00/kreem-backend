@@ -9,7 +9,7 @@ namespace KreemMachineLibrary
 {
     static class Globals
     {
-        internal static DataBaseContext db = new DataBaseContext();
+        internal static DataBaseContext db { get; set; } = new DataBaseContext();
 
         
         static Globals()
