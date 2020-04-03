@@ -14,12 +14,6 @@ namespace KreemMachineLibrary.Services
         private DataBaseContext db = Globals.db;
         ShiftService ShiftService = new ShiftService();
 
-        public ScheduleService()
-        {
-            db.Shifts.Load();
-        }
-
-
 
         /// <summary>
         /// Returns all shifts scheduled between <b>start</b> and <b>end</b> dates

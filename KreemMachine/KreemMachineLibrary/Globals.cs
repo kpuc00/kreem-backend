@@ -11,12 +11,5 @@ namespace KreemMachineLibrary
     {
         internal static DataBaseContext db { get; set; } = new DataBaseContext();
 
-        
-        static Globals()
-        {
-            // Force creating 'the model' so the app doesn't lag on first querry
-            _ = db.Users.FirstOrDefault(); 
-        }
-
     }
 }
