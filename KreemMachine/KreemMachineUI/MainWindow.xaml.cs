@@ -102,7 +102,7 @@ namespace KreemMachine
             logedUSer = user;
             fromDatePicker.SelectedDate = DateTime.Today.AddDays(1 - DateTime.Today.Day);
             toDatePicker.SelectedDate = DateTime.Now.Date;
-            RefreshUsersViewTimer.Elapsed += (sender,e) => Dispatcher.Invoke( ()=> RefreshUsersTableView() );
+            RefreshUsersViewTimer.Elapsed += (sender, e) => Dispatcher.Invoke(() => RefreshUsersTableView());
 
         }
 
@@ -407,7 +407,7 @@ namespace KreemMachine
             EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployeeDate(fromDatePicker.SelectedDate ?? default(DateTime), toDatePicker.SelectedDate ?? default(DateTime));
         }
 
-        private void fromDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        private void fromDatePicker_SelectedDateChanged(object sender, RoutedEventArgs e)
         {
             EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployeeDate(fromDatePicker.SelectedDate ?? default(DateTime), toDatePicker.SelectedDate ?? default(DateTime));
         }
@@ -422,5 +422,7 @@ namespace KreemMachine
         }
 
         #endregion
+
+      
     }
 }

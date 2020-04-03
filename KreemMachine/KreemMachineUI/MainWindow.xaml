@@ -306,9 +306,9 @@
                                 </Grid.RowDefinitions>
                                 <StackPanel Orientation="Horizontal">
                                     <Label Content="From:" Margin="5" VerticalAlignment="Center" FontWeight="Bold"/>
-                                    <DatePicker x:Name="fromDatePicker" Margin="0,5,0,5" VerticalAlignment="Center" SelectedDateChanged="fromDatePicker_SelectedDateChanged"/>
+                                    <DatePicker x:Name="fromDatePicker" Margin="0,5,0,5" VerticalAlignment="Center" LostFocus="fromDatePicker_SelectedDateChanged"/>
                                     <Label Content="To:" Margin="30,5,5,5" VerticalAlignment="Center" FontWeight="Bold"/>
-                                    <DatePicker x:Name="toDatePicker" Margin="0,5,0,5" VerticalAlignment="Center" SelectedDateChanged="fromDatePicker_SelectedDateChanged"/>
+                                    <DatePicker x:Name="toDatePicker" Margin="0,5,0,5" VerticalAlignment="Center" LostFocus="fromDatePicker_SelectedDateChanged"/>
                                 </StackPanel>
                                 <DataGrid x:Name="EmplStatsDataGrid" Grid.Row="1" GridLinesVisibility="None" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True"/>
                             </Grid>
