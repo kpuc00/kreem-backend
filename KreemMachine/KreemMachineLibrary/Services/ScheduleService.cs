@@ -89,7 +89,6 @@ namespace KreemMachineLibrary.Services
                 }
             }
             ShiftService.ClearShiftCache();
-
         }
 
         internal bool CanUserWorkShift(User user, ScheduledShift scheduledShift)

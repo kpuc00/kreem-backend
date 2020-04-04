@@ -34,7 +34,8 @@ namespace KreemMachineLibrary.Models
         public ScheduledShift(DateTime date, Shift shift)
         {
             Date = date;
-            Shift = shift;
+            ShiftId = shift.Id;
+            //Shift = shift;
             Duration = shift.Duration;
         }
 

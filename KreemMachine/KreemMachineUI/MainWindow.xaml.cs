@@ -119,8 +119,8 @@ namespace KreemMachine
 
         private void ButtonSaveScheduleSetting_Click(object sender, RoutedEventArgs e)
         {
-            shiftService.SaveChanges();
-
+            var shift = ShiftNameComboBox.SelectedItem as Shift;
+            shiftService.Save(shift);
         }
 
         private void Settings_Tab_Selected(object sender, RoutedEventArgs e)
