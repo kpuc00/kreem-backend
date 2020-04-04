@@ -76,7 +76,10 @@ namespace KreemMachineLibrary.Services
         public IEnumerable<User> GetSuggestedEmployees(ScheduledShift shift)
         {
             var employees = db.Users.Where(u => u.RoleStr == Role.Employee.ToString())
-                .Include(u => u.ScheduledShifts.Select(us => us.ScheduledShift)).ToList();
+                .Include(u => u.ScheduledShifts.Select(us => us.ScheduledShift))
+                .ToList();
+
+            ShiftService.CacheShifts();
 
             foreach (User employee in employees)
             {
@@ -85,6 +88,8 @@ namespace KreemMachineLibrary.Services
                     yield return employee;
                 }
             }
+            ShiftService.ClearShiftCache();
+
         }
 
         internal bool CanUserWorkShift(User user, ScheduledShift scheduledShift)
@@ -100,6 +105,7 @@ namespace KreemMachineLibrary.Services
 
             if (HasUserWorkedPreviousNightShift(user, scheduledShift))
                 return false;
+
             if (HasUserWorkedNextMorningShift(user, scheduledShift))
                 return false;
 
@@ -126,8 +132,8 @@ namespace KreemMachineLibrary.Services
         }
         internal bool HasUserWorkedPreviousNightShift(User user, ScheduledShift scheduledShift)
         {
-            Shift morningShift = ShiftService.GetAllShifts().First();
-            Shift nightShift = ShiftService.GetAllShifts().Last();
+            Shift morningShift = ShiftService.CahchedShifts.First();
+            Shift nightShift = ShiftService.CahchedShifts.Last();
 
             if (scheduledShift.Shift != morningShift)
                 return false;
@@ -142,8 +148,8 @@ namespace KreemMachineLibrary.Services
         }
         internal bool HasUserWorkedNextMorningShift(User user, ScheduledShift scheduledShift)
         {
-            Shift morningShift = ShiftService.GetAllShifts().First();
-            Shift nightShift = ShiftService.GetAllShifts().Last();
+            Shift morningShift = ShiftService.CahchedShifts.First();
+            Shift nightShift = ShiftService.CahchedShifts.Last();
 
             if (scheduledShift.Shift != nightShift)
                 return false;

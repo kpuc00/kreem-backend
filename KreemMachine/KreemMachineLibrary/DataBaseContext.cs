@@ -15,11 +15,9 @@ namespace KreemMachineLibrary
         // connection string in the application configuration file.
         public DataBaseContext(): base("name=DataBaseContext")
         {
-            Console.WriteLine("initialized db context ");
-
-            Database.SetInitializer<DataBaseContext>(null);
 
             Database.Log = (s) => Console.WriteLine(s);
+            Database.SetInitializer<DataBaseContext>(null);
         }
 
 

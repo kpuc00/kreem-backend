@@ -14,6 +14,8 @@ namespace KreemMachineLibrary.Services
     {
         DataBaseContext db = Globals.db;
 
+        public ReadOnlyCollection<Shift> CahchedShifts { get; private set; }
+
         public ShiftService()
         {
         }
@@ -30,7 +32,19 @@ namespace KreemMachineLibrary.Services
         }
 
 
-        public IList<Shift> GetAllShifts() => db.Shifts.Local.OrderBy(s => s.StartHour).ToList();
+        public List<Shift> GetAllShifts() => db.Shifts.OrderBy(s => s.StartHour).ToList();
+
+        public void CacheShifts()
+        {
+            CahchedShifts = GetAllShifts().AsReadOnly();
+        }
+
+        public void ClearShiftCache()
+        {
+            CahchedShifts = null;
+        }
+
+        
 
     }
 }
