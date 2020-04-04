@@ -123,7 +123,7 @@ namespace KreemMachine
 
         }
 
-        private void Settings_Tab_Loaded(object sender, RoutedEventArgs e)
+        private void Settings_Tab_Selected(object sender, RoutedEventArgs e)
         {
             AllShifts = shiftService.GetAllShifts();
 

@@ -377,7 +377,7 @@
                     </ListBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="Settings" Loaded="Settings_Tab_Loaded">
+            <TabItem Header="Settings" Selector.Selected="Settings_Tab_Selected">
                 <TabControl x:Name="InnerSettingsTab"
                             TabStripPlacement="Left">
                     <TabItem Header="Schedule settings">
