@@ -11,7 +11,6 @@ namespace KreemMachineLibrary.Services
 {
     public class ScheduleService
     {
-        private DataBaseContext db = Globals.db;
         ShiftService ShiftService = new ShiftService();
 
 
@@ -24,58 +23,67 @@ namespace KreemMachineLibrary.Services
         /// <returns>Returns all shifts scheduled between <code>start</code> and <code>end</code> dates</returns>
         public IEnumerable<ScheduledShift> GetScheduledShifts(DateTime start, DateTime end)
         {
-            var shifts = db.ScheduledShifts
-                            .Where(ss => ss.Date >= start && ss.Date < end)
-                            .Include(ss => ss.EmployeeScheduledShits)
-                            .Include(ss => ss.Shift)
-                            .OrderBy(ss => ss.Date)
-                            .ToList();
+            using (var db = new DataBaseContext())
+                return db.ScheduledShifts
+                    .Where(ss => ss.Date >= start && ss.Date < end)
+                    .Include(ss => ss.EmployeeScheduledShits)
+                    .Include(ss => ss.Shift)
+                    .OrderBy(ss => ss.Date)
+                    .ToList();
 
-
-            return shifts;
         }
 
         public ScheduledShift GetScheduledShiftOrCreateNew(DateTime date, Shift shift)
         {
+            using (var db = new DataBaseContext())
+            {
+                var scheduleFromDb = db.ScheduledShifts
+                                        .Where(s => s.ShiftId == shift.Id && s.Date == date)
+                                        .Include(s => s.EmployeeScheduledShits)
+                                        .Include(s => s.Shift)
+                                        .FirstOrDefault();
+                if (scheduleFromDb == null)
+                {
+                    scheduleFromDb = db.ScheduledShifts.Add(new ScheduledShift(date, shift));
+                    db.SaveChanges();
+                }
+                return scheduleFromDb;
 
-            var scheduleFromDb = db.ScheduledShifts.Where(s => s.ShiftId == shift.Id && s.Date == date).FirstOrDefault();
-            return scheduleFromDb ?? Save(new ScheduledShift(date, shift));
+            }
+
+
         }
 
-        internal ScheduledShift Save(ScheduledShift scheduledShift)
-        {
-            var shift = db.ScheduledShifts.Add(scheduledShift);
-            db.SaveChanges();
-            return shift;
-        }
 
         public void AssignUserToShift(User user, ScheduledShift shift)
         {
-            bool alreadyAssigned = db.UserScheduledShifts
-                .Any(us => us.UserId == user.Id && us.ScheduledShiftId == shift.Id);
-
-            if (!alreadyAssigned)
+            using (var db = new DataBaseContext())
             {
-                var userShiftAssignment = new UserScheduledShift(user, shift);
-                db.UserScheduledShifts.Add(userShiftAssignment);
-                db.SaveChanges();
+                bool alreadyAssigned = db.UserScheduledShifts.Any(us => us.UserId == user.Id && us.ScheduledShiftId == shift.Id);
+                if (!alreadyAssigned)
+                {
+                    var userShiftAssignment = new UserScheduledShift(user, shift);
+                    db.UserScheduledShifts.Add(userShiftAssignment);
+                    db.SaveChanges();
+                }
             }
-        }
+        }          
 
-        public void RemoveUserFromShift(User user, ScheduledShift shift)
+
+        public void RemoveUserFromShift(User user, ScheduledShift shift) 
         {
-
-            var userShiftAssignment = db.UserScheduledShifts.Where(us => us.UserId == user.Id && us.ScheduledShiftId == shift.Id).FirstOrDefault();
-            if(userShiftAssignment != null)
+            using (var db = new DataBaseContext())
             {
-                db.UserScheduledShifts.Remove(userShiftAssignment);
-                db.SaveChanges();
+                var userScheduledShift = db.UserScheduledShifts.Where(us => us.UserId == user.Id && us.ScheduledShiftId == shift.Id);
+                db.UserScheduledShifts.RemoveRange(userScheduledShift);
             }
-
         }
         public IEnumerable<User> GetSuggestedEmployees(ScheduledShift shift)
         {
-            var employees = db.Users.Where(u => u.RoleStr == Role.Employee.ToString())
+            IList<User> employees;
+            using (var db = new DataBaseContext())
+                 employees = db.Users.Where(u => u.RoleStr == Role.Employee.ToString())
+                .Include(u => u.ScheduledShifts)
                 .Include(u => u.ScheduledShifts.Select(us => us.ScheduledShift))
                 .ToList();
 
@@ -113,7 +121,7 @@ namespace KreemMachineLibrary.Services
 
         internal bool IsUserAssignedToShift(User user, ScheduledShift scheduledShift)
         {
-            return user.ScheduledShifts.Select(us => us.ScheduledShift).Contains(scheduledShift);
+            return user.ScheduledShifts.Any( us => us.ScheduledShift.Id == scheduledShift.Id);
         }
         internal bool HasReachedWorkingHoursLimit(User user, DateTime shiftDate)
         {
