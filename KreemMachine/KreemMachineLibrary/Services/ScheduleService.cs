@@ -46,6 +46,7 @@ namespace KreemMachineLibrary.Services
                 {
                     scheduleFromDb = db.ScheduledShifts.Add(new ScheduledShift(date, shift));
                     db.SaveChanges();
+                    db.Entry(scheduleFromDb).Reference(s => s.Shift).Load();
                 }
                 return scheduleFromDb;
 
@@ -80,16 +81,19 @@ namespace KreemMachineLibrary.Services
         }
         public IEnumerable<User> GetSuggestedEmployees(ScheduledShift shift)
         {
-            IList<User> employees;
+            Task<List<User>> getEmployees;
             using (var db = new DataBaseContext())
-                 employees = db.Users.Where(u => u.RoleStr == Role.Employee.ToString())
+                 getEmployees = db.Users.Where(u => u.RoleStr == Role.Employee.ToString())
                 .Include(u => u.ScheduledShifts)
                 .Include(u => u.ScheduledShifts.Select(us => us.ScheduledShift))
-                .ToList();
+                .ToListAsync();
 
-            ShiftService.CacheShifts();
+            Task getShifts = ShiftService.CacheShiftsAsync();
 
-            foreach (User employee in employees)
+            getEmployees.Wait();
+            getShifts.Wait();
+
+            foreach (User employee in getEmployees.Result)
             {
                 if (CanUserWorkShift(employee, shift))
                 {

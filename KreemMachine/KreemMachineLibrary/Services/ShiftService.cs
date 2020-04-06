@@ -42,9 +42,14 @@ namespace KreemMachineLibrary.Services
                 return db.Shifts.OrderBy(s => s.StartHour).ToList();
         }
 
-        public void CacheShifts()
+        public async Task CacheShiftsAsync()
         {
-            CahchedShifts = GetAllShifts().AsReadOnly();
+            using (var db = new DataBaseContext())
+            {
+                List<Shift> shifts = await db.Shifts.OrderBy(s => s.StartHour).ToListAsync();
+                CahchedShifts = shifts.AsReadOnly();
+            }
+
         }
 
         public void ClearShiftCache()
