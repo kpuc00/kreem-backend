@@ -77,6 +77,7 @@ namespace KreemMachineLibrary.Services
             {
                 var userScheduledShift = db.UserScheduledShifts.Where(us => us.UserId == user.Id && us.ScheduledShiftId == shift.Id);
                 db.UserScheduledShifts.RemoveRange(userScheduledShift);
+                db.SaveChanges();
             }
         }
         public IEnumerable<User> GetSuggestedEmployees(ScheduledShift shift)
