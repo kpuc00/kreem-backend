@@ -1,5 +1,4 @@
-﻿using KreemMachineLibrary.Helpers;
-using KreemMachineLibrary.Models;
+﻿using KreemMachineLibrary.Models;
 using KreemMachineLibrary.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -36,7 +35,8 @@ namespace KreemMachineLibrary.Services
                 randomPassword += ((char)(random.Next(1, 26) + 64)).ToString();
             }
             user.Password = randomPassword;
-            user.PasswordHash = PasswordHashHelper.CreateHash(randomPassword);
+
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(randomPassword, BCrypt.Net.BCrypt.GenerateSalt());
         }
 
         //This method checks the input values of a user
@@ -139,7 +139,7 @@ namespace KreemMachineLibrary.Services
             if (candidate == null)
                 return null;
 
-            if (PasswordHashHelper.VerifyPassword(password, candidate.PasswordHash))
+            if (BCrypt.Net.BCrypt.Verify(password, candidate.PasswordHash))
             {
                 SecurityContext.Authenticate(candidate);
                 return candidate;
