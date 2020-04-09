@@ -215,14 +215,18 @@ namespace KreemMachine
 
         #region Schedule
 
-        private void ScheduleMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
+        private async void ScheduleMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
         {
+            await UpdateCalendarView(displayMonth);
+        }
 
+        private async Task UpdateCalendarView(DateTime displayMonth)
+        {
             var calendarDays = new List<ScheduleDayViewModel>();
 
             addNullPaddingToCallendarDays();
             addMonthDaysToCallendarDays();
-            matchScheduledShiftsToCallendarDays();
+            await matchScheduledShiftsToCallendarDays();
 
             ScheduleListBox.ItemsSource = calendarDays;
 
@@ -246,13 +250,17 @@ namespace KreemMachine
                     calendarDays.Add(new ScheduleDayViewModel(day));
             }
 
-            void matchScheduledShiftsToCallendarDays()
+            async Task matchScheduledShiftsToCallendarDays()
             {
-                IEnumerator<ScheduleDayViewModel> daysOfMonth = calendarDays.GetEnumerator();
-                IEnumerator<ScheduledShift> scheduledShifts = scheduleService.GetScheduledShifts(
+
+                List<ScheduledShift> getScheduledShifts = await scheduleService.GetScheduledShiftsAsync(
                     start: displayMonth,
                     end: displayMonth.AddMonths(1)
-                    ).GetEnumerator();
+                );
+
+                IEnumerator<ScheduledShift> scheduledShifts = getScheduledShifts.GetEnumerator();
+                IEnumerator<ScheduleDayViewModel> daysOfMonth = calendarDays.GetEnumerator();
+
 
                 scheduledShifts.MoveNext();
                 while (scheduledShifts.Current != null)
@@ -267,11 +275,11 @@ namespace KreemMachine
 
                 }
             }
-
         }
-        private void ScheduleTab_Selected(object sender, RoutedEventArgs e)
+
+        private async void ScheduleTab_Selected(object sender, RoutedEventArgs e)
         {
-            ScheduleMonthPicker_SelectedMonthChanged(sender, ScheduleMonthPicker.SelectedMonth);
+            await UpdateCalendarView(ScheduleMonthPicker.SelectedMonth);
         }
 
 
@@ -298,7 +306,7 @@ namespace KreemMachine
         private async void ManualScheduleShiftPicker_SelectedShiftChanged(object sender, DateTime SelectedDay, Shift SelectedShift)
         {
 
-            ManuallyScheduledShift = await scheduleService.GetScheduledShiftOrCreateNew(SelectedDay, SelectedShift);
+            ManuallyScheduledShift = await scheduleService.GetScheduledShiftOrCreateNewAsync(SelectedDay, SelectedShift);
             ScheduleGeneratorCurrentDayNumberOfEmployees = ManuallyScheduledShift?.EmployeeScheduledShits?.Count ?? 0;
             SetUpEmployeeRecomendationForManualScheduling();
 
@@ -311,21 +319,21 @@ namespace KreemMachine
             ManuallyScheduleUsersListBox.ItemsSource = users;
         }
 
-        private void ShiftAssignmentCheckBox_Checked(object sender, RoutedEventArgs e)
+        private async void ShiftAssignmentCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             var checkbox = sender as CheckBox;
             var userViewModel = checkbox.DataContext as UserSchedulerViewModel;
-            scheduleService.AssignUserToShift(userViewModel.User, ManuallyScheduledShift);
+            await scheduleService.AssignUserToShiftAsync(userViewModel.User, ManuallyScheduledShift);
             ScheduleGeneratorCurrentDayNumberOfEmployees++;
 
         }
 
-        private void ShiftAssignmentCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        private async void ShiftAssignmentCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             var checkbox = sender as CheckBox;
             var userViewModel = checkbox.DataContext as UserSchedulerViewModel;
 
-            scheduleService.RemoveUserFromShift(userViewModel.User, ManuallyScheduledShift);
+            await scheduleService.RemoveUserFromShiftAsync(userViewModel.User, ManuallyScheduledShift);
             ScheduleGeneratorCurrentDayNumberOfEmployees--;
 
         }

@@ -21,7 +21,7 @@ namespace KreemMachineLibrary.Services
         /// <param name="start"> The first date to be included in the results (i.e. incluseive bound) </param>
         /// <param name="end"> The first date that cannot be included in the results (i.e. exclusive bound)</param>
         /// <returns>Returns all shifts scheduled between <code>start</code> and <code>end</code> dates</returns>
-        public IEnumerable<ScheduledShift> GetScheduledShifts(DateTime start, DateTime end)
+        public Task<List<ScheduledShift>> GetScheduledShiftsAsync(DateTime start, DateTime end)
         {
             using (var db = new DataBaseContext())
                 return db.ScheduledShifts
@@ -29,11 +29,11 @@ namespace KreemMachineLibrary.Services
                     .Include(ss => ss.EmployeeScheduledShits)
                     .Include(ss => ss.Shift)
                     .OrderBy(ss => ss.Date)
-                    .ToList();
+                    .ToListAsync();
 
         }
 
-        public async Task<ScheduledShift> GetScheduledShiftOrCreateNew(DateTime date, Shift shift)
+        public async Task<ScheduledShift> GetScheduledShiftOrCreateNewAsync(DateTime date, Shift shift)
         {
             using (var db = new DataBaseContext())
             {
@@ -57,28 +57,28 @@ namespace KreemMachineLibrary.Services
         }
 
 
-        public void AssignUserToShift(User user, ScheduledShift shift)
+        public async Task AssignUserToShiftAsync(User user, ScheduledShift shift)
         {
             using (var db = new DataBaseContext())
             {
-                bool alreadyAssigned = db.UserScheduledShifts.Any(us => us.UserId == user.Id && us.ScheduledShiftId == shift.Id);
+                bool alreadyAssigned = await db.UserScheduledShifts.AnyAsync(us => us.UserId == user.Id && us.ScheduledShiftId == shift.Id);
                 if (!alreadyAssigned)
                 {
                     var userShiftAssignment = new UserScheduledShift(user, shift);
                     db.UserScheduledShifts.Add(userShiftAssignment);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
             }
         }          
 
 
-        public void RemoveUserFromShift(User user, ScheduledShift shift) 
+        public Task<int> RemoveUserFromShiftAsync(User user, ScheduledShift shift) 
         {
             using (var db = new DataBaseContext())
             {
                 var userScheduledShift = db.UserScheduledShifts.Where(us => us.UserId == user.Id && us.ScheduledShiftId == shift.Id);
                 db.UserScheduledShifts.RemoveRange(userScheduledShift);
-                db.SaveChanges();
+                return db.SaveChangesAsync();
             }
         }
         public IEnumerable<User> GetSuggestedEmployees(ScheduledShift shift)
