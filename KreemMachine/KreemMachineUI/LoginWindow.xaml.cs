@@ -26,14 +26,14 @@ namespace KreemMachine
     public partial class LoginWindow : Window
     {
 
-        UserService users;
+        UserService users = new UserService();
 
         public LoginWindow()
         {
             InitializeComponent();
 
-            // Run initialization on separate thread so that the UI doesn't hang 
-            new Thread( () => users = new UserService() ).Start();
+            // Initialize the db on a separate thread so that it is ready 
+            new Thread( () => new UserService().AuthenticateByCredentials("","") ).Start();
         }
 
 
@@ -45,10 +45,7 @@ namespace KreemMachine
         private void LogInButton_Click(object sender, RoutedEventArgs e)
         {
 
-
-            //If the thread initializing users hasn't yet finished
-            //users might still be null, hence safe navigation operator ?.
-            var user = users?.AuthenticateByCredentials(Email, Password);
+            var user = users.AuthenticateByCredentials(Email, Password);
 
             if (UserLogInIsValid(user))
                 DislayMainWindow(user);

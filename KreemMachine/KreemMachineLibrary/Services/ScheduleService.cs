@@ -33,19 +33,20 @@ namespace KreemMachineLibrary.Services
 
         }
 
-        public ScheduledShift GetScheduledShiftOrCreateNew(DateTime date, Shift shift)
+        public async Task<ScheduledShift> GetScheduledShiftOrCreateNew(DateTime date, Shift shift)
         {
             using (var db = new DataBaseContext())
             {
-                var scheduleFromDb = db.ScheduledShifts
+                var scheduleFromDb = await db.ScheduledShifts
                                         .Where(s => s.ShiftId == shift.Id && s.Date == date)
                                         .Include(s => s.EmployeeScheduledShits)
                                         .Include(s => s.Shift)
-                                        .FirstOrDefault();
+                                        .FirstOrDefaultAsync();
+
                 if (scheduleFromDb == null)
                 {
                     scheduleFromDb = db.ScheduledShifts.Add(new ScheduledShift(date, shift));
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                     db.Entry(scheduleFromDb).Reference(s => s.Shift).Load();
                 }
                 return scheduleFromDb;
