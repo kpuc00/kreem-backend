@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using System.Windows;
+using BCrypt.Net;
 
 namespace KreemMachineLibrary.Services
 {
@@ -36,7 +37,7 @@ namespace KreemMachineLibrary.Services
             }
             user.Password = randomPassword;
 
-            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(randomPassword, BCrypt.Net.BCrypt.GenerateSalt());
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(randomPassword);
         }
 
         //This method checks the input values of a user
@@ -139,7 +140,7 @@ namespace KreemMachineLibrary.Services
             if (candidate == null)
                 return null;
 
-            if (BCrypt.Net.BCrypt.Verify(password, candidate.PasswordHash))
+            if (BCrypt. Net.BCrypt.Verify(password, candidate.PasswordHash))
             {
                 SecurityContext.Authenticate(candidate);
                 return candidate;
