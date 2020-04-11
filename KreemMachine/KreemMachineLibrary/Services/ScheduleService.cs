@@ -26,7 +26,7 @@ namespace KreemMachineLibrary.Services
             using (var db = new DataBaseContext())
                 return db.ScheduledShifts
                     .Where(ss => ss.Date >= start && ss.Date < end)
-                    .Include(ss => ss.EmployeeScheduledShits)
+                    .Include(ss => ss.EmployeeScheduledShits.Select(es => es.User))
                     .Include(ss => ss.Shift)
                     .OrderBy(ss => ss.Date)
                     .ToListAsync();
@@ -69,10 +69,10 @@ namespace KreemMachineLibrary.Services
                     await db.SaveChangesAsync();
                 }
             }
-        }          
+        }
 
 
-        public Task<int> RemoveUserFromShiftAsync(User user, ScheduledShift shift) 
+        public Task<int> RemoveUserFromShiftAsync(User user, ScheduledShift shift)
         {
             using (var db = new DataBaseContext())
             {
@@ -85,10 +85,10 @@ namespace KreemMachineLibrary.Services
         {
             Task<List<User>> getEmployees;
             using (var db = new DataBaseContext())
-                 getEmployees = db.Users.Where(u => u.RoleStr == Role.Employee.ToString())
-                .Include(u => u.ScheduledShifts)
-                .Include(u => u.ScheduledShifts.Select(us => us.ScheduledShift))
-                .ToListAsync();
+                getEmployees = db.Users.Where(u => u.RoleStr == Role.Employee.ToString())
+               .Include(u => u.ScheduledShifts)
+               .Include(u => u.ScheduledShifts.Select(us => us.ScheduledShift))
+               .ToListAsync();
 
             Task getShifts = ShiftService.CacheShiftsAsync();
 
@@ -127,7 +127,7 @@ namespace KreemMachineLibrary.Services
 
         internal bool IsUserAssignedToShift(User user, ScheduledShift scheduledShift)
         {
-            return user.ScheduledShifts.Any( us => us.ScheduledShift.Id == scheduledShift.Id);
+            return user.ScheduledShifts.Any(us => us.ScheduledShift.Id == scheduledShift.Id);
         }
         internal bool HasReachedWorkingHoursLimit(User user, DateTime shiftDate)
         {
@@ -136,7 +136,7 @@ namespace KreemMachineLibrary.Services
 
             double workedHoursInTheWeek = user.ScheduledShifts
                 .Where(us => us.ScheduledShift.Date >= startOfWeek && us.ScheduledShift.Date < nextWeek)
-                .Sum( us => us.ScheduledShift.Duration);
+                .Sum(us => us.ScheduledShift.Duration);
             return workedHoursInTheWeek >= user.MaxMonthlyHoours;
         }
         internal bool IsUserScheduledForDay(User user, DateTime day)
@@ -154,7 +154,7 @@ namespace KreemMachineLibrary.Services
             DateTime previousDay = scheduledShift.Date.AddDays(-1);
 
             bool hasWorkedPreviousNight = user.ScheduledShifts.Where(us => us.ScheduledShift.Date == previousDay)
-                .Select( us => us.ScheduledShift.Shift)
+                .Select(us => us.ScheduledShift.Shift)
                 .Contains(nightShift);
 
             return hasWorkedPreviousNight;
