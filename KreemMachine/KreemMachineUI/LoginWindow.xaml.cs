@@ -32,8 +32,14 @@ namespace KreemMachine
         {
             InitializeComponent();
 
-            // Initialize the db on a separate thread so that it is ready 
-            new Thread( () => new UserService().AuthenticateByCredentials("","") ).Start();
+            // Initialize the db on a separate thread so that it is ready when we actually need it
+            new Thread(async () =>
+            {
+                new UserService().AuthenticateByCredentials("", "");
+                var shift = new ShiftService().GetAllShifts()[0];
+                var scheduled = await new ScheduleService().GetScheduledShiftOrCreateNewAsync(DateTime.Now, shift);
+                new ScheduleService().GetSuggestedEmployees(scheduled);
+            }).Start();
         }
 
 
