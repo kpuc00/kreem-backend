@@ -195,6 +195,7 @@
                 </Grid>
             </TabItem>
 
+            <!-- Products -->
             <TabItem Header="Products" Selector.Selected="StocKTabItem_Selected" Grid.IsSharedSizeScope="True">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -221,7 +222,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Button Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0"/>
-                    <Button Content="Restock requests"  Grid.Column="1"/>
+                    <Button Padding="7 3" Margin="5,3,5,0" Content="Restock requests" Grid.Column="1"/>
                     <TextBox Grid.Column="2"  />
 
                     <Grid Grid.Row="1" TextBlock.FontSize="18" Grid.ColumnSpan="3" >
@@ -268,7 +269,11 @@
                     </ListBox>
                 </Grid>
             </TabItem>
-
+            
+            <!--Restock Requests -->
+            <TabItem x:Name="RestockRequestsTab" Selector.Selected="RestockRequestsTab_Selected" Visibility="Hidden">
+            
+            </TabItem>
             <!--Statistics-->
             <TabItem Header="Statistics" Visibility="{Binding ElementName=_this, Path=CanViewStatisticsTab, Converter={StaticResource BoolToVis}}" >
                 <Grid>
