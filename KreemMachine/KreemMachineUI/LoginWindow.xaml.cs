@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KreemMachineLibrary;
 using KreemMachineLibrary.Models;
+using KreemMachineLibrary.Models.Statics;
 using KreemMachineLibrary.Services;
 
 namespace KreemMachine

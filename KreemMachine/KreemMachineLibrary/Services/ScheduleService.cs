@@ -1,5 +1,6 @@
 ﻿using KreemMachineLibrary.Extensions.Date;
 using KreemMachineLibrary.Models;
+using KreemMachineLibrary.Models.Statics;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;

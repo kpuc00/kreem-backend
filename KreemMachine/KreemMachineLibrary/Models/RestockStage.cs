@@ -28,6 +28,12 @@ namespace KreemMachineLibrary.Models.Statics
 
         [Column("date"), Required]
         public DateTime Date { get; set; }
+
+        public virtual User User { get; set; }
+
+        public RestockRequest Request { get; set; }
+
+
     }
 
 }

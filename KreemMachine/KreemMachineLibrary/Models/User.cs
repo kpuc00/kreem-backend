@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KreemMachineLibrary.Exceptions;
+using KreemMachineLibrary.Models.Statics;
 using KreemMachineLibrary.Services;
 
 namespace KreemMachineLibrary.Models

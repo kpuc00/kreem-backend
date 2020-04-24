@@ -1,10 +1,11 @@
 ﻿using KreemMachineLibrary.Models;
+using KreemMachineLibrary.Models.Statics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static KreemMachineLibrary.Models.Role;
+using static KreemMachineLibrary.Models.Statics.Role;
 using static KreemMachineLibrary.Permission;
 
 namespace KreemMachineLibrary

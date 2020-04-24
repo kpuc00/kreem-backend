@@ -11,6 +11,7 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using System.Windows;
 using BCrypt.Net;
+using KreemMachineLibrary.Models.Statics;
 
 namespace KreemMachineLibrary.Services
 {

@@ -23,7 +23,7 @@ namespace KreemMachineLibrary.Models
 
         public virtual Product Product { get; set; }
 
-
+        
 
     }
 }

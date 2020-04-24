@@ -111,9 +111,10 @@
     <Compile Include="Exceptions\RequiredFieldsEmpty.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Models\Department.cs" />
-    <Compile Include="Models\Roles.cs" />
     <Compile Include="Models\ScheduledShift.cs" />
     <Compile Include="Models\Shift.cs" />
+    <Compile Include="Models\Statics\RestockStepType.cs" />
+    <Compile Include="Models\Statics\Roles.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserScheduledShift.cs" />
     <Compile Include="Permission.cs" />
