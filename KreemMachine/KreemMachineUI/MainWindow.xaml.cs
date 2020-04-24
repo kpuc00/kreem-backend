@@ -422,13 +422,18 @@ namespace KreemMachine
 
         #endregion
 
-        #region Stock
+        #region Products
 
         private void StocKTabItem_Selected(object sender, RoutedEventArgs e)
         {
             AllProductsListBox.ItemsSource = productServices.GetAllProducts();
         }
 
+        private void SeeRestockRequestsButton_Click(object sender, RoutedEventArgs e)
+        {
+            RestockRequestsTab.IsSelected = true;
+
+        }
 
         #endregion
 
@@ -436,9 +441,13 @@ namespace KreemMachine
 
         private void RestockRequestsTab_Selected(object sender, RoutedEventArgs e)
         {
-
+            RestockRequestsListBox.ItemsSource = new List<string> { "", "", "" };
         }
 
         #endregion
+
+      
+
+      
     }
 }
