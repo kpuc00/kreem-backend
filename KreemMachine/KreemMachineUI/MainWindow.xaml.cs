@@ -429,8 +429,16 @@ namespace KreemMachine
             AllProductsListBox.ItemsSource = productServices.GetAllProducts();
         }
 
+
         #endregion
 
-      
+        #region Restock
+
+        private void RestockRequestsTab_Selected(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        #endregion
     }
 }

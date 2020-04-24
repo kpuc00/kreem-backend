@@ -195,7 +195,7 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Stock" Selector.Selected="StocKTabItem_Selected" Grid.IsSharedSizeScope="True">
+            <TabItem Header="Products" Selector.Selected="StocKTabItem_Selected" Grid.IsSharedSizeScope="True">
                 <Grid>
                     <Grid.RowDefinitions>
                         <!-- Buttons and search -->
@@ -221,7 +221,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Button Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0"/>
-                    <Button Content="Restock requests" Visibility="Hidden" Grid.Column="1"/>
+                    <Button Content="Restock requests"  Grid.Column="1"/>
                     <TextBox Grid.Column="2"  />
 
                     <Grid Grid.Row="1" TextBlock.FontSize="18" Grid.ColumnSpan="3" >
