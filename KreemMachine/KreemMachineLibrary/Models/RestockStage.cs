@@ -15,8 +15,8 @@ namespace KreemMachineLibrary.Models
         [Key]
         public long Id { get; set; }
 
-        [Column("status"), Required]
-        public string StatusStr { get; set; }
+        [Column("type"), Required]
+        public string TypeStr { get; set; }
 
         [Column("user_id"), Required]
         public long UserId { get; set; }
@@ -31,10 +31,10 @@ namespace KreemMachineLibrary.Models
         public DateTime Date { get; set; } = DateTime.Now;
 
         [NotMapped]
-        public RestockStageType? Status
+        public RestockStageType? Type
         {
-            get => string.IsNullOrEmpty(StatusStr) ? null : Enum.Parse(typeof(RestockStageType), StatusStr) as RestockStageType?;
-            set => StatusStr = value.ToString();
+            get => string.IsNullOrEmpty(TypeStr) ? null : Enum.Parse(typeof(RestockStageType), TypeStr) as RestockStageType?;
+            set => TypeStr = value.ToString();
         }
 
         public virtual User User { get; set; }

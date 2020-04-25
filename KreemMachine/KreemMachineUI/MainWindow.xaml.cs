@@ -32,8 +32,6 @@ namespace KreemMachine
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        List<User> AllUsers;
-
         IEnumerable<Shift> AllShifts;
 
         public bool CanViewUsersTab => SecurityContext.HasPermissions(Permission.ViewUsers);
@@ -89,6 +87,7 @@ namespace KreemMachine
         ScheduleService scheduleService = new ScheduleService();
         StatisticsService statisticsService = new StatisticsService();
         ProductServices productServices = new ProductServices();
+        StockService stockService = new StockService();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -446,14 +445,41 @@ namespace KreemMachine
 
         #region Restock
 
-        private void RestockRequestsTab_Selected(object sender, RoutedEventArgs e)
+        private async void RestockRequestsTab_Selected(object sender, RoutedEventArgs e)
         {
-            RestockRequestsListBox.ItemsSource = new List<string> { "", "", "" };
+            List<RestockRequest> requests =  await stockService.GetActiveRequestsAsync();
+            List<RestockRequestViewModel> viewModels = requests.Select(r => new RestockRequestViewModel(r)).ToList();
+            RestockRequestsItemsComponent.ItemsSource = viewModels;
+            viewModels.ForEach(SetUpEventsForRestockRequestViewModel);
         }
 
+        private void SetUpEventsForRestockRequestViewModel(RestockRequestViewModel viewModel)
+        {
+            viewModel.RequestApproved += RestockRequestApproved;
+            viewModel.RequestDenied += RestockRequestDenied;
+            viewModel.RequestRestocked += RestocRequestRestocked;
+            viewModel.RequestHidden += RestockRequestHidden;
+        }
 
+        private void RestockRequestApproved(object sender, RestockRequest e)
+        {
+            throw new NotImplementedException();
+        }
 
+        private void RestockRequestDenied(object sender, RestockRequest e)
+        {
+            throw new NotImplementedException();
+        }
 
+        private void RestocRequestRestocked(object sender, RestockRequest e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void RestockRequestHidden(object sender, RestockRequest e)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
     }

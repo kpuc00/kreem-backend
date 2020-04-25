@@ -9,11 +9,7 @@
         Title="Kreem Machine" Height="500" Width="1200"
         WindowStartupLocation="CenterScreen" Icon="kreem_icon.png">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0*"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <TabControl x:Name="MainContent" TabStripPlacement="Left" Margin="10,10,-0.4,0.4" Grid.ColumnSpan="2" >
+        <TabControl x:Name="MainContent" TabStripPlacement="Left"  BorderThickness="3 0 0 0" Padding="7">
             <!--Style to make the TabHeaders go to left and look somewhat nice-->
             <TabControl.Resources >
                 <Style TargetType="{x:Type TabItem}">
@@ -291,30 +287,60 @@
                     <TextBox Grid.Row="0" Grid.Column="1" Margin="7 3" />
                     
                     <!-- Main content -->
-                    <ListBox  Grid.Row="1" Grid.ColumnSpan="2" x:Name="RestockRequestsListBox" HorizontalContentAlignment="Stretch">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Product name" />
-                                            <TextBlock Text="19.99" />
-                                            <TextBlock Text="25" />
-                                            <TextBlock Text="Department" />
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.ColumnSpan="2">
+                        <ItemsControl  x:Name="RestockRequestsItemsComponent" HorizontalContentAlignment="Stretch">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="10 30" BorderThickness="1" BorderBrush="Black"  >
+                                        <StackPanel TextBlock.FontSize="16">
+                                            <StackPanel Orientation="Horizontal" >
+                                                <TextBlock Margin="0 0 10 0" Text="{Binding Request.Product.Name}" TextDecorations="Underline"/>
+
+                                                <TextBlock Text="{Binding Request.Product.BuyCost, StringFormat=C,ConverterCulture=NL-nl}" />
+
+                                                <TextBlock Margin="5 0" Text="{Binding Request.Product.Department.Name}" />
+
+                                                <TextBlock Text="{Binding Request.Product.Quantity}" />
+                                                <Image Source="/Icons/depot.png" Height="24"/>
+                                            </StackPanel>
+
+                                            <ItemsControl ItemsSource="{Binding Request.Stages}" Margin="0 5" >
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Date}" Margin="0 0 10 0" />
+                                                            <TextBlock Text="{Binding User.FullName}" FontWeight="Bold" Margin="5 0" />
+                                                            <TextBlock Text="{Binding User.RoleStr, StringFormat={} ({0}) }" />
+
+                                                            <TextBlock Text="{Binding TypeStr}" Margin="5 0 0 0" />
+                                                            <TextBlock Text=" request for " />
+                                                            <TextBlock Text="{Binding Quantity}" FontWeight="Bold" />
+                                                            <TextBlock Text=" Items. " />
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+
+                                            <ItemsControl ItemsSource="{Binding Buttons}"  HorizontalAlignment="Left" >
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <StackPanel.Resources>
+                                                                <Style TargetType="Button">
+                                                                    <Setter Property="Margin" Value="5 0" />
+                                                                    <Setter Property="Padding" Value="5 0" />
+                                                                </Style>
+                                                            </StackPanel.Resources>
+                                                        </StackPanel>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                            </ItemsControl>
                                         </StackPanel>
-                                        <ListBox>
-
-
-                                            <ListBoxItem Content="step 1" />
-                                            <ListBoxItem Content="step 2" />
-                                        </ListBox>
-                                        <Button> Depends on step, shit!!!</Button>
-                                    </StackPanel>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-
-                    </ListBox>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </Grid>
             </TabItem>
             

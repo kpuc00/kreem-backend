@@ -46,7 +46,7 @@ namespace KreemMachine
             {
                 Quantity = quantity,
                 Request = request,
-                Status = RestockStageType.Open,
+                Type = RestockStageType.Open,
                 User = SecurityContext.CurrentUser,
             };
 

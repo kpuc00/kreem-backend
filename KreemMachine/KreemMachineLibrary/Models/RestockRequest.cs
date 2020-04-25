@@ -20,6 +20,10 @@ namespace KreemMachineLibrary.Models
 
         public virtual Product Product { get; set; }
 
+        public virtual List<RestockStage> Stages { get; set; }
+
+        public RestockStage LatestStage => Stages.OrderBy( s => s.Date ).Last();
+
         public RestockRequest(){}
 
         public RestockRequest(Product product)
