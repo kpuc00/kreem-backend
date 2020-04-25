@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KreemMachineLibrary.Models
 {
-    [Table("product")]
+    [Table("restock_request")]
     public class RestockRequest
     {
 
@@ -18,12 +18,13 @@ namespace KreemMachineLibrary.Models
         [Column("product_id"), Required]
         public long ProductId { get; set; }
 
-        [Required]
-        public string Status { get; set; }
-
         public virtual Product Product { get; set; }
 
-        
+        public RestockRequest(){}
 
+        public RestockRequest(Product product)
+        {
+            ProductId = product.Id;
+        }
     }
 }

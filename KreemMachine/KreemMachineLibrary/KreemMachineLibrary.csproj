@@ -111,6 +111,8 @@
     <Compile Include="Exceptions\RequiredFieldsEmpty.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Models\Department.cs" />
+    <Compile Include="Models\RestockRequest.cs" />
+    <Compile Include="Models\RestockStage.cs" />
     <Compile Include="Models\ScheduledShift.cs" />
     <Compile Include="Models\Shift.cs" />
     <Compile Include="Models\Statics\RestockStepType.cs" />

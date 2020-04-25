@@ -253,6 +253,8 @@
                                         <ColumnDefinition SharedSizeGroup="DepartmentColumn" Width="Auto"/>
                                         <!--Empty column for ui purpose-->
                                         <ColumnDefinition Width="*"/>
+                                        <!-- Request restock -->
+                                        <ColumnDefinition Width="auto"/>
                                         <!-- Edit -->
                                         <ColumnDefinition Width="auto"/>
                                         <!-- Delete -->
@@ -262,8 +264,9 @@
                                     <TextBlock Grid.Column="1"  Text="{Binding Quantity}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="2" Text="{Binding BuyCost}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="3" Text="{Binding Department.Name}" Margin="0 0 10 0" />
-                                    <Button Grid.Column="5" Content=" Edit " Margin="0 0 10 0" />
-                                    <Button Grid.Column="6" Content=" Delete " />
+                                    <Button Grid.Column="5" Content=" Restock" Click="RequestRestockForProductButton_Clicked" Margin="0 0 10 0" />
+                                    <Button Grid.Column="6" Content=" Edit " Margin="0 0 10 0" />
+                                    <Button Grid.Column="7" Content=" Delete " />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
@@ -300,6 +303,8 @@
                                             <TextBlock Text="Department" />
                                         </StackPanel>
                                         <ListBox>
+
+
                                             <ListBoxItem Content="step 1" />
                                             <ListBoxItem Content="step 2" />
                                         </ListBox>

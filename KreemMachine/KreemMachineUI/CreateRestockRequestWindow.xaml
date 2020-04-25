@@ -1,0 +1,31 @@
+﻿<Window x:Class="KreemMachine.CreateRestockRequestWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KreemMachine"
+        mc:Ignorable="d"
+        Title="Request Restock" Height="200" Width="450"
+        >
+    <Grid TextBlock.FontSize="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Request restock for: " />
+            <TextBlock x:Name="ProductNameTextBlock" Text="product name" MaxWidth="300" TextWrapping="Wrap" />
+        </StackPanel>
+        
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Quantity: " />
+            <TextBox x:Name="ProductQuantityTextBox" MinWidth="100" 
+                     PreviewTextInput="ProductQuantityTextBox_PreviewTextInput" />
+        </StackPanel>
+        
+        <Button x:Name="SendRequestButton" Click="SendRequestButton_Click"
+                Grid.Row="2" Content="Send" Margin="10" Padding="10 2" HorizontalAlignment="Center" />
+    </Grid>
+</Window>

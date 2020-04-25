@@ -435,6 +435,13 @@ namespace KreemMachine
 
         }
 
+        private void RequestRestockForProductButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            var product = ((Button)sender).DataContext as Product;
+            var form = new CreateRestockRequestWindow(product);
+            form.Show();
+        }
+
         #endregion
 
         #region Restock
@@ -444,10 +451,10 @@ namespace KreemMachine
             RestockRequestsListBox.ItemsSource = new List<string> { "", "", "" };
         }
 
+
+
+
         #endregion
 
-      
-
-      
     }
 }
