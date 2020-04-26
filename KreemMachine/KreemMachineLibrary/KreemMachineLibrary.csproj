@@ -104,6 +104,7 @@
     <Compile Include="DTO\ResourcesPerEmployeeDTO.cs" />
     <Compile Include="DTO\ResourcesPerMonthDTO.cs" />
     <Compile Include="DTO\ResourcesPerShiftDTO.cs" />
+    <Compile Include="Exceptions\MissingPermissionEexception.cs" />
     <Compile Include="Exceptions\PhoneNumberException.cs" />
     <Compile Include="Extensions\DateTimeExtension.cs" />
     <Compile Include="Exceptions\DeletAdminAccountException.cs" />

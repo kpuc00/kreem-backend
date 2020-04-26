@@ -191,7 +191,8 @@
             </TabItem>
 
             <!-- Products -->
-            <TabItem Header="Products" Selector.Selected="StocKTabItem_Selected" Grid.IsSharedSizeScope="True">
+            <TabItem Header="Products" Selector.Selected="StocKTabItem_Selected" Grid.IsSharedSizeScope="True" 
+                     Visibility="{Binding ElementName=_this, Path=CanViewProductsTab, Converter={StaticResource BoolToVis}}" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <!-- Buttons and search -->
@@ -218,7 +219,8 @@
 
                     <Button Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0"/>
                     <Button Padding="7 3" Margin="5,3,5,0" Content="Restock requests" Grid.Column="1" 
-                            Name="SeeRestockRequestsButton" Click="SeeRestockRequestsButton_Click"/>
+                            Name="SeeRestockRequestsButton" Click="SeeRestockRequestsButton_Click"
+                            Visibility="{Binding ElementName=_this, Path=CanViewRestockRequestsTab, Converter={StaticResource BoolToVis}}"/>
                     <TextBox Grid.Column="2"  />
 
                     <Grid Grid.Row="1" TextBlock.FontSize="18" Grid.ColumnSpan="3" >
@@ -321,7 +323,8 @@
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
 
-                                            <ItemsControl ItemsSource="{Binding Buttons}"  HorizontalAlignment="Left" >
+                                            <ItemsControl ItemsSource="{Binding Buttons}"  HorizontalAlignment="Left" 
+                                                          Visibility="{Binding ElementName=_this, Path=CanChangeRestockRequests, Converter={StaticResource BoolToVis}}">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
                                                         <StackPanel Orientation="Horizontal">

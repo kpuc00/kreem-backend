@@ -41,7 +41,10 @@ namespace KreemMachine
         public bool CanEditUser => SecurityContext.HasPermissions(Permission.EditUsers);
         public bool CanDeleteUser => SecurityContext.HasPermissions(Permission.DeleteUsers);
         public bool CanEditSchedule => SecurityContext.HasPermissions(Permission.EditSchedule);
-
+        public bool CanViewProductsTab => SecurityContext.HasPermissions(Permission.ViewAllProducts)
+                                          || SecurityContext.HasPermissions(Permission.ViewOwnProducts);
+        public bool CanViewRestockRequestsTab => SecurityContext.HasPermissions(Permission.ViewRestockRequests);
+        public bool CanChangeRestockRequests => SecurityContext.HasPermissions(Permission.ChangeRestockRequests);
 
         ScheduledShift manuallyScheduledShift;
 
@@ -425,7 +428,7 @@ namespace KreemMachine
 
         private void StocKTabItem_Selected(object sender, RoutedEventArgs e)
         {
-            AllProductsListBox.ItemsSource = productServices.GetAllProducts();
+            AllProductsListBox.ItemsSource = productServices.GetViewableProducts();
         }
 
         private void SeeRestockRequestsButton_Click(object sender, RoutedEventArgs e)
@@ -508,9 +511,7 @@ namespace KreemMachine
                 string membersName = request.Stages
                     .Select(s => s.TypeStr + s.Date.ToString("yyyy-mm-dd") + s.User.FullName)
                     .Aggregate(string.Concat);
-
                 string searchSource = (productName + productDepartment + membersName).ToLower();
-                Console.WriteLine(searchSource);
 
                 string[] searchSequence = SearchRestockRequestTextBox.Text.ToLower().Split(' ');
 
