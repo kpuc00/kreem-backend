@@ -25,7 +25,7 @@ namespace KreemMachineLibrary.Models
         public long RequestId { get; set; }
 
         [Column("quantity")]
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
 
         [Column("date"), Required]
         public DateTime Date { get; set; } = DateTime.Now;

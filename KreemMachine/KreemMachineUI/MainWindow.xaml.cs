@@ -457,7 +457,12 @@ namespace KreemMachine
             viewModels.ForEach(SetUpEventsForRestockRequestViewModel);
 
             RestockRequestsItemsComponent.ItemsSource = viewModels;
+            ICollectionView view = CollectionViewSource.GetDefaultView(viewModels);
+            view.Filter = FilterRestockRequestByTextBoxInput;
+
         }
+
+      
 
         private void SetUpEventsForRestockRequestViewModel(RestockRequestViewModel viewModel)
         {
@@ -469,7 +474,7 @@ namespace KreemMachine
 
         private async void RestockRequestApproved(object sender, RestockRequest request)
         {
-            stockService.ApproveRequest(request, request.LatestStage.Quantity);
+            stockService.ApproveRequest(request, request.LatestStage.Quantity ?? 0);
             await UpdateRestockRequestsTab();
         }
 
@@ -481,7 +486,7 @@ namespace KreemMachine
 
         private async void RestocRequestRestocked(object sender, RestockRequest request)
         {
-            stockService.RestockRequest(request, request.LatestStage.Quantity);
+            stockService.RestockRequest(request, request.LatestStage.Quantity ?? 0);
             await UpdateRestockRequestsTab();
         }
 
@@ -490,6 +495,38 @@ namespace KreemMachine
             stockService.HideRequest(request);
             await UpdateRestockRequestsTab();
         }
+
+        private bool FilterRestockRequestByTextBoxInput(object product)
+        {
+            return string.IsNullOrEmpty(SearchRestockRequestTextBox.Text) || requestContainsSearchwords();
+
+            bool requestContainsSearchwords()
+            {
+                RestockRequest request = ((RestockRequestViewModel)product).Request;
+                string productName = request.Product.Name;
+                string productDepartment = request.Product.Department.Name;
+                string membersName = request.Stages
+                    .Select(s => s.TypeStr + s.Date.ToString("yyyy-mm-dd") + s.User.FullName)
+                    .Aggregate(string.Concat);
+
+                string searchSource = (productName + productDepartment + membersName).ToLower();
+                Console.WriteLine(searchSource);
+
+                string[] searchSequence = SearchRestockRequestTextBox.Text.ToLower().Split(' ');
+
+                return searchSequence.Any(search => searchSource.Contains(search));
+            }
+        }
+
+        private void SearchRestockRequestTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ICollectionView view = CollectionViewSource.GetDefaultView(RestockRequestsItemsComponent.ItemsSource);
+            view.Refresh();
+        }
+
+
+
+
         #endregion
 
     }

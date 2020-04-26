@@ -8,7 +8,6 @@
         x:Name="_this"
         Title="Kreem Machine" Height="500" Width="1200"
         WindowStartupLocation="CenterScreen" Icon="kreem_icon.png">
-    <Grid>
         <TabControl x:Name="MainContent" TabStripPlacement="Left"  BorderThickness="3 0 0 0" Padding="7">
             <!--Style to make the TabHeaders go to left and look somewhat nice-->
             <TabControl.Resources >
@@ -284,7 +283,8 @@
                     
                     <!-- Top row -->
                     <TextBlock Grid.Row="0" Text="Retock requests:" FontSize="24" />
-                    <TextBox Grid.Row="0" Grid.Column="1" Margin="7 3" />
+                    <TextBox x:Name="SearchRestockRequestTextBox" Grid.Row="0" Grid.Column="1" Margin="7 3" 
+                             TextChanged="SearchRestockRequestTextBox_TextChanged" VerticalContentAlignment="Center" />
                     
                     <!-- Main content -->
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.ColumnSpan="2">
@@ -308,7 +308,7 @@
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <StackPanel Orientation="Horizontal">
-                                                            <TextBlock Text="{Binding Date}" Margin="0 0 10 0" />
+                                                        <TextBlock Text="{Binding Date, StringFormat=yyyy-mm-dd HH:MM}" Margin="0 0 10 0" />
                                                             <TextBlock Text="{Binding User.FullName}" FontWeight="Bold" Margin="5 0" />
                                                             <TextBlock Text="{Binding User.RoleStr, StringFormat={} ({0}) }" />
 
@@ -632,6 +632,4 @@
                 </TabControl>
             </TabItem>
         </TabControl>
-    </Grid>
-
 </Window>
