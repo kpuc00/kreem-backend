@@ -25,24 +25,24 @@ namespace KreemMachine.ViewModels
             switch (request.LatestStage.Type)
             {
                 case RestockStageType.Open:
-                    AddButton("Approve", RequestApproved);
-                    AddButton("Deny", RequestDenied);
+                    AddButton("Approve", () => RequestApproved);
+                    AddButton("Deny", () => RequestDenied);
+                    break;
+                case RestockStageType.Approve:
+                    AddButton("Restock", () => RequestRestocked);
                     break;
                 case RestockStageType.Deny:
-                case RestockStageType.Approve:
-                    AddButton("Restock", RequestRestocked);
-                    break;
                 case RestockStageType.Restock:
-                    AddButton("Hide", RequestHidden);
+                    AddButton("Hide", () => RequestHidden);
                     break;
             }
         }
 
-        private void AddButton(string title, EventHandler<RestockRequest> handler)
+        private void AddButton(string title, Func<EventHandler<RestockRequest>> getHandler)
         {
             var newButton = new Button();
             newButton.Content = title;
-            newButton.Click += (sender, e) => handler?.Invoke(sender, Request);
+            newButton.Click += (sender, e) => getHandler()?.Invoke(sender, Request);
             Buttons.Add(newButton);
         }
 

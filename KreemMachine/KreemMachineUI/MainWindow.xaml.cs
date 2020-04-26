@@ -447,10 +447,16 @@ namespace KreemMachine
 
         private async void RestockRequestsTab_Selected(object sender, RoutedEventArgs e)
         {
-            List<RestockRequest> requests =  await stockService.GetActiveRequestsAsync();
+            await UpdateRestockRequestsTab();
+        }
+
+        private async Task UpdateRestockRequestsTab()
+        {
+            List<RestockRequest> requests = await stockService.GetActiveRequestsAsync();
             List<RestockRequestViewModel> viewModels = requests.Select(r => new RestockRequestViewModel(r)).ToList();
-            RestockRequestsItemsComponent.ItemsSource = viewModels;
             viewModels.ForEach(SetUpEventsForRestockRequestViewModel);
+
+            RestockRequestsItemsComponent.ItemsSource = viewModels;
         }
 
         private void SetUpEventsForRestockRequestViewModel(RestockRequestViewModel viewModel)
@@ -461,24 +467,28 @@ namespace KreemMachine
             viewModel.RequestHidden += RestockRequestHidden;
         }
 
-        private void RestockRequestApproved(object sender, RestockRequest e)
+        private async void RestockRequestApproved(object sender, RestockRequest request)
         {
-            throw new NotImplementedException();
+            stockService.ApproveRequest(request, request.LatestStage.Quantity);
+            await UpdateRestockRequestsTab();
         }
 
-        private void RestockRequestDenied(object sender, RestockRequest e)
+        private async void RestockRequestDenied(object sender, RestockRequest request)
         {
-            throw new NotImplementedException();
+            stockService.DenyRequest(request);
+            await UpdateRestockRequestsTab();
         }
 
-        private void RestocRequestRestocked(object sender, RestockRequest e)
+        private async void RestocRequestRestocked(object sender, RestockRequest request)
         {
-            throw new NotImplementedException();
+            stockService.RestockRequest(request, request.LatestStage.Quantity);
+            await UpdateRestockRequestsTab();
         }
 
-        private void RestockRequestHidden(object sender, RestockRequest e)
+        private async void RestockRequestHidden(object sender, RestockRequest request)
         {
-            throw new NotImplementedException();
+            stockService.HideRequest(request);
+            await UpdateRestockRequestsTab();
         }
         #endregion
 

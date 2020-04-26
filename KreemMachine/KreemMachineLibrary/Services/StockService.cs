@@ -11,12 +11,24 @@ namespace KreemMachineLibrary.Services
 {
     public class StockService
     {
-        public void CreateRequestFromOpenStage(RestockStage stage)
+        public void CreateRequestFromOpenStage(RestockRequest request, int quantity)
         {
-            stage.Type = RestockStageType.Open;
+
+            RestockStage openStage = new RestockStage()
+            {
+                Quantity = quantity,
+                Request = request,
+                Type = RestockStageType.Open,
+                UserId = SecurityContext.CurrentUser.Id,
+            };
+
+            AddStageToRequest(openStage);
+        }
+
+        private void AddStageToRequest(RestockStage stage)
+        {
             using (var db = new DataBaseContext())
             {
-                db.Users.Attach(stage.User);
                 db.RestockStages.Add(stage);
                 db.SaveChanges();
             }
@@ -34,5 +46,53 @@ namespace KreemMachineLibrary.Services
                     .ToListAsync();
             }
         }
+
+        public void ApproveRequest(RestockRequest request, int quantity)
+        {
+            RestockStage acceptStage = new RestockStage()
+            {
+                Type = RestockStageType.Approve,
+                Quantity = quantity,
+                RequestId = request.Id,
+                UserId = SecurityContext.CurrentUser.Id,
+            };
+
+            AddStageToRequest(acceptStage);
+        }
+        public void DenyRequest(RestockRequest request)
+        {
+            RestockStage acceptStage = new RestockStage()
+            {
+                Type = RestockStageType.Deny,
+                RequestId = request.Id,
+                UserId = SecurityContext.CurrentUser.Id,
+            };
+            AddStageToRequest(acceptStage);
+        }
+        public void RestockRequest(RestockRequest request, int quantity)
+        {
+            RestockStage restockStage = new RestockStage()
+            {
+                Type = RestockStageType.Restock,
+                Quantity = quantity,
+                RequestId = request.Id,
+                UserId = SecurityContext.CurrentUser.Id,
+            };
+            AddStageToRequest(restockStage);
+        }
+
+        public void HideRequest(RestockRequest request)
+        {
+            RestockStage hideStage = new RestockStage()
+            {
+                Type = RestockStageType.Hide,
+                RequestId = request.Id,
+                UserId = SecurityContext.CurrentUser.Id,
+            };
+            AddStageToRequest(hideStage);
+        }
+
+        
+
     }
 }

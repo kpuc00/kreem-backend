@@ -42,15 +42,7 @@ namespace KreemMachine
 
             RestockRequest request = new RestockRequest(Product);
 
-            RestockStage openStage = new RestockStage()
-            {
-                Quantity = quantity,
-                Request = request,
-                Type = RestockStageType.Open,
-                User = SecurityContext.CurrentUser,
-            };
-
-            stockService.CreateRequestFromOpenStage(openStage);
+            stockService.CreateRequestFromOpenStage(request, quantity);
             this.Close();
         }
 
