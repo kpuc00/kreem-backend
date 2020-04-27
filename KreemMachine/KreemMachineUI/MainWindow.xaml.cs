@@ -44,6 +44,8 @@ namespace KreemMachine
         public bool CanViewProductsTab => SecurityContext.HasPermissions(Permission.ViewAllProducts)
                                           || SecurityContext.HasPermissions(Permission.ViewOwnProducts);
         public bool CanViewRestockRequestsTab => SecurityContext.HasPermissions(Permission.ViewRestockRequests);
+        public bool CanRequestProductRestock => SecurityContext.HasPermissions(Permission.RequestRestockForAnyProduct)
+                                          || SecurityContext.HasPermissions(Permission.RequestRestockForOwnProduct);
         public bool CanChangeRestockRequests => SecurityContext.HasPermissions(Permission.ChangeRestockRequests);
 
         ScheduledShift manuallyScheduledShift;
@@ -429,12 +431,6 @@ namespace KreemMachine
         private void StocKTabItem_Selected(object sender, RoutedEventArgs e)
         {
             AllProductsListBox.ItemsSource = productServices.GetViewableProducts();
-        }
-
-        private void SeeRestockRequestsButton_Click(object sender, RoutedEventArgs e)
-        {
-            RestockRequestsTab.IsSelected = true;
-
         }
 
         private void RequestRestockForProductButton_Clicked(object sender, RoutedEventArgs e)

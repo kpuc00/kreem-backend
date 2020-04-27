@@ -218,9 +218,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Button Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0"/>
-                    <Button Padding="7 3" Margin="5,3,5,0" Content="Restock requests" Grid.Column="1" 
-                            Name="SeeRestockRequestsButton" Click="SeeRestockRequestsButton_Click"
-                            Visibility="{Binding ElementName=_this, Path=CanViewRestockRequestsTab, Converter={StaticResource BoolToVis}}"/>
+                    
                     <TextBox Grid.Column="2"  />
 
                     <Grid Grid.Row="1" TextBlock.FontSize="18" Grid.ColumnSpan="3" >
@@ -261,7 +259,8 @@
                                     <TextBlock Grid.Column="1"  Text="{Binding Quantity}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="2" Text="{Binding BuyCost}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="3" Text="{Binding Department.Name}" Margin="0 0 10 0" />
-                                    <Button Grid.Column="5" Content=" Restock" Click="RequestRestockForProductButton_Clicked" Margin="0 0 10 0" />
+                                <Button Grid.Column="5" Content=" Restock" Margin="0 0 10 0" Click="RequestRestockForProductButton_Clicked"
+                                             IsEnabled="{Binding ElementName=_this, Path=CanRequestProductRestock}"  />
                                     <Button Grid.Column="6" Content=" Edit " Margin="0 0 10 0" />
                                     <Button Grid.Column="7" Content=" Delete " />
                                 </Grid>
@@ -272,7 +271,8 @@
             </TabItem>
             
             <!--Restock Requests -->
-            <TabItem x:Name="RestockRequestsTab" Selector.Selected="RestockRequestsTab_Selected" Visibility="Hidden">
+        <TabItem x:Name="RestockRequestsTab" Selector.Selected="RestockRequestsTab_Selected" Header="Requests"
+                 Visibility="{Binding ElementName=_this, Path=CanViewRestockRequestsTab, Converter={StaticResource BoolToVis}}" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
