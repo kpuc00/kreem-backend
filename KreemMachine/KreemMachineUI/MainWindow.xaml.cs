@@ -437,7 +437,7 @@ namespace KreemMachine
         {
             var product = ((Button)sender).DataContext as Product;
             var form = new RequestInfoGetterWindow(
-                title: "Create stock Request",
+                title: "Create stock request",
                 message: "Please specify how many items you want to request",
                 buttonText: "Open request");
 
@@ -481,8 +481,17 @@ namespace KreemMachine
 
         private async void RestockRequestApproved(object sender, RestockRequest request)
         {
-            stockService.ApproveRequest(request, request.LatestStage.Quantity ?? 0);
-            await UpdateRestockRequestsTab();
+            var form = new RequestInfoGetterWindow(
+                title: "Approve stock request",
+                message: "Please specify how many items you want to approve",
+                buttonText: "Approve request");
+
+            if (form.ShowDialog(out int quantity) == true)
+            {
+                stockService.ApproveRequest(request, quantity);
+                await UpdateRestockRequestsTab();
+            }
+            
         }
 
         private async void RestockRequestDenied(object sender, RestockRequest request)
