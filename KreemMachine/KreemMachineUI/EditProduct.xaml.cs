@@ -18,33 +18,37 @@ using KreemMachineLibrary.Exceptions;
 namespace KreemMachine
 {
     /// <summary>
-    /// Interaction logic for CreateProduct.xaml
+    /// Interaction logic for EditProduct.xaml
     /// </summary>
-    public partial class CreateProduct : Window
+    public partial class EditProduct : Window
     {
-        Product product;
-        ProductServices productServices = new ProductServices();
-        Department department = new Department();
 
-        public CreateProduct()
+        Product product;
+        ProductServices productServices;
+        Department department;
+
+        public EditProduct(Product givenProduct, ProductServices givenProductServices)
         {
             InitializeComponent();
 
-            var departments = productServices.GetAllDepartments();
-            DepartmentComboBox.ItemsSource = departments;
-            DepartmentComboBox.DisplayMemberPath = "Name";
+            product = givenProduct;
+            productServices = givenProductServices;
 
-            ProductNameTextBox.Text = "";
-            BuyCostTextBox.Text = "";
-            SellPriceTextBox.Text = "";
-            QuantityTextBox.Text = "";
-            DepartmentComboBox.Text = "";
+            var departments = productServices.GetAllDepartments();
+            DepartmentComboBox.DisplayMemberPath = "Name";
+            DepartmentComboBox.ItemsSource = departments;
+
+            ProductNameTextBox.Text = product.Name;
+            BuyCostTextBox.Text = product.BuyCost.ToString();
+            SellPriceTextBox.Text = product.SellPrice.ToString();
+            QuantityTextBox.Text = product.Quantity.ToString();
+            DepartmentComboBox.Text = product.Department.Name;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             long departmentId = DepartmentComboBox.SelectedIndex + 1;
-            productServices.CreateProduct(ProductNameTextBox.Text, float.Parse(BuyCostTextBox.Text), float.Parse(SellPriceTextBox.Text), int.Parse(QuantityTextBox.Text), departmentId);
+            productServices.UpdateProduct(product, ProductNameTextBox.Text, float.Parse(BuyCostTextBox.Text), float.Parse(SellPriceTextBox.Text), int.Parse(QuantityTextBox.Text), departmentId);
             this.Close();
         }
     }

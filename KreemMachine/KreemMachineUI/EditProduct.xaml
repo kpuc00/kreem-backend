@@ -1,11 +1,12 @@
-﻿<Window x:Class="KreemMachine.CreateProduct"
+﻿<Window x:Class="KreemMachine.EditProduct"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KreemMachine"
         mc:Ignorable="d"
-        Title="Create product" WindowStartupLocation="CenterScreen" Icon="kreem_icon.png" Height="350" Width="500">
+        Title="Edit product" WindowStartupLocation="CenterScreen" Icon="kreem_icon.png" Height="350" Width="500">
+
     <Grid Margin="20" TextElement.FontSize="18">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -31,9 +32,10 @@
         <TextBox Name="SellPriceTextBox" Text="" Grid.Row="2" Grid.Column="1" Margin="5"/>
         <TextBox Name="QuantityTextBox" Text="" Grid.Row="3" Grid.Column="1" Margin="5"/>
         <ComboBox Name="DepartmentComboBox" Text="" Grid.Row="4" Grid.Column="1" Margin="5"/>
-        
+
         <Button Grid.Row="5" Margin="0 50"  Width="100" Height="30"  Grid.ColumnSpan="2" Content="Save" 
                 HorizontalAlignment="Center" Name="SaveButton" Click="SaveButton_Click"/>
-        
+
     </Grid>
+
 </Window>

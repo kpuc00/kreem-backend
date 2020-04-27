@@ -44,5 +44,14 @@ namespace KreemMachineLibrary.Models
             SellPrice = sellPrice;
             Department = department;
         }
+
+        public Product(string name, int quantity, float buyCost, float sellPrice, long departmentId)
+        {
+            Name = name;
+            Quantity = quantity;
+            BuyCost = buyCost;
+            SellPrice = sellPrice;
+            DepartmentId = departmentId;
+        }
     }
 }

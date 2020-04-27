@@ -292,7 +292,7 @@ namespace KreemMachine
 
             ManualScheduleShiftPicker.SelectedDay = selected.Day;
             ScheduleManuallyButton_Click(null, null);
-           // ManualScheduleShiftPicker_SelectedShiftChanged(this, selected.Day, ManualScheduleShiftPicker.SelectedShift);
+            // ManualScheduleShiftPicker_SelectedShiftChanged(this, selected.Day, ManualScheduleShiftPicker.SelectedShift);
 
         }
 
@@ -426,11 +426,35 @@ namespace KreemMachine
 
         private void StocKTabItem_Selected(object sender, RoutedEventArgs e)
         {
-            AllProductsListBox.ItemsSource = productServices.GetAllProducts();
+            AllProductsListBox.ItemsSource = productServices.DisplayAllProducts();
+        }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new CreateProduct();
+            window.Show();
+        }
+
+        private void EditProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var product = button.DataContext as Product;
+
+            var window = new EditProduct(product, productServices);
+            window.Show();
+        }
+
+        private void DeleteProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to delete this product?", "Delete product", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                var button = sender as Button;
+                var product = button.DataContext as Product;
+
+                productServices.RemoveProduct(product);
+            }
         }
 
         #endregion
 
-      
     }
 }
