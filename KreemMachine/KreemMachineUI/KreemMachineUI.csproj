@@ -113,8 +113,8 @@
     <Compile Include="CreateProduct.xaml.cs">
       <DependentUpon>CreateProduct.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CreateRestockRequestWindow.xaml.cs">
-      <DependentUpon>CreateRestockRequestWindow.xaml</DependentUpon>
+    <Compile Include="RequestInfoGetterWindow.xaml.cs">
+      <DependentUpon>RequestInfoGetterWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\RestockRequestViewModel.cs" />
     <Compile Include="YearPicker.xaml.cs">
@@ -129,7 +129,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CreateRestockRequestWindow.xaml">
+    <Page Include="RequestInfoGetterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -22,27 +22,32 @@ namespace KreemMachine
     /// <summary>
     /// Interaction logic for CreateRestockRequestWindow.xaml
     /// </summary>
-    public partial class CreateRestockRequestWindow : Window
+    public partial class RequestInfoGetterWindow : Window
     {
-        Product Product;
-        StockService stockService = new StockService();
+        public int? Quantity { get; set; } 
 
-        public CreateRestockRequestWindow(Product product)
+        public RequestInfoGetterWindow(string title ="Restock Request", string message ="Please enter the quantity", string buttonText = "Confirm")
         {
             InitializeComponent();
-            Product = product;
-
-            ProductNameTextBlock.Text = Product.Name;
+            this.DataContext = this;
+            Title = title;
+            MessageTextBlock.Text = message;
+            ConfirmButton.Content = buttonText;
         }
 
         private void SendRequestButton_Click(object sender, RoutedEventArgs e)
         {
-            if (int.TryParse(ProductQuantityTextBox.Text, out int quantity) == false)
+            if (uint.TryParse(ProductQuantityTextBox.Text, out uint quantity) == false)
                 return;
 
-            RestockRequest request = new RestockRequest(Product);
+            if (quantity == 0)
+                return;
 
-            stockService.CreateRequestFromOpenStage(request, quantity);
+            Quantity = (int)quantity;
+
+
+            this.DialogResult = true;
+
             this.Close();
         }
 
@@ -50,6 +55,14 @@ namespace KreemMachine
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+
+        public bool? ShowDialog(out int result)
+        {
+            bool? dr = base.ShowDialog();
+            result = Quantity ?? 0;
+            return dr;
         }
     }
 }

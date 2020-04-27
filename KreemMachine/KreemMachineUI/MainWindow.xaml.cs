@@ -436,8 +436,16 @@ namespace KreemMachine
         private void RequestRestockForProductButton_Clicked(object sender, RoutedEventArgs e)
         {
             var product = ((Button)sender).DataContext as Product;
-            var form = new CreateRestockRequestWindow(product);
-            form.Show();
+            var form = new RequestInfoGetterWindow(
+                title: "Create stock Request",
+                message: "Please specify how many items you want to request",
+                buttonText: "Open request");
+
+            if (form.ShowDialog(out int quantity) == true)
+            {
+                RestockRequest request = new RestockRequest(product);
+                stockService.CreateRequestFromOpenStage(request, quantity);
+            }
         }
 
         #endregion
