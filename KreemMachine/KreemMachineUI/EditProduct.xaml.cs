@@ -69,8 +69,9 @@ namespace KreemMachine
                 string sellPrice = SellPriceTextBox.Text;
                 string quantity = QuantityTextBox.Text;
                 int departmentId = DepartmentComboBox.SelectedIndex + 1;
+                Department selectedDepartment = (Department)DepartmentComboBox.SelectedItem;
 
-                int i = productServices.UpdateProduct(product, productName, buyCost, sellPrice, quantity, departmentId);
+                int i = productServices.UpdateProduct(product, productName, buyCost, sellPrice, quantity, selectedDepartment);
 
                 if (i == 1)
                 {
@@ -80,19 +81,19 @@ namespace KreemMachine
             }
             catch (BuyCostIncorrectFormatException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Edit product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             catch (SellPriceIncorrectFormatException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Edit product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             catch (QuantityIncorrectFormatException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Edit product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             catch (RequiredFieldsEmpty ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Edit product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
     }

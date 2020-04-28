@@ -45,13 +45,13 @@ namespace KreemMachineLibrary.Models
             Department = department;
         }
 
-        public Product(string name, int quantity, float buyCost, float sellPrice, long departmentId)
+        public Product(string name, int quantity, float buyCost, float sellPrice, Department department)
         {
             Name = name;
             Quantity = quantity;
             BuyCost = buyCost;
             SellPrice = sellPrice;
-            DepartmentId = departmentId;
+            DepartmentId = department.Id;
         }
     }
 }

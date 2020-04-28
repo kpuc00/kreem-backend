@@ -47,27 +47,27 @@ namespace KreemMachine
                 string buyCost = BuyCostTextBox.Text;
                 string sellPrice = SellPriceTextBox.Text;
                 string quantity = QuantityTextBox.Text;
-                int departmentId = DepartmentComboBox.SelectedIndex + 1;
+                Department selectedDepartment = (Department)DepartmentComboBox.SelectedItem;
 
-                productServices.CreateProduct(productName, buyCost, sellPrice, quantity, departmentId);
+                productServices.CreateProduct(productName, buyCost, sellPrice, quantity, selectedDepartment);
 
                 this.Close();
             }
             catch (BuyCostIncorrectFormatException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Create product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             catch (SellPriceIncorrectFormatException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Create product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             catch (QuantityIncorrectFormatException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Create product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             catch (RequiredFieldsEmpty ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message, "Create product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
     }

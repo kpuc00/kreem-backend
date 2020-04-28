@@ -12,9 +12,9 @@ namespace KreemMachineLibrary.Services
     public class ProductServices
     {
 
-        public Product CreateProduct(string givenName, string givenBuyCost, string givenSellPrice, string givenQuantity, long givenDepartmentId)
+        public Product CreateProduct(string givenName, string givenBuyCost, string givenSellPrice, string givenQuantity, Department selectedDepartment)
         {
-            Product product = ValidateInput(givenName, givenBuyCost, givenSellPrice, givenQuantity, givenDepartmentId);
+            Product product = ValidateInput(givenName, givenBuyCost, givenSellPrice, givenQuantity, selectedDepartment);
 
             using (var db = new DataBaseContext())
             {
@@ -41,15 +41,16 @@ namespace KreemMachineLibrary.Services
             return 1;
         }
 
-        public int UpdateProduct(Product product, string productName, string buyCost, string sellPrice, string quantity, long departmentId)
+        public int UpdateProduct(Product product, string productName, string buyCost, string sellPrice, string quantity, Department selectedDepartment)
         {
-            ValidateInput(productName, buyCost, sellPrice, quantity, departmentId);
+            ValidateInput(productName, buyCost, sellPrice, quantity, selectedDepartment);
 
             product.Name = productName;
             product.BuyCost = float.Parse(buyCost);
             product.SellPrice = float.Parse(sellPrice);
             product.Quantity = int.Parse(quantity);
-            product.DepartmentId = departmentId;
+            product.DepartmentId = selectedDepartment.Id;
+            product.Department = null;
 
             using (var db = new DataBaseContext())
             {
@@ -96,21 +97,21 @@ namespace KreemMachineLibrary.Services
                 db.Products.Load();
         }
 
-        private Product ValidateInput(string givenName, string givenBuyCost, string givenSellPrice, string givenQuantity, long givenDepartmentId)
+        private Product ValidateInput(string givenName, string givenBuyCost, string givenSellPrice, string givenQuantity, Department givenDepartment)
         {
-            if (string.IsNullOrWhiteSpace(givenName) || string.IsNullOrWhiteSpace(givenBuyCost) || string.IsNullOrWhiteSpace(givenSellPrice) || string.IsNullOrWhiteSpace(givenQuantity) || givenDepartmentId == 0)
+            if (string.IsNullOrWhiteSpace(givenName) || string.IsNullOrWhiteSpace(givenBuyCost) || string.IsNullOrWhiteSpace(givenSellPrice) || string.IsNullOrWhiteSpace(givenQuantity) || givenDepartment == null)
             {
-                throw new RequiredFieldsEmpty("You need to fill in all required fields");
+                throw new RequiredFieldsEmpty("You need to fill in all the required fields!");
             }
 
             else
             {
-                //Checks if the buyCost and sellPrice is in correct format
+                //Checks if the buyCost is in correct format
                 int dotCount = 0;
                 bool valH = true;
                 foreach (Char c in givenBuyCost)
                 {
-                    if (c == '.')
+                    if (c == ',')
                     {
                         if (++dotCount > 1)
                         {
@@ -129,13 +130,14 @@ namespace KreemMachineLibrary.Services
                 }
                 if (!valH)
                 {
-                    throw new BuyCostIncorrectFormatException("The buy cost value's format is incorrect!");
+                    throw new BuyCostIncorrectFormatException("The 'Buy cost' value's format is incorrect!");
                 }
-
-                //Checks if the sellPrice and sellPrice is in correct format
+                dotCount = 0;
+                valH = true;
+                //Checks if the sellPrice is in correct format
                 foreach (Char c in givenSellPrice)
                 {
-                    if (c == '.')
+                    if (c == ',')
                     {
                         if (++dotCount > 1)
                         {
@@ -154,18 +156,18 @@ namespace KreemMachineLibrary.Services
                 }
                 if (!valH)
                 {
-                    throw new SellPriceIncorrectFormatException("The sell price value is not in a correct format!");
+                    throw new SellPriceIncorrectFormatException("The 'Sell price' value's format is incorrect!");
                 }
 
                 foreach (Char c in givenQuantity)
                 {
                     if (c < '0' || c > '9')
                     {
-                        throw new QuantityIncorrectFormatException("The quantity value is not in a correct format!");
+                        throw new QuantityIncorrectFormatException("The 'Quantity' value's format is incorrect!");
                     }
                 }
 
-                return new Product(givenName, int.Parse(givenQuantity), float.Parse(givenBuyCost), float.Parse(givenSellPrice), givenDepartmentId);
+                return new Product(givenName, int.Parse(givenQuantity), float.Parse(givenBuyCost), float.Parse(givenSellPrice), givenDepartment);
             }
         }
     }
