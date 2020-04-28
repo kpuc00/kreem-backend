@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:KreemMachine"
         mc:Ignorable="d"
         Title="Window title" Height="200" Width="350"
+        WindowStartupLocation="CenterScreen"
         >
     <Grid TextBlock.FontSize="18">
         <Grid.RowDefinitions>
