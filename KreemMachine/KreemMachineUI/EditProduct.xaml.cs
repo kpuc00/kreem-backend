@@ -22,22 +22,8 @@ namespace KreemMachine
     /// </summary>
     public partial class EditProduct : Window
     {
-
         Product product;
         ProductServices productServices;
-
-        private bool isSaved = false;
-        public bool IsSaved
-        {
-            get
-            {
-                return isSaved;
-            }
-            private set
-            {
-                isSaved = value;
-            }
-        }
 
         public EditProduct(Product givenProduct, ProductServices givenProductServices)
         {
@@ -55,15 +41,12 @@ namespace KreemMachine
             SellPriceTextBox.Text = product.SellPrice.ToString();
             QuantityTextBox.Text = product.Quantity.ToString();
             DepartmentComboBox.Text = product.Department.Name;
-
-            IsSaved = false;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-
                 string productName = ProductNameTextBox.Text;
                 string buyCost = BuyCostTextBox.Text;
                 string sellPrice = SellPriceTextBox.Text;
@@ -71,12 +54,8 @@ namespace KreemMachine
                 int departmentId = DepartmentComboBox.SelectedIndex + 1;
                 Department selectedDepartment = (Department)DepartmentComboBox.SelectedItem;
 
-                int i = productServices.UpdateProduct(product, productName, buyCost, sellPrice, quantity, selectedDepartment);
+                productServices.UpdateProduct(product, productName, buyCost, sellPrice, quantity, selectedDepartment);
 
-                if (i == 1)
-                {
-                    IsSaved = true;
-                }
                 this.Close();
             }
             catch (BuyCostIncorrectFormatException ex)

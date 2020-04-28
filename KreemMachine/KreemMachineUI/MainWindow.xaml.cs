@@ -441,6 +441,20 @@ namespace KreemMachine
             RefreshProductsTableTimer.Stop();
         }
 
+        private void SearchProductsBar_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(SearchProductsBar.Text))
+            {
+                RefreshProductsTableTimer.Stop();
+                AllProductsListBox.ItemsSource = productServices.FilterProducts(SearchProductsBar.Text);
+            }
+            else
+            {
+                RefreshProductsTable(sender, e);
+                RefreshProductsTableTimer.Start();
+            }
+        }
+
         private void AddNewProductButton_Click(object sender, RoutedEventArgs e)
         {
             var window = new CreateProduct();
@@ -454,11 +468,8 @@ namespace KreemMachine
 
             var window = new EditProduct(product, productServices);
             window.Show();
-
-            if (window.IsSaved == true)
-            {
-                StocKTabItem_Selected(sender, e);
-            }
+            SearchProductsBar.Text = null;
+            RefreshProductsTable(sender, e);
         }
 
         private void DeleteProductButton_Click(object sender, RoutedEventArgs e)
@@ -472,6 +483,7 @@ namespace KreemMachine
                 int i = productServices.RemoveProduct(product);
                 if (i == 1)
                 {
+                    SearchProductsBar.Text = null;
                     StocKTabItem_Selected(sender, e);
                 }
                 RefreshProductsTableTimer.Start();
@@ -498,8 +510,6 @@ namespace KreemMachine
                 stockService.CreateRequestFromOpenStage(request, quantity);
             }
         }
-
-
 
         #endregion
 

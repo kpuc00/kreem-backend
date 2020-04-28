@@ -219,7 +219,7 @@
 
                     <Button Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0" Click="AddNewProductButton_Click"/>
                     
-                    <TextBox Grid.Column="2"  />
+                    <TextBox Grid.Column="2" Name="SearchProductsBar" KeyUp="SearchProductsBar_KeyUp" />
 
                     <Grid Grid.Row="1" TextBlock.FontSize="18" Grid.ColumnSpan="3" >
                         <Grid.ColumnDefinitions>

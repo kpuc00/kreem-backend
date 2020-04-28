@@ -2,6 +2,7 @@
 using KreemMachineLibrary.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,6 @@ namespace KreemMachineLibrary.Services
 {
     public class ProductServices
     {
-
         public Product CreateProduct(string givenName, string givenBuyCost, string givenSellPrice, string givenQuantity, Department selectedDepartment)
         {
             Product product = ValidateInput(givenName, givenBuyCost, givenSellPrice, givenQuantity, selectedDepartment);
@@ -168,6 +168,28 @@ namespace KreemMachineLibrary.Services
                 }
 
                 return new Product(givenName, int.Parse(givenQuantity), float.Parse(givenBuyCost), float.Parse(givenSellPrice), givenDepartment);
+            }
+        }
+
+        public List<Product> FilterProducts(string s)
+        {
+            using (var db = new DataBaseContext())
+            {
+                var products = db.Products.Include(p => p.Department);
+
+                if (SecurityContext.HasPermissions(Permission.ViewAllProducts))
+                    return products.Where(p => p.Name.ToLower().Contains(s.ToLower())).ToList();
+
+                if (SecurityContext.HasPermissions(Permission.ViewOwnProducts))
+                {
+                    long? usersDepartment = SecurityContext.CurrentUser.DepartmentId;
+                    return products
+                        .Where(p => p.Name.ToLower().Contains(s.ToLower()))
+                       .Where(p => p.DepartmentId == usersDepartment)
+                       .ToList();
+                }
+
+                throw new MissingPermissionEexception(Permission.ViewAllProducts, Permission.ViewOwnProducts);
             }
         }
     }
