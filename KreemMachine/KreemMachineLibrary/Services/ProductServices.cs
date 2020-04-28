@@ -12,15 +12,18 @@ namespace KreemMachineLibrary.Services
     public class ProductServices
     {
 
-        public Product CreateProduct(string givenName, float givenBuyCost, float givenSellPrice, int givenQuantity, long givenDepartmentId)
+        public Product CreateProduct(string givenName, string givenBuyCost, string givenSellPrice, string givenQuantity, long givenDepartmentId)
         {
-            Product product = new Product(givenName, givenQuantity, givenBuyCost, givenSellPrice, givenDepartmentId);
+            Product product = ValidateInput(givenName, givenBuyCost, givenSellPrice, givenQuantity, givenDepartmentId);
+
             using (var db = new DataBaseContext())
             {
                 product = db.Products.Add(product);
+                db.SaveChanges();
             }
 
             return product;
+
         }
 
         public int RemoveProduct(Product product)
@@ -38,12 +41,14 @@ namespace KreemMachineLibrary.Services
             return 1;
         }
 
-        public int UpdateProduct(Product product, string productName, float buyCost, float sellPrice, int quantity, long departmentId)
+        public int UpdateProduct(Product product, string productName, string buyCost, string sellPrice, string quantity, long departmentId)
         {
+            ValidateInput(productName, buyCost, sellPrice, quantity, departmentId);
+
             product.Name = productName;
-            product.BuyCost = buyCost;
-            product.SellPrice = sellPrice;
-            product.Quantity = quantity;
+            product.BuyCost = float.Parse(buyCost);
+            product.SellPrice = float.Parse(sellPrice);
+            product.Quantity = int.Parse(quantity);
             product.DepartmentId = departmentId;
 
             using (var db = new DataBaseContext())
@@ -89,6 +94,79 @@ namespace KreemMachineLibrary.Services
         {
             using (var db = new DataBaseContext())
                 db.Products.Load();
+        }
+
+        private Product ValidateInput(string givenName, string givenBuyCost, string givenSellPrice, string givenQuantity, long givenDepartmentId)
+        {
+            if (string.IsNullOrWhiteSpace(givenName) || string.IsNullOrWhiteSpace(givenBuyCost) || string.IsNullOrWhiteSpace(givenSellPrice) || string.IsNullOrWhiteSpace(givenQuantity) || givenDepartmentId == 0)
+            {
+                throw new RequiredFieldsEmpty("You need to fill in all required fields");
+            }
+
+            else
+            {
+                //Checks if the buyCost and sellPrice is in correct format
+                int dotCount = 0;
+                bool valH = true;
+                foreach (Char c in givenBuyCost)
+                {
+                    if (c == '.')
+                    {
+                        if (++dotCount > 1)
+                        {
+                            valH = false;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (c < '0' || c > '9')
+                        {
+                            valH = false;
+                            break;
+                        }
+                    }
+                }
+                if (!valH)
+                {
+                    throw new BuyCostIncorrectFormatException("The buy cost value's format is incorrect!");
+                }
+
+                //Checks if the sellPrice and sellPrice is in correct format
+                foreach (Char c in givenSellPrice)
+                {
+                    if (c == '.')
+                    {
+                        if (++dotCount > 1)
+                        {
+                            valH = false;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        if (c < '0' || c > '9')
+                        {
+                            valH = false;
+                            break;
+                        }
+                    }
+                }
+                if (!valH)
+                {
+                    throw new SellPriceIncorrectFormatException("The sell price value is not in a correct format!");
+                }
+
+                foreach (Char c in givenQuantity)
+                {
+                    if (c < '0' || c > '9')
+                    {
+                        throw new QuantityIncorrectFormatException("The quantity value is not in a correct format!");
+                    }
+                }
+
+                return new Product(givenName, int.Parse(givenQuantity), float.Parse(givenBuyCost), float.Parse(givenSellPrice), givenDepartmentId);
+            }
         }
     }
 }

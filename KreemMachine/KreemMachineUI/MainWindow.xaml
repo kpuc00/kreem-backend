@@ -191,7 +191,7 @@
             </TabItem>
 
             <!-- Products -->
-            <TabItem Header="Products" Selector.Selected="StocKTabItem_Selected" Grid.IsSharedSizeScope="True" 
+            <TabItem Header="Products" Selector.Selected="StocKTabItem_Selected" Selector.Unselected="StockTabItem_Unselected" Grid.IsSharedSizeScope="True" 
                      Visibility="{Binding ElementName=_this, Path=CanViewProductsTab, Converter={StaticResource BoolToVis}}" >
                 <Grid>
                     <Grid.RowDefinitions>
@@ -259,10 +259,10 @@
                                     <TextBlock Grid.Column="1"  Text="{Binding Quantity}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="2" Text="{Binding BuyCost}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="3" Text="{Binding Department.Name}" Margin="0 0 10 0" />
-                                <Button Grid.Column="5" Content=" Restock" Margin="0 0 10 0" Click="RequestRestockForProductButton_Clicked"
+                                <Button Grid.Column="5" Content="Restock" Padding="4 0 4 0" Margin="0 0 10 0" Click="RequestRestockForProductButton_Clicked"
                                              IsEnabled="{Binding ElementName=_this, Path=CanRequestProductRestock}"  />
-                                    <Button Grid.Column="6" Content=" Edit " Margin="0 0 10 0" Click="EditProductButton_Click" />
-                                    <Button Grid.Column="7" Content=" Delete " Click="DeleteProductButton_Click" />
+                                    <Button Grid.Column="6" Content="Edit" Padding="4 0 4 0" Margin="0 0 10 0" Click="EditProductButton_Click" />
+                                    <Button Grid.Column="7" Content="Delete" Padding="4 0 4 0" Click="DeleteProductButton_Click" />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

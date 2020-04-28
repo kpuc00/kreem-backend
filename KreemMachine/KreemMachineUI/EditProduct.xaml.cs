@@ -61,13 +61,39 @@ namespace KreemMachine
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            long departmentId = DepartmentComboBox.SelectedIndex + 1;
-            int i = productServices.UpdateProduct(product, ProductNameTextBox.Text, float.Parse(BuyCostTextBox.Text), float.Parse(SellPriceTextBox.Text), int.Parse(QuantityTextBox.Text), departmentId);
-            if (i==1)
+            try
             {
-                IsSaved = true;
+
+                string productName = ProductNameTextBox.Text;
+                string buyCost = BuyCostTextBox.Text;
+                string sellPrice = SellPriceTextBox.Text;
+                string quantity = QuantityTextBox.Text;
+                int departmentId = DepartmentComboBox.SelectedIndex + 1;
+
+                int i = productServices.UpdateProduct(product, productName, buyCost, sellPrice, quantity, departmentId);
+
+                if (i == 1)
+                {
+                    IsSaved = true;
+                }
+                this.Close();
             }
-            this.Close();
+            catch (BuyCostIncorrectFormatException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (SellPriceIncorrectFormatException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (QuantityIncorrectFormatException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (RequiredFieldsEmpty ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

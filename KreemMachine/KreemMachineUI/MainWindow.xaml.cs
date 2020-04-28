@@ -99,6 +99,7 @@ namespace KreemMachine
         User logedUSer;
 
         Timer RefreshUsersViewTimer = new Timer(5000);
+        Timer RefreshProductsTableTimer = new Timer(5000);
 
         public MainWindow(User user)
         {
@@ -107,6 +108,7 @@ namespace KreemMachine
             fromDatePicker.SelectedDate = DateTime.Today.AddDays(1 - DateTime.Today.Day);
             toDatePicker.SelectedDate = DateTime.Now.Date;
             RefreshUsersViewTimer.Elapsed += (sender, e) => Dispatcher.Invoke(() => RefreshUsersTableView());
+            RefreshProductsTableTimer.Elapsed += (sender, e) => Dispatcher.Invoke(() => RefreshProductsTable());
 
         }
 
@@ -430,7 +432,13 @@ namespace KreemMachine
 
         private void StocKTabItem_Selected(object sender, RoutedEventArgs e)
         {
-            AllProductsListBox.ItemsSource = productServices.GetViewableProducts();
+            RefreshProductsTable();
+            RefreshProductsTableTimer.Start();
+        }
+
+        private void StockTabItem_Unselected(object sender, RoutedEventArgs e)
+        {
+            RefreshProductsTableTimer.Stop();
         }
 
         private void AddNewProductButton_Click(object sender, RoutedEventArgs e)
@@ -455,6 +463,7 @@ namespace KreemMachine
 
         private void DeleteProductButton_Click(object sender, RoutedEventArgs e)
         {
+            RefreshProductsTableTimer.Stop();
             if (MessageBox.Show("You are about to remove this product. Continue?", "Delete product", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
                 var button = sender as Button;
@@ -465,7 +474,14 @@ namespace KreemMachine
                 {
                     StocKTabItem_Selected(sender, e);
                 }
+                RefreshProductsTableTimer.Start();
             }
+        }
+
+        private void RefreshProductsTable(object sender = null, EventArgs args = null)
+        {
+            Console.WriteLine("Refreshing products");
+            AllProductsListBox.ItemsSource = productServices.GetViewableProducts();
         }
 
         private void RequestRestockForProductButton_Clicked(object sender, RoutedEventArgs e)
@@ -482,6 +498,8 @@ namespace KreemMachine
                 stockService.CreateRequestFromOpenStage(request, quantity);
             }
         }
+
+
 
         #endregion
 
