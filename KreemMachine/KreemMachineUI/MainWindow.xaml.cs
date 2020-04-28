@@ -32,8 +32,6 @@ namespace KreemMachine
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        List<User> AllUsers;
-
         IEnumerable<Shift> AllShifts;
 
         public bool CanViewUsersTab => SecurityContext.HasPermissions(Permission.ViewUsers);
@@ -43,7 +41,12 @@ namespace KreemMachine
         public bool CanEditUser => SecurityContext.HasPermissions(Permission.EditUsers);
         public bool CanDeleteUser => SecurityContext.HasPermissions(Permission.DeleteUsers);
         public bool CanEditSchedule => SecurityContext.HasPermissions(Permission.EditSchedule);
-
+        public bool CanViewProductsTab => SecurityContext.HasPermissions(Permission.ViewAllProducts)
+                                          || SecurityContext.HasPermissions(Permission.ViewOwnProducts);
+        public bool CanViewRestockRequestsTab => SecurityContext.HasPermissions(Permission.ViewRestockRequests);
+        public bool CanRequestProductRestock => SecurityContext.HasPermissions(Permission.RequestRestockForAnyProduct)
+                                          || SecurityContext.HasPermissions(Permission.RequestRestockForOwnProduct);
+        public bool CanChangeRestockRequests => SecurityContext.HasPermissions(Permission.ChangeRestockRequests);
 
         ScheduledShift manuallyScheduledShift;
 
@@ -89,6 +92,7 @@ namespace KreemMachine
         ScheduleService scheduleService = new ScheduleService();
         StatisticsService statisticsService = new StatisticsService();
         ProductServices productServices = new ProductServices();
+        StockService stockService = new StockService();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -292,7 +296,7 @@ namespace KreemMachine
 
             ManualScheduleShiftPicker.SelectedDay = selected.Day;
             ScheduleManuallyButton_Click(null, null);
-            // ManualScheduleShiftPicker_SelectedShiftChanged(this, selected.Day, ManualScheduleShiftPicker.SelectedShift);
+           // ManualScheduleShiftPicker_SelectedShiftChanged(this, selected.Day, ManualScheduleShiftPicker.SelectedShift);
 
         }
 
@@ -422,37 +426,120 @@ namespace KreemMachine
 
         #endregion
 
-        #region Stock
+        #region Products
 
         private void StocKTabItem_Selected(object sender, RoutedEventArgs e)
         {
-            AllProductsListBox.ItemsSource = productServices.DisplayAllProducts();
-        }
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var window = new CreateProduct();
-            window.Show();
+            AllProductsListBox.ItemsSource = productServices.GetViewableProducts();
         }
 
-        private void EditProductButton_Click(object sender, RoutedEventArgs e)
+        private void RequestRestockForProductButton_Clicked(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            var product = button.DataContext as Product;
+            var product = ((Button)sender).DataContext as Product;
+            var form = new RequestInfoGetterWindow(
+                title: "Create stock request",
+                message: "Please specify how many items you want to request",
+                buttonText: "Open request");
 
-            var window = new EditProduct(product, productServices);
-            window.Show();
-        }
-
-        private void DeleteProductButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (MessageBox.Show("Are you sure you want to delete this product?", "Delete product", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (form.ShowDialog(out int quantity) == true)
             {
-                var button = sender as Button;
-                var product = button.DataContext as Product;
-
-                productServices.RemoveProduct(product);
+                RestockRequest request = new RestockRequest(product);
+                stockService.CreateRequestFromOpenStage(request, quantity);
             }
         }
+
+        #endregion
+
+        #region Restock
+
+        private async void RestockRequestsTab_Selected(object sender, RoutedEventArgs e)
+        {
+            await UpdateRestockRequestsTab();
+        }
+
+        private async Task UpdateRestockRequestsTab()
+        {
+            List<RestockRequest> requests = await stockService.GetActiveRequestsAsync();
+            List<RestockRequestViewModel> viewModels = requests.Select(r => new RestockRequestViewModel(r)).ToList();
+            viewModels.ForEach(SetUpEventsForRestockRequestViewModel);
+
+            RestockRequestsItemsComponent.ItemsSource = viewModels;
+            ICollectionView view = CollectionViewSource.GetDefaultView(viewModels);
+            view.Filter = FilterRestockRequestByTextBoxInput;
+
+        }
+
+      
+
+        private void SetUpEventsForRestockRequestViewModel(RestockRequestViewModel viewModel)
+        {
+            viewModel.RequestApproved += RestockRequestApproved;
+            viewModel.RequestDenied += RestockRequestDenied;
+            viewModel.RequestRestocked += RestocRequestRestocked;
+            viewModel.RequestHidden += RestockRequestHidden;
+        }
+
+        private async void RestockRequestApproved(object sender, RestockRequest request)
+        {
+            var form = new RequestInfoGetterWindow(
+                title: "Approve stock request",
+                message: "Please specify how many items you want to approve",
+                buttonText: "Approve request");
+
+            if (form.ShowDialog(out int quantity) == true)
+            {
+                stockService.ApproveRequest(request, quantity);
+                await UpdateRestockRequestsTab();
+            }
+            
+        }
+
+        private async void RestockRequestDenied(object sender, RestockRequest request)
+        {
+            stockService.DenyRequest(request);
+            await UpdateRestockRequestsTab();
+        }
+
+        private async void RestocRequestRestocked(object sender, RestockRequest request)
+        {
+            stockService.RestockRequest(request, request.LatestStage.Quantity ?? 0);
+            await UpdateRestockRequestsTab();
+        }
+
+        private async void RestockRequestHidden(object sender, RestockRequest request)
+        {
+            stockService.HideRequest(request);
+            await UpdateRestockRequestsTab();
+        }
+
+        private bool FilterRestockRequestByTextBoxInput(object product)
+        {
+            return string.IsNullOrEmpty(SearchRestockRequestTextBox.Text) || requestContainsSearchwords();
+
+            bool requestContainsSearchwords()
+            {
+                RestockRequest request = ((RestockRequestViewModel)product).Request;
+                string productName = request.Product.Name;
+                string productDepartment = request.Product.Department.Name;
+                string membersName = request.Stages
+                    .Select(s => s.TypeStr + s.Date.ToString("yyyy-mm-dd") + s.User.FullName)
+                    .Aggregate(string.Concat);
+                string searchSource = (productName + productDepartment + membersName).ToLower();
+
+                string[] searchSequence = SearchRestockRequestTextBox.Text.ToLower().Split(' ');
+
+                return searchSequence.Any(search => searchSource.Contains(search));
+            }
+        }
+
+        private void SearchRestockRequestTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ICollectionView view = CollectionViewSource.GetDefaultView(RestockRequestsItemsComponent.ItemsSource);
+            view.Refresh();
+        }
+
+
+
 
         #endregion
 

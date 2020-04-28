@@ -113,9 +113,10 @@
     <Compile Include="CreateProduct.xaml.cs">
       <DependentUpon>CreateProduct.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EditProduct.xaml.cs">
-      <DependentUpon>EditProduct.xaml</DependentUpon>
+    <Compile Include="RequestInfoGetterWindow.xaml.cs">
+      <DependentUpon>RequestInfoGetterWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\RestockRequestViewModel.cs" />
     <Compile Include="YearPicker.xaml.cs">
       <DependentUpon>YearPicker.xaml</DependentUpon>
     </Compile>
@@ -128,11 +129,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CreateUserWindow.xaml">
+    <Page Include="RequestInfoGetterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EditProduct.xaml">
+    <Page Include="CreateUserWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -232,6 +233,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\depot.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

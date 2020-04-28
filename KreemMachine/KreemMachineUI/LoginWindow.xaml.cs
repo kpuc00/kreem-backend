@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KreemMachineLibrary;
 using KreemMachineLibrary.Models;
+using KreemMachineLibrary.Models.Statics;
 using KreemMachineLibrary.Services;
 
 namespace KreemMachine
@@ -39,6 +40,9 @@ namespace KreemMachine
                 var shift = new ShiftService().GetAllShifts()[0];
                 var scheduled = await new ScheduleService().GetScheduledShiftOrCreateNewAsync(DateTime.Now.Date, shift);
                 new ScheduleService().GetSuggestedEmployees(scheduled);
+                new ProductServices().LoadProducts();
+                _ = new StockService().GetActiveRequestsAsync();
+
             }).Start();
         }
 

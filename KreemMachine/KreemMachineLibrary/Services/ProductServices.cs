@@ -1,11 +1,9 @@
-﻿using KreemMachineLibrary.Models;
-using KreemMachineLibrary.Exceptions;
+﻿using KreemMachineLibrary.Exceptions;
+using KreemMachineLibrary.Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Data.Entity;
-
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,47 +11,32 @@ namespace KreemMachineLibrary.Services
 {
     public class ProductServices
     {
-        DataBaseContext db = Globals.db;
-
-        public Product CreateProduct(string givenName, float givenBuyCost, float givenSellPrice, int givenQuantity, long givenDepartmentId)
+        public List<Product> GetViewableProducts()
         {
-            Product product = new Product(givenName, givenQuantity, givenBuyCost, givenSellPrice, givenDepartmentId);
-            product = db.Products.Add(product);
-            return product;
-        }
-
-        public void RemoveProduct(Product product)
-        {
-            if (db.Products.Local.Contains(product))
+            using (var db = new DataBaseContext())
             {
-                db.Products.Attach(product);
-                db.Products.Remove(product);
-                db.SaveChanges();
+                var products = db.Products.Include(p => p.Department);
+
+                if (SecurityContext.HasPermissions(Permission.ViewAllProducts))
+                    return products.ToList();
+
+                if (SecurityContext.HasPermissions(Permission.ViewOwnProducts))
+                {
+                    long? usersDepartment = SecurityContext.CurrentUser.DepartmentId;
+                    return products
+                       .Where(p => p.DepartmentId == usersDepartment)
+                       .ToList();
+                }
+                   
+
+                throw new MissingPermissionEexception(Permission.ViewAllProducts, Permission.ViewOwnProducts);
             }
         }
 
-        public void UpdateProduct(Product product, string productName, float buyCost, float sellPrice, int quantity, long departmentId)
+        public void LoadProducts()
         {
-            product.Name = productName;
-            product.BuyCost = buyCost;
-            product.SellPrice = sellPrice;
-            product.Quantity = quantity;
-            product.DepartmentId = departmentId;
-
-            db.Entry(product).State = EntityState.Modified;
-            db.SaveChanges();
-
+            using (var db = new DataBaseContext())
+                db.Products.Load();
         }
-
-        public List<Product> DisplayAllProducts()
-        {
-            return db.Products.ToList();
-        }
-
-        public List<Department> GetAllDepartments()
-        {
-            return db.Departments.ToList();
-        }
-
     }
 }

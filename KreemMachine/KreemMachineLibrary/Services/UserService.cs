@@ -11,6 +11,7 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using System.Windows;
 using BCrypt.Net;
+using KreemMachineLibrary.Models.Statics;
 
 namespace KreemMachineLibrary.Services
 {
@@ -152,7 +153,9 @@ namespace KreemMachineLibrary.Services
         public List<User> GetAll()
         {
             using (var db = new DataBaseContext())
-                return db.Users.ToList();
+                return db.Users
+                    .Include(u => u.Department)
+                    .ToList();
         }
 
         public void UpdateEmployee(User user, string firstName, string lastName, string email, Role role, string hourlyWage, DateTime birthDate, string address, string phoneNumber) {

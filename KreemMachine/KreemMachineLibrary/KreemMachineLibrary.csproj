@@ -104,6 +104,7 @@
     <Compile Include="DTO\ResourcesPerEmployeeDTO.cs" />
     <Compile Include="DTO\ResourcesPerMonthDTO.cs" />
     <Compile Include="DTO\ResourcesPerShiftDTO.cs" />
+    <Compile Include="Exceptions\MissingPermissionEexception.cs" />
     <Compile Include="Exceptions\PhoneNumberException.cs" />
     <Compile Include="Extensions\DateTimeExtension.cs" />
     <Compile Include="Exceptions\DeletAdminAccountException.cs" />
@@ -111,9 +112,12 @@
     <Compile Include="Exceptions\RequiredFieldsEmpty.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Models\Department.cs" />
-    <Compile Include="Models\Roles.cs" />
+    <Compile Include="Models\RestockRequest.cs" />
+    <Compile Include="Models\RestockStage.cs" />
     <Compile Include="Models\ScheduledShift.cs" />
     <Compile Include="Models\Shift.cs" />
+    <Compile Include="Models\Statics\RestockStepType.cs" />
+    <Compile Include="Models\Statics\Roles.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserScheduledShift.cs" />
     <Compile Include="Permission.cs" />
@@ -125,6 +129,7 @@
     <Compile Include="Services\ShiftService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
     <Compile Include="Services\StatisticsService.cs" />
+    <Compile Include="Services\StockService.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>

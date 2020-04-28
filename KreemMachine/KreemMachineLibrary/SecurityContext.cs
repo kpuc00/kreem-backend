@@ -1,10 +1,11 @@
 ﻿using KreemMachineLibrary.Models;
+using KreemMachineLibrary.Models.Statics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static KreemMachineLibrary.Models.Role;
+using static KreemMachineLibrary.Models.Statics.Role;
 using static KreemMachineLibrary.Permission;
 
 namespace KreemMachineLibrary
@@ -14,9 +15,41 @@ namespace KreemMachineLibrary
         public static User CurrentUser { get; private set; }
 
         static readonly Dictionary<Role, Permission[]> PermissionTable = new Dictionary<Role, Permission[]> {
-            { Administrator, new[] { ViewUsers, CreateUsers, EditUsers, DeleteUsers, ViewSchedule, EditSchedule, AutogenerateSchedule, ViewStatistics, EditShifts,  } },
-            { Manager, new[] { ViewUsers, ViewSchedule, EditSchedule, AutogenerateSchedule, ViewStatistics, EditShifts,  } },
-            { Depot, new[] {ViewSchedule} },
+            { Administrator, new[] { 
+                ViewUsers, 
+                CreateUsers, 
+                EditUsers, 
+                DeleteUsers, 
+                ViewSchedule, 
+                EditSchedule, 
+                AutogenerateSchedule, 
+                ViewStatistics, 
+                EditShifts,
+                ViewAllProducts,
+                ViewOwnProducts,
+                RequestRestockForAnyProduct,
+                RequestRestockForOwnProduct,
+                ViewRestockRequests,
+                ChangeRestockRequests,
+                } 
+            },
+            { Manager, new[] { 
+                ViewUsers, 
+                ViewSchedule, 
+                EditSchedule, 
+                AutogenerateSchedule, 
+                ViewStatistics, 
+                EditShifts,
+                ViewOwnProducts,
+                RequestRestockForOwnProduct,
+                } 
+            },
+            { Depot, new[] {
+                ViewAllProducts,
+                ViewRestockRequests,
+                ChangeRestockRequests,
+                } 
+            },
             { Employee, new Permission[]{} },
         };
 

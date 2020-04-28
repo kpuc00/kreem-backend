@@ -8,12 +8,7 @@
         x:Name="_this"
         Title="Kreem Machine" Height="500" Width="1200"
         WindowStartupLocation="CenterScreen" Icon="kreem_icon.png">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0*"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <TabControl x:Name="MainContent" TabStripPlacement="Left" Margin="10,10,-0.4,0.4" Grid.ColumnSpan="2" >
+        <TabControl x:Name="MainContent" TabStripPlacement="Left"  BorderThickness="3 0 0 0" Padding="7">
             <!--Style to make the TabHeaders go to left and look somewhat nice-->
             <TabControl.Resources >
                 <Style TargetType="{x:Type TabItem}">
@@ -195,7 +190,9 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Stock" Selector.Selected="StocKTabItem_Selected" Grid.IsSharedSizeScope="True">
+            <!-- Products -->
+            <TabItem Header="Products" Selector.Selected="StocKTabItem_Selected" Grid.IsSharedSizeScope="True" 
+                     Visibility="{Binding ElementName=_this, Path=CanViewProductsTab, Converter={StaticResource BoolToVis}}" >
                 <Grid>
                     <Grid.RowDefinitions>
                         <!-- Buttons and search -->
@@ -220,8 +217,8 @@
 
                     </Grid.ColumnDefinitions>
 
-                    <Button Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0" Click="Button_Click"/>
-                    <Button Content="Restock requests" Visibility="Hidden" Grid.Column="1"/>
+                    <Button Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0"/>
+                    
                     <TextBox Grid.Column="2"  />
 
                     <Grid Grid.Row="1" TextBlock.FontSize="18" Grid.ColumnSpan="3" >
@@ -251,6 +248,8 @@
                                         <ColumnDefinition SharedSizeGroup="DepartmentColumn" Width="Auto"/>
                                         <!--Empty column for ui purpose-->
                                         <ColumnDefinition Width="*"/>
+                                        <!-- Request restock -->
+                                        <ColumnDefinition Width="auto"/>
                                         <!-- Edit -->
                                         <ColumnDefinition Width="auto"/>
                                         <!-- Delete -->
@@ -260,15 +259,94 @@
                                     <TextBlock Grid.Column="1"  Text="{Binding Quantity}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="2" Text="{Binding BuyCost}" Margin="0 0 10 0" />
                                     <TextBlock Grid.Column="3" Text="{Binding Department.Name}" Margin="0 0 10 0" />
-                                    <Button Grid.Column="5" Content=" Edit " Margin="0 0 10 0" Click="EditProductButton_Click" />
-                                    <Button Grid.Column="6" Content=" Delete " Click="DeleteProductButton_Click" />
+                                <Button Grid.Column="5" Content=" Restock" Margin="0 0 10 0" Click="RequestRestockForProductButton_Clicked"
+                                             IsEnabled="{Binding ElementName=_this, Path=CanRequestProductRestock}"  />
+                                    <Button Grid.Column="6" Content=" Edit " Margin="0 0 10 0" />
+                                    <Button Grid.Column="7" Content=" Delete " />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
             </TabItem>
+            
+            <!--Restock Requests -->
+        <TabItem x:Name="RestockRequestsTab" Selector.Selected="RestockRequestsTab_Selected" Header="Requests"
+                 Visibility="{Binding ElementName=_this, Path=CanViewRestockRequestsTab, Converter={StaticResource BoolToVis}}" >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <!-- Top row -->
+                    <TextBlock Grid.Row="0" Text="Retock requests:" FontSize="24" />
+                    <TextBox x:Name="SearchRestockRequestTextBox" Grid.Row="0" Grid.Column="1" Margin="7 3" 
+                             TextChanged="SearchRestockRequestTextBox_TextChanged" VerticalContentAlignment="Center" />
+                    
+                    <!-- Main content -->
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.ColumnSpan="2">
+                        <ItemsControl  x:Name="RestockRequestsItemsComponent" HorizontalContentAlignment="Stretch">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="10" BorderThickness="1" BorderBrush="Black"  >
+                                        <StackPanel TextBlock.FontSize="16">
+                                            <StackPanel Orientation="Horizontal" >
+                                                <TextBlock Margin="0 0 10 0" Text="{Binding Request.Product.Name}" TextDecorations="Underline"/>
 
+                                                <TextBlock Text="{Binding Request.Product.BuyCost, StringFormat=C,ConverterCulture=NL-nl}" />
+
+                                                <TextBlock Margin="5 0" Text="{Binding Request.Product.Department.Name}" />
+
+                                                <TextBlock Text="{Binding Request.Product.Quantity}" />
+                                                <Image Source="/Icons/depot.png" Height="24"/>
+                                            </StackPanel>
+
+                                            <ItemsControl ItemsSource="{Binding Request.Stages}" Margin="0 5" >
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Date, StringFormat=yyyy-mm-dd HH:MM}" Margin="0 0 10 0" />
+                                                            <TextBlock Text="{Binding User.FullName}" FontWeight="Bold" Margin="5 0" />
+                                                            <TextBlock Text="{Binding User.RoleStr, StringFormat={} ({0}) }" />
+
+                                                            <TextBlock Text="{Binding TypeStr}" Margin="5 0 0 0" />
+                                                            <TextBlock Text=" request for " />
+                                                            <TextBlock Text="{Binding Quantity}" FontWeight="Bold" />
+                                                            <TextBlock Text=" Items. " />
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+
+                                            <ItemsControl ItemsSource="{Binding Buttons}"  HorizontalAlignment="Left" 
+                                                          Visibility="{Binding ElementName=_this, Path=CanChangeRestockRequests, Converter={StaticResource BoolToVis}}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <StackPanel.Resources>
+                                                                <Style TargetType="Button">
+                                                                    <Setter Property="Margin" Value="5 0" />
+                                                                    <Setter Property="Padding" Value="5 0" />
+                                                                </Style>
+                                                            </StackPanel.Resources>
+                                                        </StackPanel>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+            
             <!--Statistics-->
             <TabItem Header="Statistics" Visibility="{Binding ElementName=_this, Path=CanViewStatisticsTab, Converter={StaticResource BoolToVis}}" >
                 <Grid>
@@ -377,6 +455,8 @@
                     </ListBox>
                 </Grid>
             </TabItem>
+            
+            <!-- Settings -->
             <TabItem Header="Settings" Selector.Selected="Settings_Tab_Selected">
                 <TabControl x:Name="InnerSettingsTab"
                             TabStripPlacement="Left">
@@ -555,6 +635,4 @@
                 </TabControl>
             </TabItem>
         </TabControl>
-    </Grid>
-
 </Window>
