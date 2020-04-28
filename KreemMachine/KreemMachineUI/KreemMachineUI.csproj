@@ -113,6 +113,9 @@
     <Compile Include="CreateProduct.xaml.cs">
       <DependentUpon>CreateProduct.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EditProduct.xaml.cs">
+      <DependentUpon>EditProduct.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RequestInfoGetterWindow.xaml.cs">
       <DependentUpon>RequestInfoGetterWindow.xaml</DependentUpon>
     </Compile>
@@ -126,6 +129,10 @@
     <Compile Include="ViewModels\UserSchedulerViewModel.cs" />
     <Compile Include="ViewModels\ScheduleDayViewModel.cs" />
     <Page Include="CreateProduct.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EditProduct.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

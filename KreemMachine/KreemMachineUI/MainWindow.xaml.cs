@@ -296,7 +296,7 @@ namespace KreemMachine
 
             ManualScheduleShiftPicker.SelectedDay = selected.Day;
             ScheduleManuallyButton_Click(null, null);
-           // ManualScheduleShiftPicker_SelectedShiftChanged(this, selected.Day, ManualScheduleShiftPicker.SelectedShift);
+            // ManualScheduleShiftPicker_SelectedShiftChanged(this, selected.Day, ManualScheduleShiftPicker.SelectedShift);
 
         }
 
@@ -433,6 +433,41 @@ namespace KreemMachine
             AllProductsListBox.ItemsSource = productServices.GetViewableProducts();
         }
 
+        private void AddNewProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new CreateProduct();
+            window.Show();
+        }
+
+        private void EditProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var product = button.DataContext as Product;
+
+            var window = new EditProduct(product, productServices);
+            window.Show();
+
+            if (window.IsSaved == true)
+            {
+                StocKTabItem_Selected(sender, e);
+            }
+        }
+
+        private void DeleteProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("You are about to remove this product. Continue?", "Delete product", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                var button = sender as Button;
+                var product = button.DataContext as Product;
+
+                int i = productServices.RemoveProduct(product);
+                if (i == 1)
+                {
+                    StocKTabItem_Selected(sender, e);
+                }
+            }
+        }
+
         private void RequestRestockForProductButton_Clicked(object sender, RoutedEventArgs e)
         {
             var product = ((Button)sender).DataContext as Product;
@@ -469,7 +504,7 @@ namespace KreemMachine
 
         }
 
-      
+
 
         private void SetUpEventsForRestockRequestViewModel(RestockRequestViewModel viewModel)
         {
@@ -491,7 +526,7 @@ namespace KreemMachine
                 stockService.ApproveRequest(request, quantity);
                 await UpdateRestockRequestsTab();
             }
-            
+
         }
 
         private async void RestockRequestDenied(object sender, RestockRequest request)

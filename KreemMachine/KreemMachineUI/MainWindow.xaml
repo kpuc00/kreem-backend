@@ -217,7 +217,7 @@
 
                     </Grid.ColumnDefinitions>
 
-                    <Button Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0"/>
+                    <Button Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0" Click="AddNewProductButton_Click"/>
                     
                     <TextBox Grid.Column="2"  />
 
@@ -261,8 +261,8 @@
                                     <TextBlock Grid.Column="3" Text="{Binding Department.Name}" Margin="0 0 10 0" />
                                 <Button Grid.Column="5" Content=" Restock" Margin="0 0 10 0" Click="RequestRestockForProductButton_Clicked"
                                              IsEnabled="{Binding ElementName=_this, Path=CanRequestProductRestock}"  />
-                                    <Button Grid.Column="6" Content=" Edit " Margin="0 0 10 0" />
-                                    <Button Grid.Column="7" Content=" Delete " />
+                                    <Button Grid.Column="6" Content=" Edit " Margin="0 0 10 0" Click="EditProductButton_Click" />
+                                    <Button Grid.Column="7" Content=" Delete " Click="DeleteProductButton_Click" />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

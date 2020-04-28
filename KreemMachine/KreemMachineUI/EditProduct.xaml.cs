@@ -25,7 +25,19 @@ namespace KreemMachine
 
         Product product;
         ProductServices productServices;
-        Department department;
+
+        private bool isSaved = false;
+        public bool IsSaved
+        {
+            get
+            {
+                return isSaved;
+            }
+            private set
+            {
+                isSaved = value;
+            }
+        }
 
         public EditProduct(Product givenProduct, ProductServices givenProductServices)
         {
@@ -43,12 +55,18 @@ namespace KreemMachine
             SellPriceTextBox.Text = product.SellPrice.ToString();
             QuantityTextBox.Text = product.Quantity.ToString();
             DepartmentComboBox.Text = product.Department.Name;
+
+            IsSaved = false;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             long departmentId = DepartmentComboBox.SelectedIndex + 1;
-            productServices.UpdateProduct(product, ProductNameTextBox.Text, float.Parse(BuyCostTextBox.Text), float.Parse(SellPriceTextBox.Text), int.Parse(QuantityTextBox.Text), departmentId);
+            int i = productServices.UpdateProduct(product, ProductNameTextBox.Text, float.Parse(BuyCostTextBox.Text), float.Parse(SellPriceTextBox.Text), int.Parse(QuantityTextBox.Text), departmentId);
+            if (i==1)
+            {
+                IsSaved = true;
+            }
             this.Close();
         }
     }

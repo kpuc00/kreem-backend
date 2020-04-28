@@ -22,7 +22,7 @@ namespace KreemMachine
     /// </summary>
     public partial class CreateProduct : Window
     {
-        Product product;
+
         ProductServices productServices = new ProductServices();
         Department department = new Department();
 

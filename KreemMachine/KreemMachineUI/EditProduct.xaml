@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:KreemMachine"
         mc:Ignorable="d"
         Title="Edit product" WindowStartupLocation="CenterScreen" Icon="kreem_icon.png" Height="350" Width="500">
-
     <Grid Margin="20" TextElement.FontSize="18">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -37,5 +36,4 @@
                 HorizontalAlignment="Center" Name="SaveButton" Click="SaveButton_Click"/>
 
     </Grid>
-
 </Window>
