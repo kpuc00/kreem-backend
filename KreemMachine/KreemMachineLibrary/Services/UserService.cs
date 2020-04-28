@@ -64,7 +64,7 @@ namespace KreemMachineLibrary.Services
             int dotCount = 0;
             bool valH = true;
             foreach (Char c in hourlyWage) {
-                if (c == '.') {
+                if (c == ',') {
                     if (++dotCount > 1) {
                         valH = false;
                         break;
