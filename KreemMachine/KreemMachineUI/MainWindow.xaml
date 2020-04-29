@@ -310,7 +310,7 @@
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="{Binding Date, StringFormat=yyyy-mm-dd HH:MM}" Margin="0 0 10 0" />
+                                                        <TextBlock Text="{Binding Date, StringFormat=yyyy-MM-dd HH:mm}" Margin="0 0 10 0" />
                                                             <TextBlock Text="{Binding User.FullName}" FontWeight="Bold" Margin="5 0" />
                                                             <TextBlock Text="{Binding User.RoleStr, StringFormat={} ({0}) }" />
 
