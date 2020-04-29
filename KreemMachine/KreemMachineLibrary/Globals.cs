@@ -9,14 +9,7 @@ namespace KreemMachineLibrary
 {
     static class Globals
     {
-        internal static DataBaseContext db = new DataBaseContext();
-
-        
-        static Globals()
-        {
-            // Force creating 'the model' so the app doesn't lag on first querry
-            _ = db.Users.FirstOrDefault(); 
-        }
+        internal static DataBaseContext db { get; set; } = new DataBaseContext();
 
     }
 }

@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using KreemMachineLibrary.Exceptions;
+using KreemMachineLibrary.Models.Statics;
 
 namespace KreemMachine
 {
@@ -50,19 +51,7 @@ namespace KreemMachine
         {
             try
             {
-                User user = new User(
-                    FirstNameTextBox.Text,
-                    LastNameTextBox.Text,
-                    EmailTextBox.Text,
-                    (Role)RoleComboBox.SelectedItem,
-                    float.Parse(HourlyWageTextBox.Text),
-                    BirthDatePicker.SelectedDate,
-                    AddressTextBox.Text,
-                    PhoneNumberTextBox.Text);
-
-                users.Save(user);
-
-                MessageBox.Show($"Your password is {user.Password}");
+                users.Save(FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, (Role)RoleComboBox.SelectedItem, HourlyWageTextBox.Text, BirthDatePicker.DisplayDate, AddressTextBox.Text, PhoneNumberTextBox.Text);
 
                 this.Close();
             }
@@ -70,13 +59,15 @@ namespace KreemMachine
             {
                 MessageBox.Show(ex.Message);
             }
+            catch (PhoneNumberException ex) {
+                MessageBox.Show(ex.Message);
+            }
             catch (RequiredFieldsEmpty ex)
             {
                 MessageBox.Show(ex.Message);
             }
-            catch (Exception ex) {
-                MessageBox.Show(ex.Message);
-            }
+            
+
         }
 
         private void FirstNameTextBox_KeyUp(object sender, KeyEventArgs e)

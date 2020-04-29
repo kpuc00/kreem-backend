@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KreemMachineLibrary;
 using KreemMachineLibrary.Models;
+using KreemMachineLibrary.Models.Statics;
 using KreemMachineLibrary.Services;
 
 namespace KreemMachine
@@ -26,14 +27,23 @@ namespace KreemMachine
     public partial class LoginWindow : Window
     {
 
-        UserService users;
+        UserService users = new UserService();
 
         public LoginWindow()
         {
             InitializeComponent();
 
-            // Run initialization on separate thread so that the UI doesn't hang 
-            new Thread( () => users = new UserService() ).Start();
+            // Initialize the db on a separate thread so that it is ready when we actually need it
+            new Thread(async () =>
+            {
+                new UserService().AuthenticateByCredentials("", "");
+                var shift = new ShiftService().GetAllShifts()[0];
+                var scheduled = await new ScheduleService().GetScheduledShiftOrCreateNewAsync(DateTime.Now.Date, shift);
+                new ScheduleService().GetSuggestedEmployees(scheduled);
+                new ProductServices().LoadProducts();
+                _ = new StockService().GetActiveRequestsAsync();
+
+            }).Start();
         }
 
 
@@ -45,10 +55,7 @@ namespace KreemMachine
         private void LogInButton_Click(object sender, RoutedEventArgs e)
         {
 
-
-            //If the thread initializing users hasn't yet finished
-            //users might still be null, hence safe navigation operator ?.
-            var user = users?.AuthenticateByCredentials(Email, Password);
+            var user = users.AuthenticateByCredentials(Email, Password);
 
             if (UserLogInIsValid(user))
                 DislayMainWindow(user);
@@ -69,6 +76,22 @@ namespace KreemMachine
 
             // after 'MainWindow' is closed, also close This Window
             window.Closed += (Sender, E) => this.Close();
+        }
+
+        private void EmailTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                LogInButton_Click(this, new RoutedEventArgs());
+            }
+        }
+
+        private void SecretPasswordBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                LogInButton_Click(this, new RoutedEventArgs());
+            }
         }
     }
 }

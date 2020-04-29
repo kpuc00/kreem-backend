@@ -30,7 +30,11 @@ namespace KreemMachine
         public IList<Shift> AvailableShifts
         {
             get => availableShifts;
-            set => ShiftsComboBox.ItemsSource = availableShifts = value;
+            set
+            {
+                ShiftsComboBox.SelectedItem = value[0];
+                ShiftsComboBox.ItemsSource = availableShifts = value;
+            }
         }
 
         /// <summary>

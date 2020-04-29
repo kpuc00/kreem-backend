@@ -17,5 +17,11 @@ namespace KreemMachineLibrary
         AutogenerateSchedule,
         ViewStatistics,
         EditShifts,
+        ViewAllProducts,
+        ViewOwnProducts,
+        RequestRestockForAnyProduct,
+        RequestRestockForOwnProduct,
+        ViewRestockRequests,
+        ChangeRestockRequests,
     }
 }

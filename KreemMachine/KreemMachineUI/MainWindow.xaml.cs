@@ -23,6 +23,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Threading;
 using KreemMachineLibrary.DTO;
+using System.Timers;
 
 namespace KreemMachine
 {
@@ -31,8 +32,6 @@ namespace KreemMachine
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        ObservableCollection<User> AllUsers;
-
         IEnumerable<Shift> AllShifts;
 
         public bool CanViewUsersTab => SecurityContext.HasPermissions(Permission.ViewUsers);
@@ -42,14 +41,18 @@ namespace KreemMachine
         public bool CanEditUser => SecurityContext.HasPermissions(Permission.EditUsers);
         public bool CanDeleteUser => SecurityContext.HasPermissions(Permission.DeleteUsers);
         public bool CanEditSchedule => SecurityContext.HasPermissions(Permission.EditSchedule);
+        public bool CanViewProductsTab => SecurityContext.HasPermissions(Permission.ViewAllProducts)
+                                          || SecurityContext.HasPermissions(Permission.ViewOwnProducts);
+        public bool CanViewRestockRequestsTab => SecurityContext.HasPermissions(Permission.ViewRestockRequests);
+        public bool CanRequestProductRestock => SecurityContext.HasPermissions(Permission.RequestRestockForAnyProduct)
+                                          || SecurityContext.HasPermissions(Permission.RequestRestockForOwnProduct);
+        public bool CanChangeRestockRequests => SecurityContext.HasPermissions(Permission.ChangeRestockRequests);
+
         public string ServerField => HostTextBox.Text;
         public string UsernameField => ConnectionUsernameTextBox.Text;
         public string PasswordField => ConnectionPasswordPasswordBox.Password;
         public string DatabaseNameField => ConnectionDatabaseNameTextBox.Text;
-
-
-
-
+        
         ScheduledShift manuallyScheduledShift;
 
         public ScheduledShift ManuallyScheduledShift
@@ -93,23 +96,25 @@ namespace KreemMachine
         ConnectionSettingsService connectionService = new ConnectionSettingsService();
         ScheduleService scheduleService = new ScheduleService();
         StatisticsService statisticsService = new StatisticsService();
+        ProductServices productServices = new ProductServices();
+        StockService stockService = new StockService();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         User logedUSer;
+
+        Timer RefreshUsersViewTimer = new Timer(5000);
+        Timer RefreshProductsTableTimer = new Timer(5000);
+
         public MainWindow(User user)
         {
             InitializeComponent();
             logedUSer = user;
             fromDatePicker.SelectedDate = DateTime.Today.AddDays(1 - DateTime.Today.Day);
             toDatePicker.SelectedDate = DateTime.Now.Date;
-        }
+            RefreshUsersViewTimer.Elapsed += (sender, e) => Dispatcher.Invoke(() => RefreshUsersTableView());
+            RefreshProductsTableTimer.Elapsed += (sender, e) => Dispatcher.Invoke(() => RefreshProductsTable());
 
-        private void TabItem_Loaded(object sender, RoutedEventArgs e)
-        {
-            AllUsersListBox.ItemsSource = null;
-            AllUsers = userService.GetAll();
-            AllUsersListBox.ItemsSource = AllUsers;
         }
 
         private void SearchTextBox_KeyUp(object sender, KeyEventArgs e)
@@ -125,11 +130,11 @@ namespace KreemMachine
 
         private void ButtonSaveScheduleSetting_Click(object sender, RoutedEventArgs e)
         {
-            shiftService.SaveChanges();
-
+            var shift = ShiftNameComboBox.SelectedItem as Shift;
+            shiftService.Save(shift);
         }
 
-        private void Settings_Tab_Loaded(object sender, RoutedEventArgs e)
+        private void Settings_Tab_Selected(object sender, RoutedEventArgs e)
         {
             AllShifts = shiftService.GetAllShifts();
 
@@ -202,21 +207,37 @@ namespace KreemMachine
 
         private void UsersTabItem_Selected(object sender, RoutedEventArgs e)
         {
+            RefreshUsersTableView();
+            RefreshUsersViewTimer.Start();
+        }
+
+        private void UsersTabItem_Unselected(object sender, RoutedEventArgs e)
+        {
+            RefreshUsersViewTimer.Stop();
+        }
+
+        private void RefreshUsersTableView(object sender = null, EventArgs args = null)
+        {
+            Console.WriteLine("Refreshing users");
             AllUsersListBox.ItemsSource = null;
-            AllUsersListBox.ItemsSource = AllUsers;
+            AllUsersListBox.ItemsSource = userService.GetAll();
         }
 
 
         #region Schedule
 
-        private void ScheduleMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
+        private async void ScheduleMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
         {
+            await UpdateCalendarView(displayMonth);
+        }
 
+        private async Task UpdateCalendarView(DateTime displayMonth)
+        {
             var calendarDays = new List<ScheduleDayViewModel>();
 
             addNullPaddingToCallendarDays();
             addMonthDaysToCallendarDays();
-            matchScheduledShiftsToCallendarDays();
+            await matchScheduledShiftsToCallendarDays();
 
             ScheduleListBox.ItemsSource = calendarDays;
 
@@ -240,13 +261,17 @@ namespace KreemMachine
                     calendarDays.Add(new ScheduleDayViewModel(day));
             }
 
-            void matchScheduledShiftsToCallendarDays()
+            async Task matchScheduledShiftsToCallendarDays()
             {
-                IEnumerator<ScheduleDayViewModel> daysOfMonth = calendarDays.GetEnumerator();
-                IEnumerator<ScheduledShift> scheduledShifts = scheduleService.GetScheduledShifts(
+
+                List<ScheduledShift> getScheduledShifts = await scheduleService.GetScheduledShiftsAsync(
                     start: displayMonth,
                     end: displayMonth.AddMonths(1)
-                    ).GetEnumerator();
+                );
+
+                IEnumerator<ScheduledShift> scheduledShifts = getScheduledShifts.GetEnumerator();
+                IEnumerator<ScheduleDayViewModel> daysOfMonth = calendarDays.GetEnumerator();
+
 
                 scheduledShifts.MoveNext();
                 while (scheduledShifts.Current != null)
@@ -261,11 +286,11 @@ namespace KreemMachine
 
                 }
             }
-
         }
-        private void ScheduleTab_Selected(object sender, RoutedEventArgs e)
+
+        private async void ScheduleTab_Selected(object sender, RoutedEventArgs e)
         {
-            ScheduleMonthPicker_SelectedMonthChanged(sender, ScheduleMonthPicker.SelectedMonth);
+            await UpdateCalendarView(ScheduleMonthPicker.SelectedMonth);
         }
 
 
@@ -276,9 +301,9 @@ namespace KreemMachine
 
             var selected = e.AddedItems[0] as ScheduleDayViewModel;
 
-            ScheduleManuallyButton_Click(null, null);
             ManualScheduleShiftPicker.SelectedDay = selected.Day;
-            ManualScheduleShiftPicker_SelectedShiftChanged(this, selected.Day, ManualScheduleShiftPicker.SelectedShift);
+            ScheduleManuallyButton_Click(null, null);
+            // ManualScheduleShiftPicker_SelectedShiftChanged(this, selected.Day, ManualScheduleShiftPicker.SelectedShift);
 
         }
 
@@ -289,10 +314,10 @@ namespace KreemMachine
 
         }
 
-        private void ManualScheduleShiftPicker_SelectedShiftChanged(object sender, DateTime SelectedDay, Shift SelectedShift)
+        private async void ManualScheduleShiftPicker_SelectedShiftChanged(object sender, DateTime SelectedDay, Shift SelectedShift)
         {
-             
-            ManuallyScheduledShift = scheduleService.GetScheduledShiftOrCreateNew(SelectedDay, SelectedShift);
+
+            ManuallyScheduledShift = await scheduleService.GetScheduledShiftOrCreateNewAsync(SelectedDay, SelectedShift);
             ScheduleGeneratorCurrentDayNumberOfEmployees = ManuallyScheduledShift?.EmployeeScheduledShits?.Count ?? 0;
             SetUpEmployeeRecomendationForManualScheduling();
 
@@ -305,21 +330,21 @@ namespace KreemMachine
             ManuallyScheduleUsersListBox.ItemsSource = users;
         }
 
-        private void ShiftAssignmentCheckBox_Checked(object sender, RoutedEventArgs e)
+        private async void ShiftAssignmentCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             var checkbox = sender as CheckBox;
             var userViewModel = checkbox.DataContext as UserSchedulerViewModel;
-            scheduleService.AssignUserToShift(userViewModel.User, ManuallyScheduledShift);
+            await scheduleService.AssignUserToShiftAsync(userViewModel.User, ManuallyScheduledShift);
             ScheduleGeneratorCurrentDayNumberOfEmployees++;
 
         }
 
-        private void ShiftAssignmentCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        private async void ShiftAssignmentCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             var checkbox = sender as CheckBox;
             var userViewModel = checkbox.DataContext as UserSchedulerViewModel;
 
-            scheduleService.RemoveUserFromShift(userViewModel.User, ManuallyScheduledShift);
+            await scheduleService.RemoveUserFromShiftAsync(userViewModel.User, ManuallyScheduledShift);
             ScheduleGeneratorCurrentDayNumberOfEmployees--;
 
         }
@@ -330,16 +355,16 @@ namespace KreemMachine
 
         //Resources per shift
 
-        private void ResPerShiftTab_Loaded(object sender, RoutedEventArgs e)
+        private void ResPerShiftTab_Selected(object sender, RoutedEventArgs e)
         {
             StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
         }
 
         private void StatisticsPerShiftMonthPicker_SelectedMonthChanged(object sender, DateTime displayMonth)
         {
-            string cbMorning = "";
-            string cbNoon = "";
-            string cbNight = "";
+            string cbMorning = null;
+            string cbNoon = null;
+            string cbNight = null;
             if ((bool)cbMorningShift.IsChecked)
             {
                 cbMorning = cbMorningShift.Content.ToString();
@@ -368,9 +393,17 @@ namespace KreemMachine
             StatisticsPerShiftMonthPicker_SelectedMonthChanged(sender, StatisticsPerShiftMonthPicker.SelectedMonth);
         }
 
+        private void ResPerShiftDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.PropertyName == nameof(ResourcesPerShiftDTO.Date))
+            {
+                (e.Column as DataGridTextColumn).Binding.StringFormat = "dd/MM/yyyy";
+            }
+        }
+
         //Resources per month
 
-        private void ResPerMonthTab_Loaded(object sender, RoutedEventArgs e)
+        private void ResPerMonthTab_Selected(object sender, RoutedEventArgs e)
         {
             StatisticsPerMonthYearPicker_SelectedYearChanged(sender, StatisticsPerMonthYearPicker.SelectedYear);
         }
@@ -380,31 +413,203 @@ namespace KreemMachine
             ResPerMonthDataGrid.ItemsSource = statisticsService.GetResourcesPerMonth(displayYear);
         }
 
-        //Employee statistics
-
-        private void EmplStatsTab_Loaded(object sender, RoutedEventArgs e)
-        {
-            EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployee();
-        }
-
-        private void fromDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployeeDate(fromDatePicker.SelectedDate ?? default(DateTime), toDatePicker.SelectedDate ?? default(DateTime));
-        }
-
-        private void toDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployeeDate(fromDatePicker.SelectedDate ?? default(DateTime), toDatePicker.SelectedDate ?? default(DateTime));
-        }
-
         private void ResPerMonthDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             if (e.PropertyName == nameof(ResourcesPerMonthDTO.Month))
-                (e.Column as DataGridTextColumn).Binding.StringFormat = "MMM";
+                (e.Column as DataGridTextColumn).Binding.StringFormat = "MMMM";
+        }
+
+        //Employee statistics
+
+        private void EmplStatsTab_Selected(object sender, RoutedEventArgs e)
+        {
+            EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployeeDate(fromDatePicker.SelectedDate ?? default(DateTime), toDatePicker.SelectedDate ?? default(DateTime));
+        }
+
+        private void fromDatePicker_SelectedDateChanged(object sender, RoutedEventArgs e)
+        {
+            EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployeeDate(fromDatePicker.SelectedDate ?? default(DateTime), toDatePicker.SelectedDate ?? default(DateTime));
         }
 
         #endregion
 
-        
+        #region Products
+
+        private void StocKTabItem_Selected(object sender, RoutedEventArgs e)
+        {
+            RefreshProductsTable();
+            RefreshProductsTableTimer.Start();
+        }
+
+        private void StockTabItem_Unselected(object sender, RoutedEventArgs e)
+        {
+            RefreshProductsTableTimer.Stop();
+        }
+
+        private void SearchProductsBar_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(SearchProductsBar.Text))
+            {
+                RefreshProductsTableTimer.Stop();
+                AllProductsListBox.ItemsSource = productServices.FilterProducts(SearchProductsBar.Text);
+            }
+            else
+            {
+                RefreshProductsTable(sender, e);
+                RefreshProductsTableTimer.Start();
+            }
+        }
+
+        private void AddNewProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new CreateProduct();
+            window.Show();
+        }
+
+        private void EditProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var product = button.DataContext as Product;
+
+            var window = new EditProduct(product, productServices);
+            window.Show();
+            SearchProductsBar.Text = null;
+            RefreshProductsTable(sender, e);
+        }
+
+        private void DeleteProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            RefreshProductsTableTimer.Stop();
+            if (MessageBox.Show("You are about to remove this product. Continue?", "Delete product", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                var button = sender as Button;
+                var product = button.DataContext as Product;
+
+                int i = productServices.RemoveProduct(product);
+                if (i == 1)
+                {
+                    SearchProductsBar.Text = null;
+                    StocKTabItem_Selected(sender, e);
+                }
+                RefreshProductsTableTimer.Start();
+            }
+        }
+
+        private void RefreshProductsTable(object sender = null, EventArgs args = null)
+        {
+            Console.WriteLine("Refreshing products");
+            AllProductsListBox.ItemsSource = productServices.GetViewableProducts();
+        }
+
+        private void RequestRestockForProductButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            var product = ((Button)sender).DataContext as Product;
+            var form = new RequestInfoGetterWindow(
+                title: "Create stock request",
+                message: "Please specify how many items you want to request",
+                buttonText: "Open request");
+
+            if (form.ShowDialog(out int quantity) == true)
+            {
+                RestockRequest request = new RestockRequest(product);
+                stockService.CreateRequestFromOpenStage(request, quantity);
+            }
+        }
+
+        #endregion
+
+        #region Restock
+
+        private async void RestockRequestsTab_Selected(object sender, RoutedEventArgs e)
+        {
+            await UpdateRestockRequestsTab();
+        }
+
+        private async Task UpdateRestockRequestsTab()
+        {
+            List<RestockRequest> requests = await stockService.GetActiveRequestsAsync();
+            List<RestockRequestViewModel> viewModels = requests.Select(r => new RestockRequestViewModel(r)).ToList();
+            viewModels.ForEach(SetUpEventsForRestockRequestViewModel);
+
+            RestockRequestsItemsComponent.ItemsSource = viewModels;
+            ICollectionView view = CollectionViewSource.GetDefaultView(viewModels);
+            view.Filter = FilterRestockRequestByTextBoxInput;
+
+        }
+
+
+
+        private void SetUpEventsForRestockRequestViewModel(RestockRequestViewModel viewModel)
+        {
+            viewModel.RequestApproved += RestockRequestApproved;
+            viewModel.RequestDenied += RestockRequestDenied;
+            viewModel.RequestRestocked += RestocRequestRestocked;
+            viewModel.RequestHidden += RestockRequestHidden;
+        }
+
+        private async void RestockRequestApproved(object sender, RestockRequest request)
+        {
+            var form = new RequestInfoGetterWindow(
+                title: "Approve stock request",
+                message: "Please specify how many items you want to approve",
+                buttonText: "Approve request");
+
+            if (form.ShowDialog(out int quantity) == true)
+            {
+                stockService.ApproveRequest(request, quantity);
+                await UpdateRestockRequestsTab();
+            }
+
+        }
+
+        private async void RestockRequestDenied(object sender, RestockRequest request)
+        {
+            stockService.DenyRequest(request);
+            await UpdateRestockRequestsTab();
+        }
+
+        private async void RestocRequestRestocked(object sender, RestockRequest request)
+        {
+            stockService.RestockRequest(request, request.LatestStage.Quantity ?? 0);
+            await UpdateRestockRequestsTab();
+        }
+
+        private async void RestockRequestHidden(object sender, RestockRequest request)
+        {
+            stockService.HideRequest(request);
+            await UpdateRestockRequestsTab();
+        }
+
+        private bool FilterRestockRequestByTextBoxInput(object product)
+        {
+            return string.IsNullOrEmpty(SearchRestockRequestTextBox.Text) || requestContainsSearchwords();
+
+            bool requestContainsSearchwords()
+            {
+                RestockRequest request = ((RestockRequestViewModel)product).Request;
+                string productName = request.Product.Name;
+                string productDepartment = request.Product.Department.Name;
+                string membersName = request.Stages
+                    .Select(s => s.TypeStr + s.Date.ToString("yyyy-mm-dd") + s.User.FullName)
+                    .Aggregate(string.Concat);
+                string searchSource = (productName + productDepartment + membersName).ToLower();
+
+                string[] searchSequence = SearchRestockRequestTextBox.Text.ToLower().Split(' ');
+
+                return searchSequence.Any(search => searchSource.Contains(search));
+            }
+        }
+
+        private void SearchRestockRequestTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ICollectionView view = CollectionViewSource.GetDefaultView(RestockRequestsItemsComponent.ItemsSource);
+            view.Refresh();
+        }
+
+
+
+
+        #endregion
+
     }
 }

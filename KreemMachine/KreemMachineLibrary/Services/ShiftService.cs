@@ -1,4 +1,3 @@
-using KreemMachineLibrary.Helpers;
 using KreemMachineLibrary.Models;
 using System;
 using System.Collections.Generic;
@@ -12,25 +11,52 @@ namespace KreemMachineLibrary.Services
 {
     public class ShiftService
     {
-        DataBaseContext db = Globals.db;
+
+        public ReadOnlyCollection<Shift> CahchedShifts { get; private set; }
 
         public ShiftService()
         {
         }
 
-        public void SaveChanges()
+        public void Save(Shift shift)
         {
-            db.SaveChanges();
+            using (var db = new DataBaseContext())
+            {
+                db.Entry(shift).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
         }
 
         internal Shift GetShift(string name)
         {
-            var shift = db.Shifts.Where(s => s.Name == name).FirstOrDefault();
-            return shift;
+            using (var db = new DataBaseContext() )
+                return db.Shifts.Where(s => s.Name == name).FirstOrDefault();
         }
 
 
-        public IList<Shift> GetAllShifts() => db.Shifts.Local.OrderBy(s => s.StartHour).ToList();
+        public List<Shift> GetAllShifts()
+        {
+            using (var db = new DataBaseContext() )
+                return db.Shifts.OrderBy(s => s.StartHour).ToList();
+        }
+
+        public async Task CacheShiftsAsync()
+        {
+            using (var db = new DataBaseContext())
+            {
+                List<Shift> shifts = await db.Shifts.OrderBy(s => s.StartHour).ToListAsync();
+                CahchedShifts = shifts.AsReadOnly();
+            }
+
+        }
+
+        public void ClearShiftCache()
+        {
+            CahchedShifts = null;
+        }
+
+        
 
     }
 }

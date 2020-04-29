@@ -30,8 +30,8 @@ namespace KreemMachineLibrary.Models
 
         public UserScheduledShift(User user, ScheduledShift scheduledShift)
         {
-            User = user;
-            ScheduledShift = scheduledShift;
+            UserId = user.Id;
+            ScheduledShiftId = scheduledShift.Id;
             HourlyWage = user.HourlyWage;
 
         }

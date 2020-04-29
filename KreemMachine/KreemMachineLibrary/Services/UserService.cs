@@ -1,5 +1,4 @@
-﻿using KreemMachineLibrary.Helpers;
-using KreemMachineLibrary.Models;
+﻿using KreemMachineLibrary.Models;
 using KreemMachineLibrary.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -11,20 +10,23 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using System.Windows;
+using BCrypt.Net;
+using KreemMachineLibrary.Models.Statics;
 
 namespace KreemMachineLibrary.Services
 {
     public class UserService
     {
         
-        DataBaseContext db = Globals.db;
-
-        public User Save(User user)
+        public User Save(string firstName, string lastName, string email, Role role, string hourlyWage, DateTime birthDate, string address, string phoneNumber)
         {
+            User user = this.VerifyInputDataUser(firstName, lastName, email, role, hourlyWage, birthDate, address, phoneNumber);
             HashPassword(user);
             user = SaveToDatabase(user);
             return user;
         }
+
+
 
         internal void HashPassword(User user)
         {
@@ -35,35 +37,89 @@ namespace KreemMachineLibrary.Services
                 randomPassword += ((char)(random.Next(1, 26) + 64)).ToString();
             }
             user.Password = randomPassword;
-            user.PasswordHash = PasswordHashHelper.CreateHash(randomPassword);
+
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(randomPassword);
+        }
+
+        //This method checks the input values of a user
+        private User VerifyInputDataUser(string firstName, string lastName, string email, Role role, string hourlyWage, DateTime birthDate, string address, string phoneNumber)
+        {
+            if (String.IsNullOrWhiteSpace(firstName))
+            {
+                throw new RequiredFieldsEmpty("You need to fill in all required fields");
+            }
+            if (String.IsNullOrWhiteSpace(lastName))
+            {
+                throw new RequiredFieldsEmpty("You need to fill in all required fields");
+            }
+            if (String.IsNullOrWhiteSpace(hourlyWage))
+            {
+                throw new RequiredFieldsEmpty("You need to fill in all required fields");
+            }
+            if (String.IsNullOrWhiteSpace(birthDate.ToString())) {
+                throw new RequiredFieldsEmpty("You need to fill in all required fields");
+            }
+
+            //Checks if a string is a number
+            int dotCount = 0;
+            bool valH = true;
+            foreach (Char c in hourlyWage) {
+                if (c == ',') {
+                    if (++dotCount > 1) {
+                        valH = false;
+                        break;
+                    }
+                }
+                else {
+                    if (c < '0' || c > '9') {
+                        valH = false;
+                        break;
+                    }
+                }
+            }
+            if (!valH)
+            {
+                throw new HourlyWageMustComtainOnlyNumbers("The hourly wage can only be a number");
+            }
+
+            foreach (Char c in phoneNumber) {
+                if (c < '0' || c > '9') {
+                    throw new PhoneNumberException("Phone number can only be numbers");
+                }
+            }
+
+            return new User(firstName, lastName, email, role, float.Parse(hourlyWage), birthDate, address, phoneNumber);
         }
 
         internal User SaveToDatabase (User user)
         {
             string mail = user.Email;
-
-            var temp = from u in db.Users
-                           select u.Email;
-            List<string> allMail = temp.ToList();
-
-            int mailCount = 0;
-            if (allMail.Contains(mail))
+            using (var db = new DataBaseContext())
             {
-                foreach (string e in allMail)
+                var temp = from u in db.Users
+                           select u.Email;
+                var allMail = temp.ToList();
+
+                int mailCount = 0;
+                if (allMail.Contains(mail))
                 {
-                    if (e == mail)
+                    foreach (string e in allMail)
                     {
-                        mailCount++;
+                        if (e == mail)
+                        {
+                            mailCount++;
+                        }
                     }
+                    string newMail = mail[0] + mailCount.ToString() + mail.Substring(1);
+                    user.Email = newMail;
                 }
-                string newMail = mail[0] + mailCount.ToString() + mail.Substring(1);
-                user.Email = newMail;
+
+
+                var fromDb = db.Users.Add(user);
+                db.SaveChanges();
+                return fromDb;
             }
 
-            var fromDb = db.Users.Add(user);
-            db.SaveChanges();
-            
-            return fromDb;
         }
 
         /// <summary>
@@ -75,11 +131,17 @@ namespace KreemMachineLibrary.Services
         /// or <code>null</code> if credentials wrong</returns>
         public User AuthenticateByCredentials (string email, string password)
         {
-            var candidate = db.Users.SingleOrDefault(u => u.Email == email);
+
+            User candidate;
+            using (var db = new DataBaseContext())
+            {
+                candidate = db.Users.SingleOrDefault(u => u.Email == email);
+            }
+
             if (candidate == null)
                 return null;
 
-            if (PasswordHashHelper.VerifyPassword(password, candidate.PasswordHash))
+            if (BCrypt. Net.BCrypt.Verify(password, candidate.PasswordHash))
             {
                 SecurityContext.Authenticate(candidate);
                 return candidate;
@@ -88,34 +150,49 @@ namespace KreemMachineLibrary.Services
             return null;
         }
 
-        public ObservableCollection<User> GetAll()
+        public List<User> GetAll()
         {
-            db.Users.Load();
-            return db.Users.Local;
+            using (var db = new DataBaseContext())
+                return db.Users
+                    .Include(u => u.Department)
+                    .ToList();
         }
 
-        public void UpdateEmployee(User user) {
-            db.Entry(user).State = EntityState.Modified;
-            db.SaveChanges();
+        public void UpdateEmployee(User user, string firstName, string lastName, string email, Role role, string hourlyWage, DateTime birthDate, string address, string phoneNumber) {
+            this.VerifyInputDataUser(firstName, lastName, email, role, hourlyWage, birthDate, address, phoneNumber);
+
+            user.FirstName = firstName;
+            user.LastName = lastName;
+            user.Role = role;
+            user.HourlyWage = float.Parse(hourlyWage);
+            user.Birthdate = birthDate;
+            user.Address = address;
+            user.PhoneNumber = phoneNumber;
+
+            using (var db = new DataBaseContext())
+            {
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+            }
         }
 
         public int DeleteEmployee(User user, User logedUser) {
             Role?[] notDeletableEmployeeRoles = new Role?[] { Role.Administrator, Role.Manager };
-            if (user == logedUser) {
-                DialogResult result = MessageBox.Show("Are you sure you want to delet you own accout? You will be logged out!", MessageBoxButtons.YesNoCancel.ToString());
-                if(result == DialogResult.OK)
+           
+            if (notDeletableEmployeeRoles.Contains(user.Role) )
+            {
+                throw new DeletAdminAccountException("You are not allow to delet an employee with power");
+            } 
+            else 
+            {
+                using (var db = new DataBaseContext())
                 {
+                    if (!db.Users.Local.Contains(user))
+                        db.Users.Attach(user);
                     db.Users.Remove(user);
                     db.SaveChanges();
-                    return -1;
                 }
-                
-            }
-            else if (notDeletableEmployeeRoles.Contains(user.Role) ) {
-                throw new DeletAdminAccountException("You are not allow to delet an employee with power");
-            } else {
-                db.Users.Remove(user);
-                db.SaveChanges();               
+                               
             }
             return 1;
 
@@ -133,18 +210,23 @@ namespace KreemMachineLibrary.Services
 
         public IList<User> GetAllByRole(Role role)
         {
-            return db.Users.Where(u => u.RoleStr == Role.Employee.ToString()).ToList();
+            using (var db = new DataBaseContext())
+                return db.Users.Where(u => u.RoleStr == Role.Employee.ToString()).ToList();
+
         }
 
 
         public ObservableCollection<User> FilterEmployees(string p)
         {
-            db.Users.Load();
-            if (!String.IsNullOrWhiteSpace(p))
+            using (var db = new DataBaseContext())
             {
-                return new ObservableCollection<User>(db.Users.Local.Where(u => u.FirstName.ToLower().Contains(p.ToLower())));
+                db.Users.Load();
+                if (!String.IsNullOrWhiteSpace(p))
+                {
+                    return new ObservableCollection<User>(db.Users.Local.Where(u => u.FirstName.ToLower().Contains(p.ToLower())));
+                }
+                return db.Users.Local;
             }
-            return db.Users.Local;
         }
 
     }

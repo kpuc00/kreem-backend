@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BCrypt.Net-Next, Version=3.3.3.0, Culture=neutral, PublicKeyToken=1e11be04b6288443, processorArchitecture=MSIL">
+      <HintPath>..\packages\BCrypt.Net-Next.3.3.3\lib\net472\BCrypt.Net-Next.dll</HintPath>
+    </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\packages\BouncyCastle.1.8.5\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
@@ -101,33 +104,42 @@
     <Compile Include="DTO\ResourcesPerEmployeeDTO.cs" />
     <Compile Include="DTO\ResourcesPerMonthDTO.cs" />
     <Compile Include="DTO\ResourcesPerShiftDTO.cs" />
+    <Compile Include="Exceptions\BuyCostIncorrectFormatException.cs" />
+    <Compile Include="Exceptions\MissingPermissionEexception.cs" />
+    <Compile Include="Exceptions\PhoneNumberException.cs" />
+    <Compile Include="Exceptions\QuantityIncorrectFormatException.cs" />
+    <Compile Include="Exceptions\SellPriceIncorrectFormatException.cs" />
     <Compile Include="Extensions\DateTimeExtension.cs" />
     <Compile Include="Exceptions\DeletAdminAccountException.cs" />
     <Compile Include="Exceptions\HourlyWageMustComtainOnlyNumbers.cs" />
     <Compile Include="Exceptions\RequiredFieldsEmpty.cs" />
     <Compile Include="Globals.cs" />
-    <Compile Include="Models\Roles.cs" />
+    <Compile Include="Models\Department.cs" />
+    <Compile Include="Models\RestockRequest.cs" />
+    <Compile Include="Models\RestockStage.cs" />
     <Compile Include="Models\ScheduledShift.cs" />
     <Compile Include="Models\Shift.cs" />
+    <Compile Include="Models\Statics\RestockStepType.cs" />
+    <Compile Include="Models\Statics\Roles.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserScheduledShift.cs" />
     <Compile Include="Permission.cs" />
     <Compile Include="SecurityContext.cs" />
-    <Compile Include="Helpers\PasswordHashHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ConnectionSettingsService.cs" />
+    <Compile Include="Models\Product.cs" />
+    <Compile Include="Services\ProductServices.cs" />
     <Compile Include="Services\ShiftService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
     <Compile Include="Services\StatisticsService.cs" />
+    <Compile Include="Services\StockService.cs" />
     <Compile Include="Services\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

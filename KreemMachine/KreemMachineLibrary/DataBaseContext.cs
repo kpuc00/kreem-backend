@@ -13,11 +13,11 @@ namespace KreemMachineLibrary
         // 
         // If you wish to target a different database and/or database provider, modify the 'DBModel' 
         // connection string in the application configuration file.
-        public DataBaseContext()
-            : base("name=DataBaseContext")
+        public DataBaseContext(): base("name=DataBaseContext")
         {
-            Console.WriteLine("initialized db context ");
 
+            Database.Log = (s) => Console.WriteLine(s);
+            Database.SetInitializer<DataBaseContext>(null);
         }
 
 
@@ -28,5 +28,15 @@ namespace KreemMachineLibrary
         public virtual DbSet<ScheduledShift> ScheduledShifts { get; set; }
 
         public virtual DbSet<UserScheduledShift> UserScheduledShifts { get; set; }
+
+        public virtual DbSet<Department> Departments { get; set; }
+
+        public virtual DbSet<Product> Products { get; set; }
+
+        public virtual DbSet<RestockRequest> RestockRequests { get; set; }
+
+        public virtual DbSet<RestockStage> RestockStages { get; set; }
+
+
     }
 }
