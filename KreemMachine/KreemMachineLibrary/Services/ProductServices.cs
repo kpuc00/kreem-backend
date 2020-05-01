@@ -28,14 +28,12 @@ namespace KreemMachineLibrary.Services
 
         public int RemoveProduct(Product product)
         {
+            product.Deleted = 1;
+
             using (var db = new DataBaseContext())
             {
-                if (!db.Products.Local.Contains(product))
-                {
-                    db.Products.Attach(product);
-                    db.Products.Remove(product);
-                    db.SaveChanges();
-                }
+                db.Entry(product).State = EntityState.Modified;
+                db.SaveChanges();
             }
 
             return 1;
@@ -76,13 +74,15 @@ namespace KreemMachineLibrary.Services
                 var products = db.Products.Include(p => p.Department);
 
                 if (SecurityContext.HasPermissions(Permission.ViewAllProducts))
-                    return products.ToList();
+                    return products
+                        .Where(p => p.Deleted == 0)
+                        .ToList();
 
                 if (SecurityContext.HasPermissions(Permission.ViewOwnProducts))
                 {
                     long? usersDepartment = SecurityContext.CurrentUser.DepartmentId;
                     return products
-                       .Where(p => p.DepartmentId == usersDepartment)
+                       .Where(p => p.DepartmentId == usersDepartment && p.Deleted == 0)
                        .ToList();
                 }
 
@@ -178,14 +178,15 @@ namespace KreemMachineLibrary.Services
                 var products = db.Products.Include(p => p.Department);
 
                 if (SecurityContext.HasPermissions(Permission.ViewAllProducts))
-                    return products.Where(p => p.Name.ToLower().Contains(s.ToLower())).ToList();
+                    return products
+                        .Where(p => p.Name.ToLower().Contains(s.ToLower()) && p.Deleted == 0)
+                        .ToList();
 
                 if (SecurityContext.HasPermissions(Permission.ViewOwnProducts))
                 {
                     long? usersDepartment = SecurityContext.CurrentUser.DepartmentId;
                     return products
-                        .Where(p => p.Name.ToLower().Contains(s.ToLower()))
-                       .Where(p => p.DepartmentId == usersDepartment)
+                        .Where(p => p.DepartmentId == usersDepartment && p.Name.ToLower().Contains(s.ToLower()) && p.Deleted == 0)
                        .ToList();
                 }
 

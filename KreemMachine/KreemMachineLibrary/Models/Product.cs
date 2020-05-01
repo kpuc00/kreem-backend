@@ -29,6 +29,9 @@ namespace KreemMachineLibrary.Models
         [Column("department_id"), Required]
         public long DepartmentId { get; set; }
 
+        [Column("deleted")]
+        public int Deleted { get; set; }
+
         public virtual Department Department { get; set; }
 
         public Product()
