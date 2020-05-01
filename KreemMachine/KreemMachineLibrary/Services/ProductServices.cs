@@ -61,6 +61,25 @@ namespace KreemMachineLibrary.Services
             return 1;
         }
 
+        internal void UpdateProduct(Product product, ProductSale soldProduct, int quantity)
+        {
+            var sProduct = new ProductSale(quantity, DateTime.Now, product);
+
+            product.Quantity -= soldProduct.Quantity;
+
+            using (var db = new DataBaseContext())
+            {
+                soldProduct = db.ProductSales.Add(sProduct);
+                db.Entry(product).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
+        public void SellProduct(Product product, int quantity, ProductSale soldProduct)
+        {
+            UpdateProduct(product: product, quantity: quantity, soldProduct: soldProduct);
+        }
+
         public List<Department> GetAllDepartments()
         {
             using (var db = new DataBaseContext())

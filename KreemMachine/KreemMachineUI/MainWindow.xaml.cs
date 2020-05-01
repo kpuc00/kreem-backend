@@ -611,5 +611,18 @@ namespace KreemMachine
 
         #endregion
 
+        #region Stock-Stats
+        private void SellProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var product = button.DataContext as Product;
+
+            var form = new SellProduct(product, productServices);
+            form.Show();
+
+            Console.WriteLine(statisticsService.CalculateProfit(product));
+        }
+
+        #endregion
     }
 }

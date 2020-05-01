@@ -92,5 +92,24 @@ namespace KreemMachineLibrary.Services
             return new ObservableCollection<ResourcesPerEmployeeDTO>(result);
         }
         #endregion
+
+        #region Stock statistics
+        public float CalculateProfit(Product product)
+        {
+            using (var db = new DataBaseContext())
+            {
+                return db.Products.Where(p => p.Id == product.Id)
+                                  .Select(p => (p.SellPrice - p.BuyCost) * p.Quantity)
+                                  .FirstOrDefault();
+            }
+        }
+
+
+
+        // In order to sell a product we have to get the quantity of products sold and remove them from the current quantity of the product
+        // 1 New form that accepts a number(integer) of how many products are sold
+        // 2 On confirmation -> previous quantity - inputted quantity = get the profit
+
+        #endregion
     }
 }

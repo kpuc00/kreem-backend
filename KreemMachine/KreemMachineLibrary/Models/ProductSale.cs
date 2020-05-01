@@ -23,7 +23,17 @@ namespace KreemMachineLibrary.Models
         [Column("product_id"), Required]
         public long ProductId { get; set; }
 
-        [NotMapped]
-        public Product Product { get; set; }
+        public virtual Product Product { get; set; }
+
+        public ProductSale(int quantity, DateTime? timestamp)
+        {
+            Quantity = quantity;
+            Timestamp = timestamp;
+        }
+
+        public ProductSale(int quantity, DateTime? timestamp, Product product) : this(quantity, timestamp)
+        {
+            ProductId = product.Id;
+        }
     }
 }
