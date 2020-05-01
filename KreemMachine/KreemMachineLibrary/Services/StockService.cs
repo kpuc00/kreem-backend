@@ -78,7 +78,16 @@ namespace KreemMachineLibrary.Services
                 RequestId = request.Id,
                 UserId = SecurityContext.CurrentUser.Id,
             };
-            AddStageToRequest(restockStage);
+
+            using (var db = new DataBaseContext())
+            {
+                db.RestockStages.Add(restockStage);
+
+                request.Product.Quantity += restockStage.Quantity ?? 0;
+                db.Entry(request.Product).State = EntityState.Modified;
+
+                db.SaveChanges();
+            }
         }
 
         public void HideRequest(RestockRequest request)
@@ -91,8 +100,5 @@ namespace KreemMachineLibrary.Services
             };
             AddStageToRequest(hideStage);
         }
-
-        
-
     }
 }
