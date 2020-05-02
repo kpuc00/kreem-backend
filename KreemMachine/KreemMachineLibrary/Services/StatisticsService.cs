@@ -104,11 +104,50 @@ namespace KreemMachineLibrary.Services
             }
         }
 
+        public string GetMostSellingProduct()
+        {
+            using (var db = new DataBaseContext())
+            {
+                return db.ProductSales
+                    .OrderByDescending(p => p.Quantity)
+                    .FirstOrDefault()
+                    .Product.Name;
+            }
+        }
 
+        public string GetLeastSellingProduct()
+        {
+            using (var db = new DataBaseContext())
+            {
+                return db.ProductSales
+                    .OrderBy(p => p.Quantity)
+                    .FirstOrDefault()
+                    .Product.Name;
+            }
+        }
 
-        // In order to sell a product we have to get the quantity of products sold and remove them from the current quantity of the product
-        // 1 New form that accepts a number(integer) of how many products are sold
-        // 2 On confirmation -> previous quantity - inputted quantity = get the profit
+        public string GetMostProfitableProduct()
+        {
+            using (var db = new DataBaseContext())
+            {
+                return db.ProductSales?
+                    .OrderByDescending(p => (p.Product.SellPrice - p.Product.BuyCost) * p.Quantity)
+                    .FirstOrDefault()
+                    .Product.Name;
+            }
+        }
+
+        public string GetLeastProfitableProduct()
+        {
+            using (var db = new DataBaseContext())
+            {
+
+                return db.ProductSales
+                    .OrderBy(p => (p.Product.SellPrice - p.Product.BuyCost) * p.Quantity)
+                    .FirstOrDefault()
+                    .Product.Name;
+            }
+        }
 
         #endregion
     }

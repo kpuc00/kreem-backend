@@ -16,7 +16,7 @@ namespace KreemMachineLibrary
         public DataBaseContext(): base("name=DataBaseContext")
         {
 
-            Database.Log = (s) => Console.WriteLine(s);
+            //Database.Log = (s) => Console.WriteLine(s);
             Database.SetInitializer<DataBaseContext>(null);
         }
 
@@ -37,6 +37,7 @@ namespace KreemMachineLibrary
 
         public virtual DbSet<RestockStage> RestockStages { get; set; }
 
+        public virtual DbSet<ProductSale> ProductSales { get; set; }
 
     }
 }

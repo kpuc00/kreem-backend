@@ -620,7 +620,11 @@ namespace KreemMachine
             var form = new SellProduct(product, productServices);
             form.Show();
 
+            Console.WriteLine(statisticsService.GetMostSellingProduct());
+            Console.WriteLine(statisticsService.GetLeastSellingProduct());
             Console.WriteLine(statisticsService.CalculateProfit(product));
+            Console.WriteLine(statisticsService.GetMostProfitableProduct());
+            Console.WriteLine(statisticsService.GetLeastProfitableProduct());
         }
 
         #endregion

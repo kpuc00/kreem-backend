@@ -31,6 +31,10 @@ namespace KreemMachineLibrary.Models
             Timestamp = timestamp;
         }
 
+        public ProductSale()
+        {
+        }
+
         public ProductSale(int quantity, DateTime? timestamp, Product product) : this(quantity, timestamp)
         {
             ProductId = product.Id;
