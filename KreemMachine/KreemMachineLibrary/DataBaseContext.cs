@@ -16,7 +16,7 @@ namespace KreemMachineLibrary
         public DataBaseContext(): base("name=DataBaseContext")
         {
 
-            //Database.Log = (s) => Console.WriteLine(s);
+            Database.Log = (s) => Console.WriteLine(s);
             Database.SetInitializer<DataBaseContext>(null);
         }
 
