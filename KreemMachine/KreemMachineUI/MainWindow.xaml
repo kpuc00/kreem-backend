@@ -8,475 +8,478 @@
         x:Name="_this"
         Title="Kreem Machine" Height="500" Width="1200"
         WindowStartupLocation="CenterScreen" Icon="kreem_icon.png">
-        <TabControl x:Name="MainContent" TabStripPlacement="Left"  BorderThickness="3 0 0 0" Padding="7">
-            <!--Style to make the TabHeaders go to left and look somewhat nice-->
-            <TabControl.Resources >
-                <Style TargetType="{x:Type TabItem}">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type TabItem}">
-                                <Border Name="Border" BorderBrush="Black" Margin="10 0"
+    <TabControl x:Name="MainContent" TabStripPlacement="Left"  BorderThickness="3 0 0 0" Padding="7">
+        <!--Style to make the TabHeaders go to left and look somewhat nice-->
+        <TabControl.Resources >
+            <Style TargetType="{x:Type TabItem}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TabItem}">
+                            <Border Name="Border" BorderBrush="Black" Margin="10 0"
                                             BorderThickness="0" MinWidth="100">
-                                    <ContentPresenter x:Name="ContentSite" ContentSource="Header"  
+                                <ContentPresenter x:Name="ContentSite" ContentSource="Header"  
                                                 RecognizesAccessKey="True" TextBlock.FontSize="18"/>
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="Panel.ZIndex" Value="100" />
-                                        <Setter TargetName="Border" Property="BorderThickness" Value="0 0 0 1" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </TabControl.Resources>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Panel.ZIndex" Value="100" />
+                                    <Setter TargetName="Border" Property="BorderThickness" Value="0 0 0 1" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </TabControl.Resources>
 
-            <!--Users-->
-            <TabItem Header="Users" Visibility="{Binding ElementName=_this, Path=CanViewUsersTab, Converter={StaticResource BoolToVis}}"
+        <!--Users-->
+        <TabItem Header="Users" Visibility="{Binding ElementName=_this, Path=CanViewUsersTab, Converter={StaticResource BoolToVis}}"
                      Selector.Selected="UsersTabItem_Selected" Selector.Unselected="UsersTabItem_Unselected">
-                <Grid Grid.IsSharedSizeScope="True" >
-                    <Grid.RowDefinitions>
-                        <!--Create button and search-->
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                        <!--List of users-->
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <!-- Create button -->
-                        <ColumnDefinition Width="*" />
-                        <!-- Search bar-->
-                    </Grid.ColumnDefinitions>
-                    <Button x:Name="CreateUserButton" Click="CreateUserButton_Click"
+            <Grid Grid.IsSharedSizeScope="True" >
+                <Grid.RowDefinitions>
+                    <!--Create button and search-->
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <!--List of users-->
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <!-- Create button -->
+                    <ColumnDefinition Width="*" />
+                    <!-- Search bar-->
+                </Grid.ColumnDefinitions>
+                <Button x:Name="CreateUserButton" Click="CreateUserButton_Click"
                             Content="Create" Padding="7 3" Margin="5,3,5,0" Height="24" VerticalAlignment="Top"
                             IsEnabled="{Binding ElementName=_this, Path=CanCreateUser}" />
-                    <TextBox Name="SearchTextBox" Grid.Column="1" Margin="3" KeyUp="SearchTextBox_KeyUp"/>
-                    <!-- Headers for users table-->
-                    <Grid Grid.Row="1" TextBlock.FontSize="18" Grid.ColumnSpan="2" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition  Width="30" />
-                            <ColumnDefinition SharedSizeGroup="NameColumn" />
-                            <ColumnDefinition SharedSizeGroup="RoleColumn" />
-                            <ColumnDefinition SharedSizeGroup="EmailColumn" />
-                            <ColumnDefinition SharedSizeGroup="DepartmentColumn" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="1" Text="Name"  />
-                        <TextBlock Grid.Column="2" Text="Role"  />
-                        <TextBlock Grid.Column="3" Text="Email" TextAlignment="Left" HorizontalAlignment="Left"  />
-                        <TextBlock Grid.Column="4" Text="Department" TextAlignment="Left" HorizontalAlignment="Left"  />
-                    </Grid>
-                    <ListBox Grid.Row="2" Grid.ColumnSpan="2"  x:Name="AllUsersListBox" 
-                             TextBlock.FontSize="15" HorizontalContentAlignment="Stretch">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate >
-                                <Grid VerticalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <!-- Photo -->
-                                        <ColumnDefinition SharedSizeGroup="PhotoColumn" Width="30" />
-                                        <!-- First Name -->
-                                        <ColumnDefinition SharedSizeGroup="NameColumn" Width="Auto"/>
-                                        <!-- Last Name -->
-                                        <ColumnDefinition SharedSizeGroup="RoleColumn" Width="Auto"/>
-                                        <!-- Role -->
-                                        <ColumnDefinition SharedSizeGroup="EmailColumn" Width="Auto"/>
-                                        <!-- Email -->
-                                        <ColumnDefinition SharedSizeGroup="DepartmentColumn" Width="Auto"/>
-                                        <!--Empty column for ui purpose-->
-                                        <ColumnDefinition Width="*"/>
-                                        <!-- Edit -->
-                                        <ColumnDefinition Width="auto"/>
-                                        <!-- Delete -->
-                                        <ColumnDefinition Width="auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" />
-                                    <TextBlock Grid.Column="1" Text="{Binding FullName}" Margin="0 0 10 0" />
-                                    <TextBlock Grid.Column="2"  Text="{Binding Role}" Margin="0 0 10 0" />
-                                    <TextBlock Grid.Column="3" Text="{Binding Email}" Margin="0 0 10 0" />
-                                    <TextBlock Grid.Column="4" Text="{Binding Department.Name}" Margin="0 0 10 0" />
-                                    <Button Grid.Column="6" Content=" Edit " Margin="0 0 10 0" Click="EditUserButton_Click"
-                                            IsEnabled="{Binding ElementName=_this, Path=CanEditUser}"/>
-                                    <Button Grid.Column="7" Content=" Delete " Click="DeleteUserButton_Click"
-                                            IsEnabled="{Binding ElementName=_this, Path=CanDeleteUser}" DataContext="{Binding}" />
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                <TextBox Name="SearchTextBox" Grid.Column="1" Margin="3" KeyUp="SearchTextBox_KeyUp"/>
+                <!-- Headers for users table-->
+                <Grid Grid.Row="1" TextBlock.FontSize="18" Grid.ColumnSpan="2" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition  Width="30" />
+                        <ColumnDefinition SharedSizeGroup="NameColumn" />
+                        <ColumnDefinition SharedSizeGroup="RoleColumn" />
+                        <ColumnDefinition SharedSizeGroup="EmailColumn" />
+                        <ColumnDefinition SharedSizeGroup="DepartmentColumn" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="1" Text="Name"  />
+                    <TextBlock Grid.Column="2" Text="Role"  />
+                    <TextBlock Grid.Column="3" Text="Email" TextAlignment="Left" HorizontalAlignment="Left"  />
+                    <TextBlock Grid.Column="4" Text="Department" TextAlignment="Left" HorizontalAlignment="Left"  />
                 </Grid>
-            </TabItem>
+                <ListBox Grid.Row="2" Grid.ColumnSpan="2"  x:Name="AllUsersListBox" 
+                             TextBlock.FontSize="15" HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate >
+                            <Grid VerticalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <!-- Photo -->
+                                    <ColumnDefinition SharedSizeGroup="PhotoColumn" Width="30" />
+                                    <!-- First Name -->
+                                    <ColumnDefinition SharedSizeGroup="NameColumn" Width="Auto"/>
+                                    <!-- Last Name -->
+                                    <ColumnDefinition SharedSizeGroup="RoleColumn" Width="Auto"/>
+                                    <!-- Role -->
+                                    <ColumnDefinition SharedSizeGroup="EmailColumn" Width="Auto"/>
+                                    <!-- Email -->
+                                    <ColumnDefinition SharedSizeGroup="DepartmentColumn" Width="Auto"/>
+                                    <!--Empty column for ui purpose-->
+                                    <ColumnDefinition Width="*"/>
+                                    <!-- Edit -->
+                                    <ColumnDefinition Width="auto"/>
+                                    <!-- Delete -->
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Grid.Column="0" />
+                                <TextBlock Grid.Column="1" Text="{Binding FullName}" Margin="0 0 10 0" />
+                                <TextBlock Grid.Column="2"  Text="{Binding Role}" Margin="0 0 10 0" />
+                                <TextBlock Grid.Column="3" Text="{Binding Email}" Margin="0 0 10 0" />
+                                <TextBlock Grid.Column="4" Text="{Binding Department.Name}" Margin="0 0 10 0" />
+                                <Button Grid.Column="6" Content=" Edit " Margin="0 0 10 0" Click="EditUserButton_Click"
+                                            IsEnabled="{Binding ElementName=_this, Path=CanEditUser}"/>
+                                <Button Grid.Column="7" Content=" Delete " Click="DeleteUserButton_Click"
+                                            IsEnabled="{Binding ElementName=_this, Path=CanDeleteUser}" DataContext="{Binding}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </TabItem>
 
-            <!--Schedule-->
-            <TabItem Header="Schedule" Selector.Selected="ScheduleTab_Selected"
+        <!--Schedule-->
+        <TabItem Header="Schedule" Selector.Selected="ScheduleTab_Selected"
                      Visibility="{Binding ElementName=_this, Path=CanViewScheduleTab, Converter={StaticResource BoolToVis}}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                    <!-- Month picker-->
-                    <local:MonthPicker x:Name="ScheduleMonthPicker" Grid.Row="0" 
+                <!-- Month picker-->
+                <local:MonthPicker x:Name="ScheduleMonthPicker" Grid.Row="0" 
                                        HorizontalAlignment="Center" SelectedMonthChanged="ScheduleMonthPicker_SelectedMonthChanged" />
 
-                    <!-- Calendar Headers -->
-                    <UniformGrid Grid.Row="1" Rows="1" TextBlock.FontSize="18" TextBlock.TextAlignment="Center">
-                        <TextBlock Text="Mon"  />
-                        <TextBlock Text="Tue" />
-                        <TextBlock Text="Wed" />
-                        <TextBlock Text="Thu" />
-                        <TextBlock Text="Fri" />
-                        <TextBlock Text="Sat" />
-                        <TextBlock Text="Sun" />
-                    </UniformGrid>
+                <!-- Calendar Headers -->
+                <UniformGrid Grid.Row="1" Rows="1" TextBlock.FontSize="18" TextBlock.TextAlignment="Center">
+                    <TextBlock Text="Mon"  />
+                    <TextBlock Text="Tue" />
+                    <TextBlock Text="Wed" />
+                    <TextBlock Text="Thu" />
+                    <TextBlock Text="Fri" />
+                    <TextBlock Text="Sat" />
+                    <TextBlock Text="Sun" />
+                </UniformGrid>
 
-                    <!-- Calendar -->
-                    <ListBox x:Name="ScheduleListBox" Grid.Row="2"
+                <!-- Calendar -->
+                <ListBox x:Name="ScheduleListBox" Grid.Row="2"
                              SelectionChanged="ScheduleListBox_SelectionChanged"
                              SelectionMode="Single" 
                              HorizontalContentAlignment="Stretch"
                              VerticalContentAlignment="Stretch">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="7" />
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Border Background="{Binding StatusBackgroundColor}"  Margin="-5 -2"
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="7" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding StatusBackgroundColor}"  Margin="-5 -2"
                                         BorderBrush="LightGray" BorderThickness="1">
-                                    <TextBlock Text="{Binding Day.Day}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                </Border>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                <TextBlock Text="{Binding Day.Day}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
 
-                    <!-- Buttons -->
-                    <StackPanel Grid.Row="3" HorizontalAlignment="Left" TextBlock.FontSize="16" >
-                        <!-- Manually schedule -->
-                        <Button Content="Schedule manually" Click="ScheduleManuallyButton_Click"
+                <!-- Buttons -->
+                <StackPanel Grid.Row="3" HorizontalAlignment="Left" TextBlock.FontSize="16" >
+                    <!-- Manually schedule -->
+                    <Button Content="Schedule manually" Click="ScheduleManuallyButton_Click"
                                 Margin="7"  Padding="7 3" />
-                        <!-- Auto schedule -->
-                        <Button Content="Autogenerate" Margin="7" Padding="7 3" IsEnabled="{Binding ElementName=_this, Path=CanEditSchedule}" Visibility="Hidden" />
+                    <!-- Auto schedule -->
+                    <Button Content="Autogenerate" Margin="7" Padding="7 3" IsEnabled="{Binding ElementName=_this, Path=CanEditSchedule}" Visibility="Hidden" />
 
 
-                    </StackPanel>
+                </StackPanel>
 
-                    <!-- TODO: extract the colors somewhere else and bind them here and to the backend -->
-                    <Border Grid.Row="3" HorizontalAlignment="Right" Background="LightGray" 
+                <!-- TODO: extract the colors somewhere else and bind them here and to the backend -->
+                <Border Grid.Row="3" HorizontalAlignment="Right" Background="LightGray" 
                                 Margin="7" Padding="5 5 35 0" BorderBrush="DarkGray" BorderThickness="2">
-                        <StackPanel>
-                            <TextBlock Text="Legend:" FontSize="16" />
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5" Foreground="White"  />
-                                <TextBlock Text="Not scheduled" FontSize="14"  VerticalAlignment="Center" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5"  Foreground="LawnGreen"  />
-                                <TextBlock Text="In order" FontSize="14" VerticalAlignment="Center" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5"  Foreground="Red"  />
-                                <TextBlock Text="Understaffed" FontSize="14" VerticalAlignment="Center" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5"  Foreground="Yellow"  />
-                                <TextBlock Text="Overstaffed" FontSize="14" VerticalAlignment="Center" />
-                            </StackPanel>
+                    <StackPanel>
+                        <TextBlock Text="Legend:" FontSize="16" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5" Foreground="White"  />
+                            <TextBlock Text="Not scheduled" FontSize="14"  VerticalAlignment="Center" />
                         </StackPanel>
-                    </Border>
-                </Grid>
-            </TabItem>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5"  Foreground="LawnGreen"  />
+                            <TextBlock Text="In order" FontSize="14" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5"  Foreground="Red"  />
+                            <TextBlock Text="Understaffed" FontSize="14" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text=" ◼ " FontSize="32" Margin="0 -5"  Foreground="Yellow"  />
+                            <TextBlock Text="Overstaffed" FontSize="14" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </TabItem>
 
-            <!-- Products -->
-            <TabItem Header="Products" Selector.Selected="StocKTabItem_Selected" Selector.Unselected="StockTabItem_Unselected" Grid.IsSharedSizeScope="True" 
+        <!-- Products -->
+        <TabItem Header="Products" Selector.Selected="StocKTabItem_Selected" Selector.Unselected="StockTabItem_Unselected" Grid.IsSharedSizeScope="True" 
                      Visibility="{Binding ElementName=_this, Path=CanViewProductsTab, Converter={StaticResource BoolToVis}}" >
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <!-- Buttons and search -->
-                        <RowDefinition Height="auto" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <!-- Buttons and search -->
+                    <RowDefinition Height="auto" />
 
-                        <!-- Table heasers -->
-                        <RowDefinition Height="auto" />
+                    <!-- Table heasers -->
+                    <RowDefinition Height="auto" />
 
-                        <!-- Table -->
-                        <RowDefinition Height="*" />
+                    <!-- Table -->
+                    <RowDefinition Height="*" />
 
-                    </Grid.RowDefinitions>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <!-- Create button -->
+                    <ColumnDefinition Width="Auto" />
+
+                    <!--Request Button-->
+                    <ColumnDefinition Width="Auto" />
+
+                    <!-- Search bar-->
+                    <ColumnDefinition Width="*" />
+
+                </Grid.ColumnDefinitions>
+
+                <Button Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0" Click="AddNewProductButton_Click"/>
+
+                <TextBox Grid.Column="2" Name="SearchProductsBar" KeyUp="SearchProductsBar_KeyUp" FontSize="16"/>
+
+                <Grid Grid.Row="1" TextBlock.FontSize="18" Grid.ColumnSpan="3" >
                     <Grid.ColumnDefinitions>
-                        <!-- Create button -->
-                        <ColumnDefinition Width="Auto" />
-
-                        <!--Request Button-->
-                        <ColumnDefinition Width="Auto" />
-
-                        <!-- Search bar-->
-                        <ColumnDefinition Width="*" />
-
+                        <ColumnDefinition SharedSizeGroup="NameColumn" />
+                        <ColumnDefinition SharedSizeGroup="QuantityColumn" />
+                        <ColumnDefinition SharedSizeGroup="BuyCostColumn" />
+                        <ColumnDefinition SharedSizeGroup="DepartmentColumn" />
                     </Grid.ColumnDefinitions>
-
-                    <Button Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0" Click="AddNewProductButton_Click"/>
-                    
-                    <TextBox Grid.Column="2" Name="SearchProductsBar" KeyUp="SearchProductsBar_KeyUp" />
-
-                    <Grid Grid.Row="1" TextBlock.FontSize="18" Grid.ColumnSpan="3" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition SharedSizeGroup="NameColumn" />
-                            <ColumnDefinition SharedSizeGroup="QuantityColumn" />
-                            <ColumnDefinition SharedSizeGroup="BuyCostColumn" />
-                            <ColumnDefinition SharedSizeGroup="DepartmentColumn" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Name"  />
-                        <TextBlock Grid.Column="1" Text="Quantity"  />
-                        <TextBlock Grid.Column="2" Text="Buy Cost" Margin="10 0"  />
-                        <TextBlock Grid.Column="3" Text="Department"   />
-                    </Grid>
-                    <ListBox x:Name="AllProductsListBox" Grid.Row="2" Grid.ColumnSpan="3" HorizontalContentAlignment="Stretch">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid TextBlock.FontSize="16" >
-                                    <Grid.ColumnDefinitions>
-                                        <!-- Name -->
-                                        <ColumnDefinition SharedSizeGroup="NameColumn" Width="Auto"/>
-                                        <!-- Quantity -->
-                                        <ColumnDefinition SharedSizeGroup="QuantityColumn" Width="Auto"/>
-                                        <!-- Buy cost -->
-                                        <ColumnDefinition SharedSizeGroup="BuyCostColumn" Width="Auto"/>
-                                        <!-- Department -->
-                                        <ColumnDefinition SharedSizeGroup="DepartmentColumn" Width="Auto"/>
-                                        <!--Empty column for ui purpose-->
-                                        <ColumnDefinition Width="*"/>
-                                        <!-- Request restock -->
-                                        <ColumnDefinition Width="auto"/>
-                                        <!-- Edit -->
-                                        <ColumnDefinition Width="auto"/>
-                                        <!-- Delete -->
-                                        <ColumnDefinition Width="auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="{Binding Name}" Margin="0 0 10 0" />
-                                    <TextBlock Grid.Column="1"  Text="{Binding Quantity}" Margin="0 0 10 0" />
-                                    <TextBlock Grid.Column="2" Text="{Binding BuyCost}" Margin="0 0 10 0" />
-                                    <TextBlock Grid.Column="3" Text="{Binding Department.Name}" Margin="0 0 10 0" />
-                                <Button Grid.Column="5" Content="Restock" Padding="4 0 4 0" Margin="0 0 10 0" Click="RequestRestockForProductButton_Clicked"
-                                             IsEnabled="{Binding ElementName=_this, Path=CanRequestProductRestock}"  />
-                                    <Button Grid.Column="6" Content="Edit" Padding="4 0 4 0" Margin="0 0 10 0" Click="EditProductButton_Click" />
-                                    <Button Grid.Column="7" Content="Delete" Padding="4 0 4 0" Click="DeleteProductButton_Click" />
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                    <TextBlock Grid.Column="0" Text="Name"  />
+                    <TextBlock Grid.Column="1" Text="Quantity"  />
+                    <TextBlock Grid.Column="2" Text="Buy Cost" Margin="10 0"  />
+                    <TextBlock Grid.Column="3" Text="Department"   />
                 </Grid>
-            </TabItem>
-            
-            <!--Restock Requests -->
+                <ListBox x:Name="AllProductsListBox" Grid.Row="2" Grid.ColumnSpan="3" HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid TextBlock.FontSize="16" >
+                                <Grid.ColumnDefinitions>
+                                    <!-- Name -->
+                                    <ColumnDefinition SharedSizeGroup="NameColumn" Width="Auto"/>
+                                    <!-- Quantity -->
+                                    <ColumnDefinition SharedSizeGroup="QuantityColumn" Width="Auto"/>
+                                    <!-- Buy cost -->
+                                    <ColumnDefinition SharedSizeGroup="BuyCostColumn" Width="Auto"/>
+                                    <!-- Department -->
+                                    <ColumnDefinition SharedSizeGroup="DepartmentColumn" Width="Auto"/>
+                                    <!--Empty column for ui purpose-->
+                                    <ColumnDefinition Width="*"/>
+                                    <!-- Request restock -->        
+                                    <ColumnDefinition Width="auto"/>
+                                    <!-- Sales  -->
+                                    <ColumnDefinition Width="auto"/>
+                                    <!-- Edit -->
+                                    <ColumnDefinition Width="auto"/>
+                                    <!-- Delete -->
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Name}" Margin="0 0 10 0" />
+                                <TextBlock Grid.Column="1" Text="{Binding Quantity}" Margin="0 0 10 0" />
+                                <TextBlock Grid.Column="2" Text="{Binding BuyCost}" Margin="0 0 10 0" />
+                                <TextBlock Grid.Column="3" Text="{Binding Department.Name}" Margin="0 0 10 0" />
+                                <Button Grid.Column="5" Content="Sell" Margin="0 0 10 0" Click="SellProductButton_Click"/>
+                                <Button Grid.Column="6" Content="Restock" Padding="4 0 4 0" Margin="0 0 10 0" Click="RequestRestockForProductButton_Clicked"
+                                             IsEnabled="{Binding ElementName=_this, Path=CanRequestProductRestock}"  />
+                                <Button Grid.Column="7" Content="Edit" Padding="4 0 4 0" Margin="0 0 10 0" Click="EditProductButton_Click" />
+                                <Button Grid.Column="8" Content="Delete" Padding="4 0 4 0" Click="DeleteProductButton_Click" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </TabItem>
+
+        <!--Restock Requests -->
         <TabItem x:Name="RestockRequestsTab" Selector.Selected="RestockRequestsTab_Selected" Header="Requests"
                  Visibility="{Binding ElementName=_this, Path=CanViewRestockRequestsTab, Converter={StaticResource BoolToVis}}" >
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    
-                    <!-- Top row -->
-                    <TextBlock Grid.Row="0" Text="Retock requests:" FontSize="24" />
-                    <TextBox x:Name="SearchRestockRequestTextBox" Grid.Row="0" Grid.Column="1" Margin="7 3" 
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Top row -->
+                <TextBlock Grid.Row="0" Text="Retock requests:" FontSize="24" />
+                <TextBox x:Name="SearchRestockRequestTextBox" Grid.Row="0" Grid.Column="1" Margin="7 3" 
                              TextChanged="SearchRestockRequestTextBox_TextChanged" VerticalContentAlignment="Center" />
-                    
-                    <!-- Main content -->
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.ColumnSpan="2">
-                        <ItemsControl  x:Name="RestockRequestsItemsComponent" HorizontalContentAlignment="Stretch">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Padding="10" BorderThickness="1" BorderBrush="Black"  >
-                                        <StackPanel TextBlock.FontSize="16">
-                                            <StackPanel Orientation="Horizontal" >
-                                                <TextBlock Margin="0 0 10 0" Text="{Binding Request.Product.Name}" TextDecorations="Underline"/>
 
-                                                <TextBlock Text="{Binding Request.Product.BuyCost, StringFormat=C,ConverterCulture=NL-nl}" />
+                <!-- Main content -->
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.ColumnSpan="2">
+                    <ItemsControl  x:Name="RestockRequestsItemsComponent" HorizontalContentAlignment="Stretch">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="10" BorderThickness="1" BorderBrush="Black"  >
+                                    <StackPanel TextBlock.FontSize="16">
+                                        <StackPanel Orientation="Horizontal" >
+                                            <TextBlock Margin="0 0 10 0" Text="{Binding Request.Product.Name}" TextDecorations="Underline"/>
 
-                                                <TextBlock Margin="5 0" Text="{Binding Request.Product.Department.Name}" />
+                                            <TextBlock Text="{Binding Request.Product.BuyCost, StringFormat=C,ConverterCulture=NL-nl}" />
 
-                                                <TextBlock Text="{Binding Request.Product.Quantity}" />
-                                                <Image Source="/Icons/depot.png" Height="24"/>
-                                            </StackPanel>
+                                            <TextBlock Margin="5 0" Text="{Binding Request.Product.Department.Name}" />
 
-                                            <ItemsControl ItemsSource="{Binding Request.Stages}" Margin="0 5" >
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="{Binding Date, StringFormat=yyyy-MM-dd HH:mm}" Margin="0 0 10 0" />
-                                                            <TextBlock Text="{Binding User.FullName}" FontWeight="Bold" Margin="5 0" />
-                                                            <TextBlock Text="{Binding User.RoleStr, StringFormat={} ({0}) }" />
-
-                                                            <TextBlock Text="{Binding TypeStr}" Margin="5 0 0 0" />
-                                                            <TextBlock Text=" request for " />
-                                                            <TextBlock Text="{Binding Quantity}" FontWeight="Bold" />
-                                                            <TextBlock Text=" Items. " />
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-
-                                            <ItemsControl ItemsSource="{Binding Buttons}"  HorizontalAlignment="Left" 
-                                                          Visibility="{Binding ElementName=_this, Path=CanChangeRestockRequests, Converter={StaticResource BoolToVis}}">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <StackPanel.Resources>
-                                                                <Style TargetType="Button">
-                                                                    <Setter Property="Margin" Value="5 0" />
-                                                                    <Setter Property="Padding" Value="5 0" />
-                                                                </Style>
-                                                            </StackPanel.Resources>
-                                                        </StackPanel>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                            </ItemsControl>
+                                            <TextBlock Text="{Binding Request.Product.Quantity}" />
+                                            <Image Source="/Icons/depot.png" Height="24"/>
                                         </StackPanel>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </Grid>
-            </TabItem>
-            
-            <!--Statistics-->
-            <TabItem Header="Statistics" Visibility="{Binding ElementName=_this, Path=CanViewStatisticsTab, Converter={StaticResource BoolToVis}}" >
-                <Grid>
-                    <TabControl TabStripPlacement="Left">
-                        <TabItem x:Name="ResPerShiftTab" Header="Resources per shift" Selector.Selected="ResPerShiftTab_Selected">
-                            <Grid Background="White">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <StackPanel Orientation="Horizontal">
-                                    <local:MonthPicker x:Name="StatisticsPerShiftMonthPicker" Margin="5" SelectedMonthChanged="StatisticsPerShiftMonthPicker_SelectedMonthChanged" />
-                                    <CheckBox x:Name="cbMorningShift" Content="Morning" VerticalAlignment="Center" Margin="30,5,5,5"  Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
-                                    <CheckBox x:Name="cbNoonShift" Content="Noon" VerticalAlignment="Center" Margin="5"  Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
-                                    <CheckBox x:Name="cbNightShift" Content="Night" VerticalAlignment="Center" Margin="5" Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
-                                </StackPanel>
-                                <DataGrid Name="ResPerShiftDataGrid" Grid.Row="1" GridLinesVisibility="None" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True" AutoGeneratingColumn="ResPerShiftDataGrid_AutoGeneratingColumn"/>
-                            </Grid>
-                        </TabItem>
-                        <TabItem x:Name="ResPerMonthTab" Header="Resources per month" Selector.Selected="ResPerMonthTab_Selected">
-                            <Grid Background="White">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <local:YearPicker x:Name="StatisticsPerMonthYearPicker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5" SelectedYearChanged="StatisticsPerMonthYearPicker_SelectedYearChanged"/>
-                                <DataGrid Name="ResPerMonthDataGrid" Grid.Row="1" GridLinesVisibility="None" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True" AutoGeneratingColumn="ResPerMonthDataGrid_AutoGeneratingColumn" />
-                            </Grid>
-                        </TabItem>
-                        <TabItem x:Name="EmplStatsTab" Header="Employee statistics" Selector.Selected="EmplStatsTab_Selected">
-                            <Grid Background="White">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="From:" Margin="5" VerticalAlignment="Center" FontWeight="Bold"/>
-                                    <DatePicker x:Name="fromDatePicker" Margin="0,5,0,5" VerticalAlignment="Center" LostFocus="fromDatePicker_SelectedDateChanged"/>
-                                    <Label Content="To:" Margin="30,5,5,5" VerticalAlignment="Center" FontWeight="Bold"/>
-                                    <DatePicker x:Name="toDatePicker" Margin="0,5,0,5" VerticalAlignment="Center" LostFocus="fromDatePicker_SelectedDateChanged"/>
-                                </StackPanel>
-                                <DataGrid x:Name="EmplStatsDataGrid" Grid.Row="1" GridLinesVisibility="None" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True"/>
-                            </Grid>
-                        </TabItem>
-                    </TabControl>
-                </Grid>
 
-            </TabItem>
+                                        <ItemsControl ItemsSource="{Binding Request.Stages}" Margin="0 5" >
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Date, StringFormat=yyyy-MM-dd HH:mm}" Margin="0 0 10 0" />
+                                                        <TextBlock Text="{Binding User.FullName}" FontWeight="Bold" Margin="5 0" />
+                                                        <TextBlock Text="{Binding User.RoleStr, StringFormat={} ({0}) }" />
 
-            <!--Manually generate schedule-->
-            <TabItem Visibility="Hidden" x:Name="ManuallyGenerateScheduleTabItem" >
-                <Grid Grid.IsSharedSizeScope="True">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <StackPanel Orientation="Horizontal" >
-                        <local:ScheduleShiftPicker x:Name="ManualScheduleShiftPicker" Margin="5"
+                                                        <TextBlock Text="{Binding TypeStr}" Margin="5 0 0 0" />
+                                                        <TextBlock Text=" request for " />
+                                                        <TextBlock Text="{Binding Quantity}" FontWeight="Bold" />
+                                                        <TextBlock Text=" Items. " />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+
+                                        <ItemsControl ItemsSource="{Binding Buttons}"  HorizontalAlignment="Left" 
+                                                          Visibility="{Binding ElementName=_this, Path=CanChangeRestockRequests, Converter={StaticResource BoolToVis}}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel.Resources>
+                                                            <Style TargetType="Button">
+                                                                <Setter Property="Margin" Value="5 0" />
+                                                                <Setter Property="Padding" Value="5 0" />
+                                                            </Style>
+                                                        </StackPanel.Resources>
+                                                    </StackPanel>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </TabItem>
+
+        <!--Statistics-->
+        <TabItem Header="Statistics" Visibility="{Binding ElementName=_this, Path=CanViewStatisticsTab, Converter={StaticResource BoolToVis}}" >
+            <Grid>
+                <TabControl TabStripPlacement="Left">
+                    <TabItem x:Name="ResPerShiftTab" Header="Resources per shift" Selector.Selected="ResPerShiftTab_Selected">
+                        <Grid Background="White">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal">
+                                <local:MonthPicker x:Name="StatisticsPerShiftMonthPicker" Margin="5" SelectedMonthChanged="StatisticsPerShiftMonthPicker_SelectedMonthChanged" />
+                                <CheckBox x:Name="cbMorningShift" Content="Morning" VerticalAlignment="Center" Margin="30,5,5,5"  Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
+                                <CheckBox x:Name="cbNoonShift" Content="Noon" VerticalAlignment="Center" Margin="5"  Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
+                                <CheckBox x:Name="cbNightShift" Content="Night" VerticalAlignment="Center" Margin="5" Checked="cbShift_CheckChange" Unchecked="cbShift_CheckChange"/>
+                            </StackPanel>
+                            <DataGrid Name="ResPerShiftDataGrid" Grid.Row="1" GridLinesVisibility="None" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True" AutoGeneratingColumn="ResPerShiftDataGrid_AutoGeneratingColumn"/>
+                        </Grid>
+                    </TabItem>
+                    <TabItem x:Name="ResPerMonthTab" Header="Resources per month" Selector.Selected="ResPerMonthTab_Selected">
+                        <Grid Background="White">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <local:YearPicker x:Name="StatisticsPerMonthYearPicker" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5" SelectedYearChanged="StatisticsPerMonthYearPicker_SelectedYearChanged"/>
+                            <DataGrid Name="ResPerMonthDataGrid" Grid.Row="1" GridLinesVisibility="None" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True" AutoGeneratingColumn="ResPerMonthDataGrid_AutoGeneratingColumn" />
+                        </Grid>
+                    </TabItem>
+                    <TabItem x:Name="EmplStatsTab" Header="Employee statistics" Selector.Selected="EmplStatsTab_Selected">
+                        <Grid Background="White">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="From:" Margin="5" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <DatePicker x:Name="fromDatePicker" Margin="0,5,0,5" VerticalAlignment="Center" LostFocus="fromDatePicker_SelectedDateChanged"/>
+                                <Label Content="To:" Margin="30,5,5,5" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <DatePicker x:Name="toDatePicker" Margin="0,5,0,5" VerticalAlignment="Center" LostFocus="fromDatePicker_SelectedDateChanged"/>
+                            </StackPanel>
+                            <DataGrid x:Name="EmplStatsDataGrid" Grid.Row="1" GridLinesVisibility="None" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True"/>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+
+        </TabItem>
+
+        <!--Manually generate schedule-->
+        <TabItem Visibility="Hidden" x:Name="ManuallyGenerateScheduleTabItem" >
+            <Grid Grid.IsSharedSizeScope="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" >
+                    <local:ScheduleShiftPicker x:Name="ManualScheduleShiftPicker" Margin="5"
                                                    SelectedShiftChanged="ManualScheduleShiftPicker_SelectedShiftChanged" />
 
-                        <TextBlock Text="Staff selected: " VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding ElementName=_this, Path=ScheduleGeneratorCurrentDayNumberOfEmployees}" 
+                    <TextBlock Text="Staff selected: " VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding ElementName=_this, Path=ScheduleGeneratorCurrentDayNumberOfEmployees}" 
                                    x:Name="StaffSelectedTextBox" VerticalAlignment="Center" />
-                        <TextBlock Text=" / " VerticalAlignment="Center" />
-                        <TextBlock Text="{Binding ElementName=ManuallyScheduleUsersListBox, Path=ItemsSource.Count}"
+                    <TextBlock Text=" / " VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding ElementName=ManuallyScheduleUsersListBox, Path=ItemsSource.Count}"
                                    x:Name="StaffPrefferedTextBox" VerticalAlignment="Center" />
 
-                        <TextBlock Text=" (Min: " VerticalAlignment="Center" />
-                        <TextBlock x:Name="MinStaffTextBox" Text="{Binding ElementName=_this, Path=ManuallyScheduledShift.Shift.MinStaff}" VerticalAlignment="Center" />
-                        <TextBlock Text=" Max: " VerticalAlignment="Center" />
-                        <TextBlock x:Name="MaxStaffTextBox" Text="{Binding ElementName=_this, Path=ManuallyScheduledShift.Shift.MaxStaff}" VerticalAlignment="Center" />
-                        <TextBlock Text=")" VerticalAlignment="Center" />
-                    </StackPanel>
+                    <TextBlock Text=" (Min: " VerticalAlignment="Center" />
+                    <TextBlock x:Name="MinStaffTextBox" Text="{Binding ElementName=_this, Path=ManuallyScheduledShift.Shift.MinStaff}" VerticalAlignment="Center" />
+                    <TextBlock Text=" Max: " VerticalAlignment="Center" />
+                    <TextBlock x:Name="MaxStaffTextBox" Text="{Binding ElementName=_this, Path=ManuallyScheduledShift.Shift.MaxStaff}" VerticalAlignment="Center" />
+                    <TextBlock Text=")" VerticalAlignment="Center" />
+                </StackPanel>
 
-                    <Grid Grid.Row="1" TextBlock.FontSize="14" TextBlock.FontWeight="Medium">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="40" />
-                            <ColumnDefinition SharedSizeGroup="EmployeeNameColumn" />
-                            <ColumnDefinition SharedSizeGroup="EmployeeWorkedHoursColumn" />
-                            <ColumnDefinition SharedSizeGroup="EmployeeScheduledColumn" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="Employee" Grid.Column="1"/>
-                        <TextBlock Text="Worked hours" Grid.Column="2" Margin="10 0"/>
-                        <TextBlock Text="Schedule" Grid.Column="3"/>
-                    </Grid>
-                    <ListBox Grid.Row="2" x:Name="ManuallyScheduleUsersListBox" BorderThickness="0" TextBlock.FontSize="18">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0 7">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="40"/>
-                                        <ColumnDefinition SharedSizeGroup="EmployeeNameColumn" Width="auto"/>
-                                        <ColumnDefinition SharedSizeGroup="EmployeeWorkedHoursColumn" Width="auto"/>
-                                        <ColumnDefinition SharedSizeGroup="EmployeeScheduledColumn" Width="auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" />
-                                    <TextBlock Grid.Column="1" Text="{Binding User.FullName}" TextDecorations="Underline" />
-                                    <TextBlock Grid.Column="2" Text="{Binding HoursScheduledThisWeek, StringFormat={}{0}h }" Margin="20 0" />
-                                    <CheckBox Grid.Column="3" IsChecked="{Binding IsScheduled, Mode=OneWay}" 
+                <Grid Grid.Row="1" TextBlock.FontSize="14" TextBlock.FontWeight="Medium">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition SharedSizeGroup="EmployeeNameColumn" />
+                        <ColumnDefinition SharedSizeGroup="EmployeeWorkedHoursColumn" />
+                        <ColumnDefinition SharedSizeGroup="EmployeeScheduledColumn" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Employee" Grid.Column="1"/>
+                    <TextBlock Text="Worked hours" Grid.Column="2" Margin="10 0"/>
+                    <TextBlock Text="Schedule" Grid.Column="3"/>
+                </Grid>
+                <ListBox Grid.Row="2" x:Name="ManuallyScheduleUsersListBox" BorderThickness="0" TextBlock.FontSize="18">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0 7">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition SharedSizeGroup="EmployeeNameColumn" Width="auto"/>
+                                    <ColumnDefinition SharedSizeGroup="EmployeeWorkedHoursColumn" Width="auto"/>
+                                    <ColumnDefinition SharedSizeGroup="EmployeeScheduledColumn" Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Grid.Column="0" />
+                                <TextBlock Grid.Column="1" Text="{Binding User.FullName}" TextDecorations="Underline" />
+                                <TextBlock Grid.Column="2" Text="{Binding HoursScheduledThisWeek, StringFormat={}{0}h }" Margin="20 0" />
+                                <CheckBox Grid.Column="3" IsChecked="{Binding IsScheduled, Mode=OneWay}" 
                                               Checked="ShiftAssignmentCheckBox_Checked" Unchecked="ShiftAssignmentCheckBox_Unchecked"
                                               IsEnabled="{Binding ElementName=_this, Path=CanEditSchedule}" />
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
-            </TabItem>
-            
-            <!-- Settings -->
-            <TabItem Header="Settings" Selector.Selected="Settings_Tab_Selected">
-                <TabControl x:Name="InnerSettingsTab"
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </TabItem>
+
+        <!-- Settings -->
+        <TabItem Header="Settings" Selector.Selected="Settings_Tab_Selected">
+            <TabControl x:Name="InnerSettingsTab"
                             TabStripPlacement="Left">
-                    <TabItem Header="Schedule settings">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="20" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="20" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="20" />
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="20" />
-                            </Grid.RowDefinitions>
-                            <!--Schedule panel-->
-                            <Border Grid.Column="1" Grid.Row="1"
+                <TabItem Header="Schedule settings">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="20" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="20" />
+                        </Grid.RowDefinitions>
+                        <!--Schedule panel-->
+                        <Border Grid.Column="1" Grid.Row="1"
                               Grid.ColumnSpan="3"
                               BorderBrush="Transparent" 
                               BorderThickness="1"
@@ -486,34 +489,34 @@
                               HorizontalAlignment="Left"
                                     >
 
-                                <StackPanel Orientation="Vertical" Margin="5">
-                                    <TextBlock Text="Shift name"/>
-                                    <!--<TextBox x:Name="ShiftNameTextBox"
+                            <StackPanel Orientation="Vertical" Margin="5">
+                                <TextBlock Text="Shift name"/>
+                                <!--<TextBox x:Name="ShiftNameTextBox"
                                      HorizontalAlignment="Left"
                                      Width="118"
                                      Margin="0, 5, 0, 0"/> -->
-                                    <ComboBox x:Name="ShiftNameComboBox"
+                                <ComboBox x:Name="ShiftNameComboBox"
                                       HorizontalAlignment="Left"
                                       Width="118"
                                       Margin="0, 5, 0, 0" 
                                       DisplayMemberPath="Name"
                                       SelectionChanged="ShiftStartTextBox_TargetUpdated"
                                       SelectedIndex="0"/>
-                                    <TextBlock Text="Shift hours" 
+                                <TextBlock Text="Shift hours" 
                                        Margin="0, 10, 0, 0"/>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBox x:Name="ShiftStartTextBox" 
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox x:Name="ShiftStartTextBox" 
                                          Margin="0, 10, 0, 0" Width="50" 
                                          HorizontalAlignment="Left"
                                          KeyUp="ShiftStartTextBox_TargetUpdated"
                                          DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem, NotifyOnTargetUpdated=True}"
                                          Text="{Binding Path=StartHour, Mode=TwoWay, StringFormat={}{0:hh}:{0:mm}}"     
                                          />
-                                        <TextBlock Text=" - " FontSize="20" 
+                                    <TextBlock Text=" - " FontSize="20" 
                                            VerticalAlignment="Center" 
                                            HorizontalAlignment="Center" 
                                            Margin="0, 5, -10, 0"/>
-                                        <TextBox x:Name="ShiftEndTextBox" 
+                                    <TextBox x:Name="ShiftEndTextBox" 
                                          Margin="10, 10, 0, 0" 
                                          Width="50" 
                                          HorizontalAlignment="Right"
@@ -521,41 +524,41 @@
                                          DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem}"
                                          Text="{Binding Path=EndHour, Mode=TwoWay, StringFormat={}{0:hh}:{0:mm}}"
                                          />
-                                        <TextBlock x:Name="HoursTextBlock" 
+                                    <TextBlock x:Name="HoursTextBlock" 
                                            VerticalAlignment="Center" 
                                            HorizontalAlignment="Center" 
                                            Margin="15, 5, -10, 0"
                                            DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem}"
                                            Text="{Binding Path=Duration, StringFormat={}({0}h)}"/>
 
-                                    </StackPanel>
-                                    <TextBlock Text="Minimum staff number" 
+                                </StackPanel>
+                                <TextBlock Text="Minimum staff number" 
                                        Margin="0, 10, 0, 0"/>
-                                    <TextBox x:Name="MinimumStaffTextBox" 
+                                <TextBox x:Name="MinimumStaffTextBox" 
                                      Margin="0, 5, 0, 0" 
                                      Width="40" 
                                      HorizontalAlignment="Left"
                                      DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem}"
                                      Text="{Binding Path=MinStaff, Mode=TwoWay}"/>
-                                    <TextBlock Text="Maximum staff number" 
+                                <TextBlock Text="Maximum staff number" 
                                      Margin="0, 10, 0, 0"/>
-                                    <TextBox x:Name="MaximumStaffTextBox" 
+                                <TextBox x:Name="MaximumStaffTextBox" 
                                      Margin="0, 5, 0, 0" 
                                      Width="40" 
                                      HorizontalAlignment="Left"
                                      DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem}"
                                      Text="{Binding Path=MaxStaff, Mode=TwoWay}"/>
-                                    <TextBlock Text="Preferred staff number" 
+                                <TextBlock Text="Preferred staff number" 
                                      Margin="0, 10, 0, 0"/>
-                                    <TextBox x:Name="PreferredStaffTextBox" 
+                                <TextBox x:Name="PreferredStaffTextBox" 
                                      Margin="0, 5, 0, 0" 
                                      Width="40" 
                                      HorizontalAlignment="Left"
                                      DataContext="{Binding ElementName=ShiftNameComboBox, Path=SelectedItem}"
                                      Text="{Binding Path=PreferredStaff, Mode=TwoWay}"/>
-                                </StackPanel>
-                            </Border>
-                            <Button x:Name="ButtonSaveScheduleSetting" Grid.Column="1"
+                            </StackPanel>
+                        </Border>
+                        <Button x:Name="ButtonSaveScheduleSetting" Grid.Column="1"
                                             Margin="0, 10, 0, 0"
                                             Content="Save"
                                             FontSize="20"
@@ -564,64 +567,65 @@
                                             Width="100"
                                             Height="50"
                                             Click="ButtonSaveScheduleSetting_Click"/>
-                        </Grid>
-                    </TabItem>
-                    <TabItem Header="Connection settings"
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Connection settings"
                              TextBlock.FontSize="20" Selector.Selected="TabItem_Selected"
-                             Visibility="Hidden">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="20" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="20" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="20" />
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="20" />
-                            </Grid.RowDefinitions>
-                            <StackPanel Orientation="Vertical"
+                             >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="20" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="20" />
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Vertical"
                                             Grid.Row="1"
                                             Grid.Column="1"
                                             Grid.ColumnSpan="2">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Host" FontSize="18"/>
-                                    <TextBlock Text="Port" FontSize="18"
-                                           Margin="130, 0, 0, 0"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBox x:Name="HostTextBox" Width="150"
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Host" FontSize="18"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox x:Name="HostTextBox" Width="269"
                                            Height="35"
                                            HorizontalAlignment="Left"
                                            DataContext="{Binding ElementName=_this, Path=ConnectionSettings, Mode=TwoWay}"
                                            Text="{Binding Path=Host}"
                                            />
-                                    <TextBox x:Name="PortTextBox" Width="100"
-                                           Height="35"
-                                           Margin="18, 0, 0, 0"
-                                           DataContext="{Binding ElementName=_this, Path=ConnectionSettings, Mode=TwoWay}"
-                                           Text="{Binding Path=Port}"/>
-                                </StackPanel>
-                                <TextBlock Text="Username"
+                            </StackPanel>
+                            <TextBlock Text="Database Name"
                                            FontSize="18"
                                            Margin="0, 25, 0, 0"/>
-                                <TextBox x:Name="ConnectionUsernameTextBox"
+                            <TextBox x:Name="ConnectionDatabaseNameTextBox"
+                                           Width="269"
+                                           Height="35"
+                                           HorizontalAlignment="Left"
+                                           />
+                            <TextBlock Text="Username"
+                                           FontSize="18"
+                                           Margin="0, 10, 0, 0"/>
+                            <TextBox x:Name="ConnectionUsernameTextBox"
                                            Width="269"
                                            Height="35"
                                            HorizontalAlignment="Left"
                                            DataContext="{Binding ElementName=_this, Path=ConnectionSettings, Mode=TwoWay}"
                                            Text="{Binding Path=Username}"/>
-                                <TextBlock Text="Password"
+                            <TextBlock Text="Password"
                                            FontSize="18"
                                            Margin="0, 10, 0, 0"/>
-                                <PasswordBox x:Name="ConnectionPasswordPasswordBox"
+                            <PasswordBox x:Name="ConnectionPasswordPasswordBox"
                                             Width="269"
                                             Height="35"
                                             HorizontalAlignment="Left"
                                              />
-                                <Button x:Name="ButtonSaveConnectionSetting" Grid.Column="2"
+                            <Button x:Name="ButtonSaveConnectionSetting" Grid.Column="2"
                                             Margin="0, 30, 0, 0"
                                             Content="Save"
                                             FontSize="20"
@@ -629,10 +633,10 @@
                                             Width="150"
                                             Height="35"
                                             Click="ButtonSaveConnectionSetting_Click"/>
-                            </StackPanel>
-                        </Grid>
-                    </TabItem>
-                </TabControl>
-            </TabItem>
-        </TabControl>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </TabItem>
+    </TabControl>
 </Window>
