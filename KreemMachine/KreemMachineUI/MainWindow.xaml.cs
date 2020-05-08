@@ -48,6 +48,11 @@ namespace KreemMachine
                                           || SecurityContext.HasPermissions(Permission.RequestRestockForOwnProduct);
         public bool CanChangeRestockRequests => SecurityContext.HasPermissions(Permission.ChangeRestockRequests);
 
+        public string ServerField => HostTextBox.Text;
+        public string UsernameField => ConnectionUsernameTextBox.Text;
+        public string PasswordField => ConnectionPasswordPasswordBox.Password;
+        public string DatabaseNameField => ConnectionDatabaseNameTextBox.Text;
+        
         ScheduledShift manuallyScheduledShift;
 
         public ScheduledShift ManuallyScheduledShift
@@ -154,7 +159,7 @@ namespace KreemMachine
 
         private void ButtonSaveConnectionSetting_Click(object sender, RoutedEventArgs e)
         {
-            connectionService.SaveChanges(ConnectionSettings);
+            connectionService.ChangeConnectionString(ServerField, UsernameField, PasswordField, DatabaseNameField);
         }
 
         private void TabItem_Selected(object sender, RoutedEventArgs e)
@@ -606,5 +611,22 @@ namespace KreemMachine
 
         #endregion
 
+        #region Stock-Stats
+        private void SellProductButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var product = button.DataContext as Product;
+
+            var form = new SellProduct(product, productServices);
+            form.Show();
+
+            //Console.WriteLine(statisticsService.GetMostSellingProduct());
+            //Console.WriteLine(statisticsService.GetLeastSellingProduct());
+            //Console.WriteLine(statisticsService.CalculateProfit(product));
+            Console.WriteLine(statisticsService.GetMostProfitableProduct());
+            Console.WriteLine(statisticsService.GetLeastProfitableProduct());
+        }
+
+        #endregion
     }
 }

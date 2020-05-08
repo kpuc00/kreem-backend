@@ -37,6 +37,7 @@ namespace KreemMachineLibrary
 
         public virtual DbSet<RestockStage> RestockStages { get; set; }
 
+        public virtual DbSet<ProductSale> ProductSales { get; set; }
 
     }
 }

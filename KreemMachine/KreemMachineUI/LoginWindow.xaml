@@ -15,11 +15,11 @@
 
         <!--Email-->
         <TextBlock Text="Email" />
-        <TextBox x:Name="EmailTextBox" KeyDown="EmailTextBox_KeyDown" />
+        <TextBox Text="test@test.com" x:Name="EmailTextBox" KeyDown="EmailTextBox_KeyDown" />
 
         <!--Password-->
         <TextBlock Margin="0 10 0 0" Text="Password" />
-        <PasswordBox x:Name="SecretPasswordBox" KeyDown="SecretPasswordBox_KeyDown"  />
+        <PasswordBox Password="qweqwe" x:Name="SecretPasswordBox" KeyDown="SecretPasswordBox_KeyDown"  />
 
         <Button Content="Log in" Margin="0 25" Padding="0 5"
                 x:Name="LogInButton" Click="LogInButton_Click" />

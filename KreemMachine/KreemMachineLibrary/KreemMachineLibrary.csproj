@@ -104,6 +104,8 @@
   <ItemGroup>
     <Compile Include="DTO\ConnectionSettings.cs" />
     <Compile Include="DataBaseContext.cs" />
+    <Compile Include="DTO\ProductBoughtForAMonthDTO.cs" />
+    <Compile Include="DTO\ProductSoldForAMonthDTO.cs" />
     <Compile Include="DTO\ResourcesPerEmployeeDTO.cs" />
     <Compile Include="DTO\ResourcesPerMonthDTO.cs" />
     <Compile Include="DTO\ResourcesPerShiftDTO.cs" />
@@ -118,6 +120,7 @@
     <Compile Include="Exceptions\RequiredFieldsEmpty.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Models\Department.cs" />
+    <Compile Include="Models\ProductSale.cs" />
     <Compile Include="Models\RestockRequest.cs" />
     <Compile Include="Models\RestockStage.cs" />
     <Compile Include="Models\ScheduledShift.cs" />
