@@ -261,7 +261,7 @@
                                 <TextBlock Grid.Column="1" Text="{Binding Quantity}" Margin="0 0 10 0" />
                                 <TextBlock Grid.Column="2" Text="{Binding BuyCost}" Margin="0 0 10 0" />
                                 <TextBlock Grid.Column="3" Text="{Binding Department.Name}" Margin="0 0 10 0" />
-                                <Button Grid.Column="5" Content="Sell" Margin="0 0 10 0" Click="SellProductButton_Click"/>
+                                <Button Grid.Column="5" Content="Sell" Padding="4 0 4 0" Margin="0 0 10 0" Click="SellProductButton_Click"/>
                                 <Button Grid.Column="6" Content="Restock" Padding="4 0 4 0" Margin="0 0 10 0" Click="RequestRestockForProductButton_Clicked"
                                              IsEnabled="{Binding ElementName=_this, Path=CanRequestProductRestock}"  />
                                 <Button Grid.Column="7" Content="Edit" Padding="4 0 4 0" Margin="0 0 10 0" Click="EditProductButton_Click" />
