@@ -41,6 +41,7 @@ namespace KreemMachineLibrary.Services
             {
                 return await db.RestockRequests
                     .Where(r => !r.Stages.Any(s => s.TypeStr == RESTOCK_STAGE_HIDE))
+                    .Where(r => r.Product.Deleted != 1)
                     .Include(r => r.Product.Department)
                     .Include(r => r.Stages.Select(s => s.User))
                     .ToListAsync();

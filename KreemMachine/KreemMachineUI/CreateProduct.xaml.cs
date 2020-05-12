@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using KreemMachineLibrary.Exceptions;
+using System.Data.Entity.Infrastructure;
 
 namespace KreemMachine
 {
@@ -68,6 +69,10 @@ namespace KreemMachine
             catch (RequiredFieldsEmpty ex)
             {
                 MessageBox.Show(ex.Message, "Create product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show("Something went wrong. Make sure the name has not been used before!", "Create product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
     }
