@@ -34,6 +34,7 @@ namespace KreemMachine.UserControls
             Formatter = value => value.ToString("N");
 
             DataContext = this;
+
         }
 
         public SeriesCollection SeriesCollection { get; set; }
@@ -42,3 +43,4 @@ namespace KreemMachine.UserControls
 
     }
 }
+

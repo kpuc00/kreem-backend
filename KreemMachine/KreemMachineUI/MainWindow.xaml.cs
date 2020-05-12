@@ -24,6 +24,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Threading;
 using KreemMachineLibrary.DTO;
 using System.Timers;
+using KreemMachine.UserControls;
 
 namespace KreemMachine
 {
@@ -431,6 +432,15 @@ namespace KreemMachine
             EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployeeDate(fromDatePicker.SelectedDate ?? default(DateTime), toDatePicker.SelectedDate ?? default(DateTime));
         }
 
+        private void MostLeastSold_Selected(object sender, RoutedEventArgs e)
+        {
+            Statistics stat = new Statistics();
+        }
+
+
+
+
+
         #endregion
 
         #region Products
@@ -627,6 +637,9 @@ namespace KreemMachine
             Console.WriteLine(statisticsService.GetLeastProfitableProduct());
         }
 
+
         #endregion
+
+
     }
 }
