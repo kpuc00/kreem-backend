@@ -249,7 +249,7 @@
                                     <ColumnDefinition SharedSizeGroup="DepartmentColumn" Width="Auto"/>
                                     <!--Empty column for ui purpose-->
                                     <ColumnDefinition Width="*"/>
-                                    <!-- Request restock -->        
+                                    <!-- Request restock -->
                                     <ColumnDefinition Width="auto"/>
                                     <!-- Sales  -->
                                     <ColumnDefinition Width="auto"/>
@@ -329,29 +329,29 @@
 
                                         <ItemsControl ItemsSource="{Binding Buttons}"  HorizontalAlignment="Left" 
                                                           Visibility="{Binding ElementName=_this, Path=CanChangeRestockRequests, Converter={StaticResource BoolToVis}}">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <StackPanel.Resources>
-                                                                <Style TargetType="Button">
-                                                                    <Setter Property="Margin" Value="5 0" />
-                                                                    <Setter Property="Padding" Value="5 0" />
-                                                                </Style>
-                                                            </StackPanel.Resources>
-                                                        </StackPanel>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                            </ItemsControl>
-                                        </StackPanel>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </Grid>
-            </TabItem>
-            
-            <!--Statistics-->
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <StackPanel.Resources>
+                                                            <Style TargetType="Button">
+                                                                <Setter Property="Margin" Value="5 0" />
+                                                                <Setter Property="Padding" Value="5 0" />
+                                                            </Style>
+                                                        </StackPanel.Resources>
+                                                    </StackPanel>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </TabItem>
+
+        <!--Statistics-->
         <TabItem Header="Statistics" Visibility="{Binding ElementName=_this, Path=CanViewStatisticsTab, Converter={StaticResource BoolToVis}}" >
             <Grid>
                 <TabControl TabStripPlacement="Left">
@@ -396,20 +396,32 @@
                         </Grid>
                     </TabItem>
 
-                    <TabItem x:Name="MostLeastSold" Header="Most Least Sold" Selector.Selected="MostLeastSold_Selected">
-                        <Grid>
-                            <lvc:CartesianChart Series="{Binding SeriesCollection}" LegendLocation="Left">
-                                <lvc:CartesianChart.AxisX>
-                                    <lvc:Axis Title="Salesman" Labels="{Binding Labels}"></lvc:Axis>
-                                </lvc:CartesianChart.AxisX>
-                                <lvc:CartesianChart.AxisY>
-                                    <lvc:Axis Title="Sold Apps" LabelFormatter="{Binding Formatter}"></lvc:Axis>
-                                </lvc:CartesianChart.AxisY>
-                            </lvc:CartesianChart>
+                    <TabItem x:Name="StockStatisticsTab" Header="Stock" Height="25" Margin="0,0,0,-0.2" VerticalAlignment="Bottom" Selector.Selected="StockStatisticsTab_Selected">
+                        <Grid Background="White">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="From:" Margin="5" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <DatePicker x:Name="startDateStock" Margin="0,5,0,5" VerticalAlignment="Center" SelectedDateChanged="DateStock_SelectedDateChanged"/>
+                                <Label Content="To:" Margin="30,5,5,5" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <DatePicker x:Name="endDateStock" Margin="0,5,0,5" VerticalAlignment="Center" SelectedDateChanged="DateStock_SelectedDateChanged"/>
+                                <Label Content="Category:" Margin="30,5,5,5" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <ComboBox x:Name="cbxStockCategory" Margin="0,6,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="StockCategory_SelectionChanged"/>
+                                <RadioButton x:Name="rbnStockPrice" Margin="30,5,5,5" FontWeight="Bold" IsChecked="True">
+                                    Price
+                                </RadioButton>
+                                <RadioButton x:Name="rbnStockAmount" Margin="30,5,5,5" FontWeight="Bold">
+                                    Amount
+                                </RadioButton>
+                            </StackPanel>
+                            <DataGrid x:Name="StockGrid" Grid.Row="1" GridLinesVisibility="None" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True"/>
                         </Grid>
                     </TabItem>
                     <local:MonthPicker Height="100" Width="100"/>
                     <local:MonthPicker Height="100" Width="100"/>
+                    <RadioButton Content="RadioButton" Height="100" Width="100"/>
                 </TabControl>
             </Grid>
         </TabItem>

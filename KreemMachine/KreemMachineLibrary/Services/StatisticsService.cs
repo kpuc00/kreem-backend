@@ -103,6 +103,52 @@ namespace KreemMachineLibrary.Services
         #endregion
 
         #region Stock statistics
+
+        public ObservableCollection<StockStatisticsPriceDTO> GetStockStatisticsPrice(DateTime fromDate, DateTime toDate, Department category) {
+            using (var db = new DataBaseContext())
+            {
+                var result = from products in db.Products
+                             join productSale in db.ProductSales on products.Id equals productSale.ProductId
+                             where productSale.Timestamp >= fromDate && productSale.Timestamp <= toDate && products.DepartmentId == category.Id
+                             select new { p = products, ps = productSale } into joined
+                             group joined by new
+                             {
+                                 product = joined.p.Name,
+                                 totalPrice = joined.p.SellPrice * joined.ps.Quantity
+                             } into g
+                             select new StockStatisticsPriceDTO
+                             {
+                                 item = g.Key.product,
+                                 price = g.Key.totalPrice,
+                             };
+
+                return new ObservableCollection<StockStatisticsPriceDTO>(result);
+            }
+        }
+
+        public ObservableCollection<StockStatisticsAmountDTO> GetStockStatisticsAmount(DateTime fromDate, DateTime toDate, Department category)
+        {
+            using (var db = new DataBaseContext())
+            {
+                var result = from products in db.Products
+                             join productSale in db.ProductSales on products.Id equals productSale.ProductId
+                             where productSale.Timestamp >= fromDate && productSale.Timestamp <= toDate && products.DepartmentId == category.Id
+                             select new { p = products, ps = productSale } into joined
+                             group joined by new
+                             {
+                                 product = joined.p,
+                                 prodduct_sale = joined.ps,
+                             } into g
+                             select new StockStatisticsAmountDTO
+                             {
+                                 item = g.Key.product.Name,
+                                 amount = g.Sum(x => x.ps.Quantity),
+                             };
+
+                return new ObservableCollection<StockStatisticsAmountDTO>(result);
+            }
+        }
+
         public float CalculateProfit(Product product)
         {
             using (var db = new DataBaseContext())

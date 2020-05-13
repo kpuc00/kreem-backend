@@ -432,13 +432,6 @@ namespace KreemMachine
             EmplStatsDataGrid.ItemsSource = statisticsService.GetResourcesPerEmployeeDate(fromDatePicker.SelectedDate ?? default(DateTime), toDatePicker.SelectedDate ?? default(DateTime));
         }
 
-        private void MostLeastSold_Selected(object sender, RoutedEventArgs e)
-        {
-            Statistics stat = new Statistics();
-        }
-
-
-
 
 
         #endregion
@@ -638,8 +631,44 @@ namespace KreemMachine
         }
 
 
+
         #endregion
 
 
+
+        private void DateStock_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            StockStatistics();
+        }
+
+        private void StockCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            StockStatistics();
+        }
+
+        private void StockStatistics() 
+        {
+
+            if (rbnStockPrice.IsChecked == true) {
+                StockGrid.ItemsSource = statisticsService.GetStockStatisticsPrice(startDateStock.SelectedDate ?? default(DateTime), startDateStock.SelectedDate ?? default(DateTime), (Department)cbxStockCategory.SelectedItem);
+            }   
+            else if (rbnStockAmount.IsChecked == true) {
+                StockGrid.ItemsSource = statisticsService.GetStockStatisticsAmount(startDateStock.SelectedDate ?? default(DateTime), startDateStock.SelectedDate ?? default(DateTime), (Department)cbxStockCategory.SelectedItem);
+            }
+            
+             
+        }
+
+        private void StockStatisticsTab_Selected(object sender, RoutedEventArgs e)
+        {
+            var departments = productServices.GetAllDepartments();
+            cbxStockCategory.ItemsSource = departments;
+            cbxStockCategory.SelectedItem = departments[0];
+            cbxStockCategory.DisplayMemberPath = "Name";
+
+            StockStatistics();
+
+
+        }
     }
 }

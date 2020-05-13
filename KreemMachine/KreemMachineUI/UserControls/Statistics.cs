@@ -9,7 +9,7 @@ namespace KreemMachine.UserControls
     {
         public Statistics()
         {
-            InitializeComponent();
+            //InitializeComponent();
 
             SeriesCollection = new SeriesCollection
             {
