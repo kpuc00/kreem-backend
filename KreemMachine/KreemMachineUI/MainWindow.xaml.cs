@@ -650,10 +650,10 @@ namespace KreemMachine
         {
 
             if (rbnStockPrice.IsChecked == true) {
-                StockGrid.ItemsSource = statisticsService.GetStockStatisticsPrice(startDateStock.SelectedDate ?? default(DateTime), startDateStock.SelectedDate ?? default(DateTime), (Department)cbxStockCategory.SelectedItem);
+                StockGrid.ItemsSource = statisticsService.GetIncomeThisMonth(startDateStock.SelectedDate ?? default(DateTime), startDateStock.SelectedDate ?? default(DateTime), (Department)cbxStockCategory.SelectedItem);
             }   
             else if (rbnStockAmount.IsChecked == true) {
-                StockGrid.ItemsSource = statisticsService.GetStockStatisticsAmount(startDateStock.SelectedDate ?? default(DateTime), startDateStock.SelectedDate ?? default(DateTime), (Department)cbxStockCategory.SelectedItem);
+                StockGrid.ItemsSource = statisticsService.GetAmountSoldThisMonth(startDateStock.SelectedDate ?? default(DateTime), startDateStock.SelectedDate ?? default(DateTime), (Department)cbxStockCategory.SelectedItem);
             }
             
              
