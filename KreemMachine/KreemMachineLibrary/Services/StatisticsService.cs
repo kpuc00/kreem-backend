@@ -104,7 +104,8 @@ namespace KreemMachineLibrary.Services
 
         #region Stock statistics
 
-        public ObservableCollection<StockStatisticsPriceDTO> GetStockStatisticsPrice(DateTime fromDate, DateTime toDate, Department category) {
+        public ObservableCollection<StockStatisticsPriceDTO> GetStockStatisticsPrice(DateTime fromDate, DateTime toDate, Department category)
+        {
             using (var db = new DataBaseContext())
             {
                 var result = from products in db.Products
@@ -229,15 +230,17 @@ namespace KreemMachineLibrary.Services
                             join rq in db.RestockRequests on p.Id equals rq.ProductId
                             join rs in db.RestockStages on rq.ProductId equals rs.RequestId
                             where rs.Date >= fromDate && rs.Date <= toDate
-                            select new { 
-                                Product = p, 
-                                RestockRequest = rq, 
-                                RestockStage = rs 
+                            select new
+                            {
+                                Product = p,
+                                RestockRequest = rq,
+                                RestockStage = rs
                             } into joined
                             group joined by new { joined.RestockStage.Date.Month } into grouping
-                            select new ProductBoughtForAMonthDTO { 
-                                Month = grouping.FirstOrDefault().RestockStage.Date, 
-                                QuantityBought = grouping.FirstOrDefault().Product.Quantity 
+                            select new ProductBoughtForAMonthDTO
+                            {
+                                Month = grouping.FirstOrDefault().RestockStage.Date,
+                                QuantityBought = grouping.FirstOrDefault().Product.Quantity
                             };
 
                 return new ObservableCollection<ProductBoughtForAMonthDTO>(query);
@@ -318,6 +321,59 @@ namespace KreemMachineLibrary.Services
                             };
 
                 return new ObservableCollection<ProductSoldForAMonthDTO>(query);
+            }
+        }
+        public ObservableCollection<StockStatisticsPriceDTO> GetIncomeThisMonth(DateTime startDate, DateTime endDate, Department department)
+        {
+            using (var db = new DataBaseContext())
+            {
+                var query = from p in db.Products
+                            join rq in db.RestockRequests on p.Id equals rq.ProductId
+                            join rs in db.RestockStages on rq.ProductId equals rs.RequestId
+                            join ps in db.ProductSales on p.Id equals ps.ProductId
+                            where rs.Date >= startDate && rs.Date <= endDate && ps.Product.Department.Name == department.Name
+                            select new
+                            {
+                                Product = p,
+                                RestockRequest = rq,
+                                RestockStage = rs,
+                                SoldProduct = ps
+                            } into joined
+                            group joined by new { joined.RestockStage.Date.Month } into grouping
+                            select new StockStatisticsPriceDTO
+                            {
+                                item = grouping.FirstOrDefault().Product.Name,
+                                price = grouping.Sum(p => (p.Product.SellPrice - p.Product.BuyCost) * p.SoldProduct.Quantity)
+                            };
+
+                return new ObservableCollection<StockStatisticsPriceDTO>(query);
+            }
+        }
+
+        public ObservableCollection<StockStatisticsAmountDTO> GetAmountSoldThisMonth(DateTime startDate, DateTime endDate, Department department)
+        {
+            using (var db = new DataBaseContext())
+            {
+                var query = from p in db.Products
+                            join rq in db.RestockRequests on p.Id equals rq.ProductId
+                            join rs in db.RestockStages on rq.ProductId equals rs.RequestId
+                            join ps in db.ProductSales on p.Id equals ps.ProductId
+                            where rs.Date >= startDate && rs.Date <= endDate && ps.Product.Department.Name == department.Name
+                            select new
+                            {
+                                Product = p,
+                                RestockRequest = rq,
+                                RestockStage = rs,
+                                SoldProduct = ps
+                            } into joined
+                            group joined by new { joined.RestockStage.Date.Month } into grouping
+                            select new StockStatisticsAmountDTO
+                            {
+                                item = grouping.FirstOrDefault().Product.Name,
+                                amount = grouping.FirstOrDefault().SoldProduct.Quantity
+                            };
+
+                return new ObservableCollection<StockStatisticsAmountDTO>(query);
             }
         }
         #endregion
