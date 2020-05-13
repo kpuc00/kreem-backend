@@ -331,7 +331,7 @@ namespace KreemMachineLibrary.Services
                             join rq in db.RestockRequests on p.Id equals rq.ProductId
                             join rs in db.RestockStages on rq.ProductId equals rs.RequestId
                             join ps in db.ProductSales on p.Id equals ps.ProductId
-                            where rs.Date >= startDate && rs.Date <= endDate && ps.Product.Department.Name == department.Name
+                            where rs.Date >= startDate && rs.Date <= endDate && ps.Product.Department.Id == department.Id
                             select new
                             {
                                 Product = p,
@@ -358,7 +358,7 @@ namespace KreemMachineLibrary.Services
                             join rq in db.RestockRequests on p.Id equals rq.ProductId
                             join rs in db.RestockStages on rq.ProductId equals rs.RequestId
                             join ps in db.ProductSales on p.Id equals ps.ProductId
-                            where rs.Date >= startDate && rs.Date <= endDate && ps.Product.Department.Name == department.Name
+                            where rs.Date >= startDate && rs.Date <= endDate && ps.Product.Department.Id == department.Id
                             select new
                             {
                                 Product = p,
