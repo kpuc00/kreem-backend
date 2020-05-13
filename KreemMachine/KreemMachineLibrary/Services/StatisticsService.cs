@@ -327,27 +327,26 @@ namespace KreemMachineLibrary.Services
         {
             using (var db = new DataBaseContext())
             {
-                var query = from p in db.Products
-                            join rq in db.RestockRequests on p.Id equals rq.ProductId
-                            join rs in db.RestockStages on rq.ProductId equals rs.RequestId
+                var query = from d in db.Departments
+                            join p in db.Products on d.Id equals p.DepartmentId
                             join ps in db.ProductSales on p.Id equals ps.ProductId
-                            where rs.Date >= startDate && rs.Date <= endDate && ps.Product.Department.Id == department.Id
+                            where ps.Timestamp >= startDate && ps.Timestamp <= endDate && p.DepartmentId == department.Id
                             select new
                             {
-                                Product = p,
-                                RestockRequest = rq,
-                                RestockStage = rs,
                                 SoldProduct = ps
                             } into joined
-                            group joined by new { joined.RestockStage.Date.Month } into grouping
+                            group joined by joined.SoldProduct.Product.Id into newGrouping
                             select new StockStatisticsPriceDTO
                             {
-                                item = grouping.FirstOrDefault().Product.Name,
-                                price = grouping.Sum(p => (p.Product.SellPrice - p.Product.BuyCost) * p.SoldProduct.Quantity)
+                                item = newGrouping.FirstOrDefault().SoldProduct.Product.Name,
+                                price = newGrouping.Sum(p => (p.SoldProduct.Product.SellPrice - p.SoldProduct.Product.BuyCost) * p.SoldProduct.Quantity)
                             };
+<<<<<<< HEAD
                 foreach (StockStatisticsPriceDTO x in query) {
                     Console.WriteLine(x.item+" "+x.price);
                 }
+=======
+>>>>>>> develop
                 return new ObservableCollection<StockStatisticsPriceDTO>(query);
             }
         }
@@ -356,25 +355,20 @@ namespace KreemMachineLibrary.Services
         {
             using (var db = new DataBaseContext())
             {
-                var query = from p in db.Products
-                            join rq in db.RestockRequests on p.Id equals rq.ProductId
-                            join rs in db.RestockStages on rq.ProductId equals rs.RequestId
+                var query = from d in db.Departments
+                            join p in db.Products on d.Id equals p.DepartmentId
                             join ps in db.ProductSales on p.Id equals ps.ProductId
-                            where rs.Date >= startDate && rs.Date <= endDate && ps.Product.Department.Id == department.Id
+                            where ps.Timestamp >= startDate && ps.Timestamp <= endDate && p.DepartmentId == department.Id
                             select new
                             {
-                                Product = p,
-                                RestockRequest = rq,
-                                RestockStage = rs,
                                 SoldProduct = ps
                             } into joined
-                            group joined by new { joined.RestockStage.Date.Month } into grouping
+                            group joined by joined.SoldProduct.Product.Id into newGrouping
                             select new StockStatisticsAmountDTO
                             {
-                                item = grouping.FirstOrDefault().Product.Name,
-                                amount = grouping.FirstOrDefault().SoldProduct.Quantity
+                                item = newGrouping.FirstOrDefault().SoldProduct.Product.Name,
+                                amount = newGrouping.Sum(p => p.SoldProduct.Quantity)
                             };
-
                 return new ObservableCollection<StockStatisticsAmountDTO>(query);
             }
         }
