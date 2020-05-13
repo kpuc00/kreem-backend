@@ -341,12 +341,7 @@ namespace KreemMachineLibrary.Services
                                 item = newGrouping.FirstOrDefault().SoldProduct.Product.Name,
                                 price = newGrouping.Sum(p => (p.SoldProduct.Product.SellPrice - p.SoldProduct.Product.BuyCost) * p.SoldProduct.Quantity)
                             };
-<<<<<<< HEAD
-                foreach (StockStatisticsPriceDTO x in query) {
-                    Console.WriteLine(x.item+" "+x.price);
-                }
-=======
->>>>>>> develop
+
                 return new ObservableCollection<StockStatisticsPriceDTO>(query);
             }
         }

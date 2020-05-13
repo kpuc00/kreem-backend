@@ -25,6 +25,7 @@ using System.Windows.Threading;
 using KreemMachineLibrary.DTO;
 using System.Timers;
 using KreemMachine.UserControls;
+using KreemMachineLibrary.Extensions.Date;
 
 namespace KreemMachine
 {
@@ -630,12 +631,6 @@ namespace KreemMachine
             Console.WriteLine(statisticsService.GetLeastProfitableProduct());
         }
 
-
-
-        #endregion
-
-
-
         private void DateStock_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             StockStatistics();
@@ -646,17 +641,20 @@ namespace KreemMachine
             StockStatistics();
         }
 
-        private void StockStatistics() 
+        private void StockStatistics()
         {
-
-            if (rbnStockPrice.IsChecked == true) {
-                StockGrid.ItemsSource = statisticsService.GetIncomeThisMonth(startDateStock.SelectedDate ?? default(DateTime), startDateStock.SelectedDate ?? default(DateTime), (Department)cbxStockCategory.SelectedItem);
-            }   
-            else if (rbnStockAmount.IsChecked == true) {
-                StockGrid.ItemsSource = statisticsService.GetAmountSoldThisMonth(startDateStock.SelectedDate ?? default(DateTime), startDateStock.SelectedDate ?? default(DateTime), (Department)cbxStockCategory.SelectedItem);
+            if (cbxStockCategory.SelectedItem == null)
+            {
+                return;
             }
-            
-             
+            if (rbnStockPrice.IsChecked == true)
+            {
+                StockGrid.ItemsSource = statisticsService.GetIncomeThisMonth(startDateStock.SelectedDate ?? default(DateTime), endDateStock.SelectedDate ?? default(DateTime), (Department)cbxStockCategory.SelectedItem);
+            }
+            else if (rbnStockAmount.IsChecked == true)
+            {
+                StockGrid.ItemsSource = statisticsService.GetAmountSoldThisMonth(startDateStock.SelectedDate ?? default(DateTime), endDateStock.SelectedDate ?? default(DateTime), (Department)cbxStockCategory.SelectedItem);
+            }
         }
 
         private void StockStatisticsTab_Selected(object sender, RoutedEventArgs e)
@@ -666,9 +664,19 @@ namespace KreemMachine
             cbxStockCategory.SelectedItem = departments[0];
             cbxStockCategory.DisplayMemberPath = "Name";
 
+            startDateStock.SelectedDate = DateTime.Now.ThisMonth();
+            endDateStock.SelectedDate = DateTime.Now.NextMonth();
+
             StockStatistics();
 
 
         }
+
+        private void StockPrice_Checked(object sender, RoutedEventArgs e)
+        {
+            StockStatistics();
+        }
+
+        #endregion
     }
 }
