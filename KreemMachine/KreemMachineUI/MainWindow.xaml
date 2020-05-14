@@ -288,7 +288,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Top row -->
-                <TextBlock Grid.Row="0" Text="Retock requests:" FontSize="24" />
+                <TextBlock Grid.Row="0" Text="Restock requests:" FontSize="24" />
                 <TextBox x:Name="SearchRestockRequestTextBox" Grid.Row="0" Grid.Column="1" Margin="7 3" 
                              TextChanged="SearchRestockRequestTextBox_TextChanged" VerticalContentAlignment="Center" />
 

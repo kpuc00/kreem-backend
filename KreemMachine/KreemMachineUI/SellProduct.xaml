@@ -23,7 +23,7 @@
         <TextBox Grid.Row="0" Grid.Column="1" Name="QuantityTextBox" Text="" Margin="5" />
         
         <TextBlock Grid.Row="1" Grid.ColumnSpan="1" Text="Product Name" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5 5 10 5" />
-        <TextBox Grid.Row="1" Grid.Column="1" Name="NameTextBox" Text="" Margin="5" />
+        <TextBox Grid.Row="1" Grid.Column="1" Name="NameTextBox" Text="" Margin="5" IsEnabled="False" />
         
         <Button Grid.Row="2" Grid.Column="1" Height="50" Width="150" Name="SaveButton" Content="Save"
                 HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" Click="SaveButton_Click" />
