@@ -91,6 +91,8 @@ namespace KreemMachineLibrary.Models
         [NotMapped]
         public float MinMonthlyHours => 20;
 
+        public virtual List<BlockOff> BlockOffs { get; set; }
+
         public User() { }
 
         public User(string firstName, string lastName, string email, Role role, float hourlyWage,

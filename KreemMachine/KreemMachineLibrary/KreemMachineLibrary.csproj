@@ -121,6 +121,7 @@
     <Compile Include="Exceptions\HourlyWageMustComtainOnlyNumbers.cs" />
     <Compile Include="Exceptions\RequiredFieldsEmpty.cs" />
     <Compile Include="Globals.cs" />
+    <Compile Include="Models\BlockOff.cs" />
     <Compile Include="Models\Department.cs" />
     <Compile Include="Models\ProductSale.cs" />
     <Compile Include="Models\RestockRequest.cs" />

@@ -39,5 +39,7 @@ namespace KreemMachineLibrary
 
         public virtual DbSet<ProductSale> ProductSales { get; set; }
 
+        public virtual DbSet<BlockOff> BlockOffs { get; set; }
+
     }
 }

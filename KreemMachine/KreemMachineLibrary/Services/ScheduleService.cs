@@ -87,6 +87,7 @@ namespace KreemMachineLibrary.Services
             Task<List<User>> getEmployees;
             using (var db = new DataBaseContext())
                 getEmployees = db.Users.Where(u => u.RoleStr == Role.Employee.ToString())
+               .Where(u => !u.BlockOffs.Any(b => b.ScheduledShiftId == shift.Id ))
                .Include(u => u.ScheduledShifts)
                .Include(u => u.ScheduledShifts.Select(us => us.ScheduledShift))
                .ToListAsync();
