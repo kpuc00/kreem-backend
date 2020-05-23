@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KreemMachineLibrary.Exceptions;
+using KreemMachineLibrary.Extensions.Date;
 using KreemMachineLibrary.Models.Statics;
 using KreemMachineLibrary.Services;
 
@@ -108,6 +109,23 @@ namespace KreemMachineLibrary.Models
             PhoneNumber = phoneNumber;
             Department = department;
         }
+
+        /// <summary>
+        /// Calculate the number of hours worked in any given week.
+        /// <b> WARNING!! Requires acces to <i>ScheduledShifts</i> 
+        /// Eagger load or don't dispose of Context before running the object </b>
+        /// </summary>
+        /// <param name="date"> any date in the week to calculate, uses 
+        /// <i>KreemMachineLibrary.Extensions.Date.StartOfWeek</i> and
+        /// <i>KreemMachineLibrary.Extensions.Date.NextWeek</i> to find the week range </param>
+        /// <returns> Number of hours worked in the given week </returns>
+        public double GetHoursWorkedInWeek(DateTime date)
+        {
+            return this.ScheduledShifts
+                ?.Where(s => s.ScheduledShift.Date >= date.StartOfWeek() && s.ScheduledShift.Date < date.NextWeek())
+                ?.Sum(s => s.ScheduledShift.Duration) ?? 0;
+        }
+
 
     }
 }

@@ -97,14 +97,14 @@ namespace KreemMachineLibrary.Services
             getEmployees.Wait();
             getShifts.Wait();
 
-            foreach (User employee in getEmployees.Result)
-            {
-                if (CanUserWorkShift(employee, shift))
-                {
-                    yield return employee;
-                }
-            }
+            var sugested = getEmployees.Result
+                .Where(user => CanUserWorkShift(user, shift))
+                .OrderBy(u => u.GetHoursWorkedInWeek(shift.Date))
+                .ToList();
+           
             ShiftService.ClearShiftCache();
+
+            return sugested;
         }
 
         internal bool CanUserWorkShift(User user, ScheduledShift scheduledShift)
