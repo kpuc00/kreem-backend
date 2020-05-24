@@ -160,7 +160,9 @@
                     <Button Content="Schedule manually" Click="ScheduleManuallyButton_Click"
                                 Margin="7"  Padding="7 3" />
                     <!-- Auto schedule -->
-                    <Button Content="Autogenerate" Margin="7" Padding="7 3" IsEnabled="{Binding ElementName=_this, Path=CanEditSchedule}" Visibility="Hidden" />
+                    <Button Content="Autogenerate" Margin="7" Padding="7 3" x:Name="AutogenerateScheduleButton"
+                            Click="AutogenerateScheduleButton_Click"
+                            IsEnabled="{Binding ElementName=_this, Path=CanEditSchedule}" />
 
 
                 </StackPanel>

@@ -34,6 +34,39 @@ namespace KreemMachineLibrary.Services
 
         }
 
+
+        public List<ScheduledShift> GetOrCreateScheduledShifts(DateTime start, DateTime end) 
+        {
+            Console.WriteLine($"Try to get data {start} – {end}");
+            using (var db = new DataBaseContext())
+            {
+                var shiftTypes = db.Shifts.ToList();
+                var shifts = new List<ScheduledShift>();
+
+                var existing = GetScheduledShiftsAsync(start, end).Result;
+
+                while(start < end)
+                {
+                    foreach (var shift in shiftTypes)
+                        if(!existing.Any(s=>s.Date == start && s.ShiftId == shift.Id))
+                        {
+                            var newShift = new ScheduledShift(start, shift);
+                            newShift.EmployeeScheduledShits = new List<UserScheduledShift>();
+                            shifts.Add(newShift);
+                        }
+                    start = start.AddDays(1);
+                }
+                db.ScheduledShifts.AddRange(shifts);
+
+                db.SaveChanges();
+                Console.WriteLine($"Finished to get data {start} – {end}");
+
+
+                return shifts.Union(existing).ToList();
+            }
+            
+        }
+
         public async Task<ScheduledShift> GetScheduledShiftOrCreateNewAsync(DateTime date, Shift shift)
         {
             using (var db = new DataBaseContext())
@@ -102,8 +135,6 @@ namespace KreemMachineLibrary.Services
                 .OrderBy(u => u.GetHoursWorkedInWeek(shift.Date))
                 .ToList();
            
-            ShiftService.ClearShiftCache();
-
             return sugested;
         }
 
@@ -177,5 +208,27 @@ namespace KreemMachineLibrary.Services
 
             return hasWorkedNextMorning;
         }
+
+        public void AutogenerateSchedule(List<ScheduledShift> shifts)
+        {
+            using (var db = new DataBaseContext())
+                foreach (var shift in shifts)
+                {
+                    var employees = GetSuggestedEmployees(shift).ToList();
+                    foreach(var employee in employees)
+                    {
+                        if (shift.EmployeeScheduledShits.Count >= shift.Shift.MinStaff)
+                            break;
+                        var assignment = new UserScheduledShift(employee, shift);
+                        db.UserScheduledShifts.Add(assignment);
+                        shift.EmployeeScheduledShits.Add(assignment);
+                        db.SaveChanges();
+                        
+                    }
+
+
+                }
+        }
+
     }
 }

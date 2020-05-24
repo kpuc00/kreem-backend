@@ -351,6 +351,30 @@ namespace KreemMachine
 
         }
 
+        private void AutogenerateScheduleButton_Click(object sender, RoutedEventArgs e)
+        {
+
+
+            DateTime monthStart = DateTime.Now.AddMonths(1).ThisMonth();
+            DateTime weekToProcess = monthStart;
+
+            //TODO: fix assuming monday!!
+            while(weekToProcess <= monthStart.AddMonths(1))
+            {
+                DateTime weekStart = weekToProcess;
+                DateTime weekEnd = weekToProcess.AddDays(7);
+                Console.WriteLine($"start: {weekStart} end: {weekEnd}");
+                _ = Task.Run(() =>
+                {
+                    List<ScheduledShift> shifts = scheduleService.GetOrCreateScheduledShifts(weekStart, weekEnd);
+                    scheduleService.AutogenerateSchedule(shifts);
+                });
+
+                weekToProcess = weekEnd;
+            }
+
+        }
+
         #endregion
 
         #region Statistics
@@ -678,5 +702,6 @@ namespace KreemMachine
         }
 
         #endregion
+
     }
 }
