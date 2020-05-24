@@ -351,27 +351,33 @@ namespace KreemMachine
 
         }
 
-        private void AutogenerateScheduleButton_Click(object sender, RoutedEventArgs e)
+        private async void AutogenerateScheduleButton_Click(object sender, RoutedEventArgs e)
         {
+            AutogenerateScheduleButton.IsEnabled = false;
 
+            var tasks = new List<Task>();
 
             DateTime monthStart = DateTime.Now.AddMonths(1).ThisMonth();
-            DateTime weekToProcess = monthStart;
 
-            //TODO: fix assuming monday!!
-            while(weekToProcess <= monthStart.AddMonths(1))
+            for(DateTime weekToProcess = monthStart;
+                weekToProcess <= monthStart.AddMonths(1);
+                weekToProcess = weekToProcess.AddDays(7))
             {
                 DateTime weekStart = weekToProcess;
                 DateTime weekEnd = weekToProcess.AddDays(7);
                 Console.WriteLine($"start: {weekStart} end: {weekEnd}");
-                _ = Task.Run(() =>
+
+                tasks.Add( Task.Run(() =>
                 {
                     List<ScheduledShift> shifts = scheduleService.GetOrCreateScheduledShifts(weekStart, weekEnd);
                     scheduleService.AutogenerateSchedule(shifts);
-                });
-
-                weekToProcess = weekEnd;
+                }));
+                //break;
             }
+
+            await Task.WhenAll(tasks.ToArray());
+            AutogenerateScheduleButton.IsEnabled = true;
+            MessageBox.Show("Schedule generation completed ");
 
         }
 

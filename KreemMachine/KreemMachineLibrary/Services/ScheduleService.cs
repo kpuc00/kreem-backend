@@ -222,9 +222,8 @@ namespace KreemMachineLibrary.Services
                         var assignment = new UserScheduledShift(employee, shift);
                         db.UserScheduledShifts.Add(assignment);
                         shift.EmployeeScheduledShits.Add(assignment);
-                        db.SaveChanges();
-                        
                     }
+                    db.SaveChanges();
 
 
                 }
