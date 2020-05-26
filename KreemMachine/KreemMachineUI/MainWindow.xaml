@@ -69,7 +69,7 @@
                     <TextBlock Grid.Column="4" Text="Department" TextAlignment="Left" HorizontalAlignment="Left"  />
                 </Grid>
                 <ListBox Grid.Row="2" Grid.ColumnSpan="2"  x:Name="AllUsersListBox" 
-                             TextBlock.FontSize="15" HorizontalContentAlignment="Stretch">
+                             TextBlock.FontSize="15" HorizontalContentAlignment="Stretch" SelectionChanged="AllUsersListBox_SelectionChanged">
                     <ListBox.ItemTemplate>
                         <DataTemplate >
                             <Grid VerticalAlignment="Center">

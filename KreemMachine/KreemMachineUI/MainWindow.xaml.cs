@@ -100,6 +100,7 @@ namespace KreemMachine
         StatisticsService statisticsService = new StatisticsService();
         ProductServices productServices = new ProductServices();
         StockService stockService = new StockService();
+        DepartmentService departmentService = new DepartmentService();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
