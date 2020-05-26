@@ -354,6 +354,61 @@
             </Grid>
         </TabItem>
 
+        <!-- Departments -->
+        <TabItem Header="Departments" Grid.IsSharedSizeScope="True">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <!-- Buttons and search -->
+                    <RowDefinition Height="auto" />
+
+                    <!-- Table heasers -->
+                    <RowDefinition Height="auto" />
+
+                    <!-- Table -->
+                    <RowDefinition Height="*" />
+
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <!-- Create button -->
+                    <ColumnDefinition Width="Auto" />
+
+                    <!-- Search bar-->
+                    <ColumnDefinition Width="*" />
+
+                </Grid.ColumnDefinitions>
+
+                <Button Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0" />
+
+                <TextBox Grid.Column="2" Name="SearchDepartmentsBar" FontSize="16"/>
+
+                <Grid Grid.Row="1" TextBlock.FontSize="18" Grid.ColumnSpan="3" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition SharedSizeGroup="NameColumn" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Name"  />
+                </Grid>
+                <ListBox x:Name="AllDepartmentsListBox" Grid.Row="2" Grid.ColumnSpan="3" HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid TextBlock.FontSize="16" >
+                                <Grid.ColumnDefinitions>
+                                    <!-- Name -->
+                                    <ColumnDefinition SharedSizeGroup="NameColumn" Width="Auto"/>
+                                    <!-- Edit -->
+                                    <ColumnDefinition Width="auto"/>
+                                    <!-- Delete -->
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Name}" Margin="0 0 10 0" />
+                                <Button Grid.Column="1" Content="Edit" Padding="4 0 4 0" Margin="0 0 10 0" />
+                                <Button Grid.Column="2" Content="Delete" Padding="4 0 4 0" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </TabItem>
+
         <!--Statistics-->
         <TabItem Header="Statistics" Visibility="{Binding ElementName=_this, Path=CanViewStatisticsTab, Converter={StaticResource BoolToVis}}" >
             <Grid>
