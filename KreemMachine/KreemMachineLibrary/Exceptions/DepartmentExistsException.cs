@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KreemMachineLibrary.Exceptions
 {
-    public class DepartmentExistsException : Exception
+    class DepartmentExistsException : Exception
     {
         public DepartmentExistsException(string message) : base(message) { }
     }

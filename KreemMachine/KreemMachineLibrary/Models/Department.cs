@@ -19,5 +19,11 @@ namespace KreemMachineLibrary.Models
 
         public virtual List<User> Users { get; set; }
 
+        public Department() { }
+
+        public Department(string name) {
+            this.Name = name;
+        }
+
     }
 }

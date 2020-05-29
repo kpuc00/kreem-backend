@@ -112,6 +112,7 @@
     <Compile Include="DTO\StockStatisticsAmountDTO.cs" />
     <Compile Include="DTO\StockStatisticsPriceDTO.cs" />
     <Compile Include="Exceptions\BuyCostIncorrectFormatException.cs" />
+    <Compile Include="Exceptions\DepartmentExistsException.cs" />
     <Compile Include="Exceptions\MissingPermissionEexception.cs" />
     <Compile Include="Exceptions\PhoneNumberException.cs" />
     <Compile Include="Exceptions\QuantityIncorrectFormatException.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ConnectionSettingsService.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Services\DepartmentService.cs" />
     <Compile Include="Services\ProductServices.cs" />
     <Compile Include="Services\ShiftService.cs" />
     <Compile Include="Services\ScheduleService.cs" />

@@ -118,6 +118,8 @@ namespace KreemMachine
             RefreshUsersViewTimer.Elapsed += (sender, e) => Dispatcher.Invoke(() => RefreshUsersTableView());
             RefreshProductsTableTimer.Elapsed += (sender, e) => Dispatcher.Invoke(() => RefreshProductsTable());
 
+            AllDepartmentsListBox.ItemsSource = departmentService.GetAll();
+
         }
 
         private void SearchTextBox_KeyUp(object sender, KeyEventArgs e)
@@ -710,5 +712,34 @@ namespace KreemMachine
 
         #endregion
 
+        private void btnAddDepartment_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new AddDepartmentWindow(departmentService);
+            window.Show();
+        }
+
+
+        private void btnDeleteDepartment_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var department = button.DataContext as Department;
+
+            departmentService.Delete(department);
+        }
+
+        private void btnEditDepartment_Click_1(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var department = button.DataContext as Department;
+
+            var window = new EditDepartmentWindow(departmentService, department);
+            window.Show();
+        }
+
+        private void DepartmentTab_Selected(object sender, RoutedEventArgs e)
+        {
+            AllDepartmentsListBox.ItemsSource = null;
+            AllDepartmentsListBox.ItemsSource = departmentService.GetAll();
+        }
     }
 }
