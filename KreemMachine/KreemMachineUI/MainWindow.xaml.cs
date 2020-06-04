@@ -108,6 +108,7 @@ namespace KreemMachine
 
         Timer RefreshUsersViewTimer = new Timer(5000);
         Timer RefreshProductsTableTimer = new Timer(5000);
+        Timer RefreshDepartmentTableTimer = new Timer(5000);
 
         public MainWindow(User user)
         {
@@ -117,6 +118,7 @@ namespace KreemMachine
             toDatePicker.SelectedDate = DateTime.Now.Date;
             RefreshUsersViewTimer.Elapsed += (sender, e) => Dispatcher.Invoke(() => RefreshUsersTableView());
             RefreshProductsTableTimer.Elapsed += (sender, e) => Dispatcher.Invoke(() => RefreshProductsTable());
+            RefreshDepartmentTableTimer.Elapsed += (sender, e) => Dispatcher.Invoke(() => RefreshDepartmentTable());
 
             AllDepartmentsListBox.ItemsSource = departmentService.GetAll();
 
@@ -712,6 +714,8 @@ namespace KreemMachine
 
         #endregion
 
+        #region Department 
+
         private void btnAddDepartment_Click(object sender, RoutedEventArgs e)
         {
             var window = new AddDepartmentWindow(departmentService);
@@ -738,8 +742,21 @@ namespace KreemMachine
 
         private void DepartmentTab_Selected(object sender, RoutedEventArgs e)
         {
+            RefreshDepartmentTable();
+            RefreshDepartmentTableTimer.Start();
+        }
+
+        private void DepartmentTab_Unselected(object sender, RoutedEventArgs e)
+        {
+            RefreshDepartmentTableTimer.Stop();
+        }
+
+        private void RefreshDepartmentTable() {
             AllDepartmentsListBox.ItemsSource = null;
             AllDepartmentsListBox.ItemsSource = departmentService.GetAll();
         }
+
+        #endregion
+
     }
 }

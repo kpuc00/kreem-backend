@@ -355,7 +355,7 @@
         </TabItem>
 
         <!-- Departments -->
-        <TabItem x:Name="DepartmentTab" Header="Departments" Grid.IsSharedSizeScope="True" Selector.Selected="DepartmentTab_Selected">
+        <TabItem x:Name="DepartmentTab" Header="Departments" Grid.IsSharedSizeScope="True" Selector.Selected="DepartmentTab_Selected" Selector.Unselected="DepartmentTab_Unselected">
             <Grid>
                 <Grid.RowDefinitions>
                     <!-- Buttons and search -->
