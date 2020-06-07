@@ -181,14 +181,12 @@ namespace KreemMachineLibrary.Services
             Shift morningShift = ShiftService.CahchedShifts.First();
             Shift nightShift = ShiftService.CahchedShifts.Last();
 
-            if (scheduledShift.Shift != morningShift)
+            if (scheduledShift.ShiftId != morningShift.Id)
                 return false;
 
             DateTime previousDay = scheduledShift.Date.AddDays(-1);
 
-            bool hasWorkedPreviousNight = user.ScheduledShifts.Where(us => us.ScheduledShift.Date == previousDay)
-                .Select(us => us.ScheduledShift.Shift)
-                .Contains(nightShift);
+            bool hasWorkedPreviousNight = user.ScheduledShifts.Any(us => us.ScheduledShift.Date == previousDay && us.ScheduledShift.ShiftId == nightShift.Id);
 
             return hasWorkedPreviousNight;
         }
@@ -197,14 +195,12 @@ namespace KreemMachineLibrary.Services
             Shift morningShift = ShiftService.CahchedShifts.First();
             Shift nightShift = ShiftService.CahchedShifts.Last();
 
-            if (scheduledShift.Shift != nightShift)
+            if (scheduledShift.ShiftId != nightShift.Id)
                 return false;
 
             DateTime nextDay = scheduledShift.Date.AddDays(1);
 
-            bool hasWorkedNextMorning = user.ScheduledShifts.Where(us => us.ScheduledShift.Date == nextDay)
-                .Select(us => us.ScheduledShift.Shift)
-                .Contains(morningShift);
+            bool hasWorkedNextMorning = user.ScheduledShifts.Any(us => us.ScheduledShift.Date == nextDay && us.ScheduledShift.ShiftId == morningShift.Id);
 
             return hasWorkedNextMorning;
         }
