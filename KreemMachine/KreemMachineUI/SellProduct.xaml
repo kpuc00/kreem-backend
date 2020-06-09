@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KreemMachine"
         mc:Ignorable="d"
-        Title="SellProduct" Height="200" Width="800">
+        Title="SellProduct" Height="220" Width="800"
+        WindowStartupLocation="CenterScreen">
 
     <Grid Margin="20" TextElement.FontSize="18">
         <Grid.RowDefinitions>

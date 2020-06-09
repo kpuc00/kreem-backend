@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KreemMachine"
         mc:Ignorable="d"
-        Title="EditDepartmentWindow" Height="150" Width="400">
-    <Grid>
+        Title="EditDepartmentWindow" Height="160" Width="400"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="20" TextElement.FontSize="18">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -18,12 +18,10 @@
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Name:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 10 0"/>
-        <TextBox x:Name="tbxDepartmentName" Grid.Row="0" Grid.Column="1" Margin="10"/>
+        <TextBlock Text="Name:" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
+        <TextBox x:Name="tbxDepartmentName" Grid.Row="0" Grid.Column="1" Margin="5"/>
 
-
-
-        <Button x:Name="btnEditDepartment" Grid.Row="3" Grid.ColumnSpan="2"  Margin="100 10" Content="Save" FontSize="20" Click="btnEditDepartment_Click"/>
+        <Button x:Name="btnEditDepartment" Grid.Row="2" Grid.ColumnSpan="2"  Margin="0 10"  Width="100" Height="30" Content="Save" Click="btnEditDepartment_Click"/>
 
     </Grid>
 </Window>
