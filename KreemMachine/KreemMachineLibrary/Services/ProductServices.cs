@@ -106,7 +106,7 @@ namespace KreemMachineLibrary.Services
                 }
 
 
-                throw new MissingPermissionEexception(Permission.ViewAllProducts, Permission.ViewOwnProducts);
+                throw new MissingPermissionException(Permission.ViewAllProducts, Permission.ViewOwnProducts);
             }
         }
 
@@ -209,7 +209,7 @@ namespace KreemMachineLibrary.Services
                        .ToList();
                 }
 
-                throw new MissingPermissionEexception(Permission.ViewAllProducts, Permission.ViewOwnProducts);
+                throw new MissingPermissionException(Permission.ViewAllProducts, Permission.ViewOwnProducts);
             }
         }
     }

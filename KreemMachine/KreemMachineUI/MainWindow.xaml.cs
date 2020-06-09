@@ -36,6 +36,7 @@ namespace KreemMachine
     {
         IEnumerable<Shift> AllShifts;
 
+        #region Security Bindings
         public bool CanViewUsersTab => SecurityContext.HasPermissions(Permission.ViewAllUsers)
                                         || SecurityContext.HasPermissions(Permission.ViewOwnUsers);
         public bool CanViewScheduleTab => SecurityContext.HasPermissions(Permission.ViewSchedule);
@@ -61,7 +62,7 @@ namespace KreemMachine
         public bool CanSellProducts => SecurityContext.HasPermissions(Permission.SellOwnProducts);
         public bool CanEditProducts => SecurityContext.HasPermissions(Permission.EditOwnProducts);
         public bool CanDeleteProducts => SecurityContext.HasPermissions(Permission.DeleteProducts);
-
+        #endregion
 
         public string ServerField => HostTextBox.Text;
         public string UsernameField => ConnectionUsernameTextBox.Text;
@@ -117,8 +118,6 @@ namespace KreemMachine
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        User logedUSer;
-
         Timer RefreshUsersViewTimer = new Timer(5000);
         Timer RefreshProductsTableTimer = new Timer(5000);
         Timer RefreshDepartmentTableTimer = new Timer(5000);
@@ -126,7 +125,6 @@ namespace KreemMachine
         public MainWindow(User user)
         {
             InitializeComponent();
-            logedUSer = user;
             fromDatePicker.SelectedDate = DateTime.Today.AddDays(1 - DateTime.Today.Day);
             toDatePicker.SelectedDate = DateTime.Now.Date;
             RefreshUsersViewTimer.Elapsed += (sender, e) => Dispatcher.Invoke(() => RefreshUsersTableView());
@@ -134,12 +132,19 @@ namespace KreemMachine
             RefreshDepartmentTableTimer.Elapsed += (sender, e) => Dispatcher.Invoke(() => RefreshDepartmentTable());
 
             AllDepartmentsListBox.ItemsSource = departmentService.GetAll();
-
         }
 
         private void SearchTextBox_KeyUp(object sender, KeyEventArgs e)
         {
             AllUsersListBox.ItemsSource = userService.FilterEmployees(SearchTextBox.Text);
+            if (!string.IsNullOrEmpty(SearchTextBox.Text))
+            {
+                RefreshUsersViewTimer.Stop();
+            }
+            else
+            {
+                RefreshUsersViewTimer.Start();
+            }
         }
 
         private void CreateUserButton_Click(object sender, RoutedEventArgs e)
@@ -200,7 +205,7 @@ namespace KreemMachine
                 var user = button.DataContext as User;
                 try
                 {
-                    int i = userService.DeleteEmployee(user, logedUSer);
+                    int i = userService.DeleteEmployee(user, SecurityContext.CurrentUser);
                     if (i == -1)
                     {
                         Window window = new LoginWindow();
@@ -240,7 +245,7 @@ namespace KreemMachine
         {
             Console.WriteLine("Refreshing users");
             AllUsersListBox.ItemsSource = null;
-            AllUsersListBox.ItemsSource = userService.GetAll();
+            AllUsersListBox.ItemsSource = userService.GetUsers();
         }
 
 

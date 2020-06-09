@@ -150,11 +150,31 @@ namespace KreemMachineLibrary.Services
             return null;
         }
 
-        public List<User> GetAll()
+        public List<User> GetUsers()
+        {
+            
+            if (SecurityContext.HasPermissions(Permission.ViewAllUsers)) return GetAll();
+            
+            if (SecurityContext.HasPermissions(Permission.ViewOwnUsers)) return GetOwnUsers();
+
+            throw new MissingPermissionException(Permission.ViewAllUsers, Permission.ViewOwnUsers);
+        }
+
+        private List<User> GetAll()
         {
             using (var db = new DataBaseContext())
                 return db.Users
                     .Include(u => u.Department)
+                    .ToList();
+        }
+
+        private List<User> GetOwnUsers()
+        {
+            using (var db = new DataBaseContext())
+                return db.Users
+                    .Include(u => u.Department)
+                    .Where(u => u.DepartmentId == SecurityContext.CurrentUser.DepartmentId 
+                            || u.DepartmentId == null )
                     .ToList();
         }
 
@@ -216,16 +236,17 @@ namespace KreemMachineLibrary.Services
         }
 
 
-        public ObservableCollection<User> FilterEmployees(string p)
+        public List<User> FilterEmployees(string p)
         {
             using (var db = new DataBaseContext())
             {
-                db.Users.Load();
-                if (!String.IsNullOrWhiteSpace(p))
+                if (!string.IsNullOrWhiteSpace(p))
                 {
-                    return new ObservableCollection<User>(db.Users.Local.Where(u => u.FirstName.ToLower().Contains(p.ToLower())));
+                    return GetUsers()
+                        .Where(u => u.FullName.ToLower().Contains(p.ToLower()))
+                        .ToList();
                 }
-                return db.Users.Local;
+                return GetUsers();
             }
         }
 
