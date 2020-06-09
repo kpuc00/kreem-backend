@@ -36,9 +36,10 @@ namespace KreemMachine
     {
         IEnumerable<Shift> AllShifts;
 
-        public bool CanViewUsersTab => SecurityContext.HasPermissions(Permission.ViewUsers);
+        public bool CanViewUsersTab => SecurityContext.HasPermissions(Permission.ViewAllUsers)
+                                        || SecurityContext.HasPermissions(Permission.ViewOwnUsers);
         public bool CanViewScheduleTab => SecurityContext.HasPermissions(Permission.ViewSchedule);
-        public bool CanViewStatisticsTab => SecurityContext.HasPermissions(Permission.ViewSchedule);
+        public bool CanViewStatisticsTab => SecurityContext.HasPermissions(Permission.ViewStatistics);
         public bool CanCreateUser => SecurityContext.HasPermissions(Permission.CreateUsers);
         public bool CanEditUser => SecurityContext.HasPermissions(Permission.EditUsers);
         public bool CanDeleteUser => SecurityContext.HasPermissions(Permission.DeleteUsers);
@@ -49,6 +50,18 @@ namespace KreemMachine
         public bool CanRequestProductRestock => SecurityContext.HasPermissions(Permission.RequestRestockForAnyProduct)
                                           || SecurityContext.HasPermissions(Permission.RequestRestockForOwnProduct);
         public bool CanChangeRestockRequests => SecurityContext.HasPermissions(Permission.ChangeRestockRequests);
+        public bool CanViewDepartmentsTab => SecurityContext.HasPermissions(Permission.ViewDeparments);
+        public bool CanAddDepartments => SecurityContext.HasPermissions(Permission.CreateDepartments);
+        public bool CanEditDepartments => SecurityContext.HasPermissions(Permission.EditDepartments);
+        public bool CanDeleteDepartments => SecurityContext.HasPermissions(Permission.DeleteDepartments);
+        public bool CanChangeSettings => SecurityContext.HasPermissions(Permission.ChangeSettings);
+        public bool CanViewSettingsTab => SecurityContext.HasPermissions(Permission.ViewSettings);
+        public bool CanAutogenerateSchedule => SecurityContext.HasPermissions(Permission.AutogenerateSchedule);
+        public bool CanCreateProducts => SecurityContext.HasPermissions(Permission.CreateProducts);
+        public bool CanSellProducts => SecurityContext.HasPermissions(Permission.SellOwnProducts);
+        public bool CanEditProducts => SecurityContext.HasPermissions(Permission.EditOwnProducts);
+        public bool CanDeleteProducts => SecurityContext.HasPermissions(Permission.DeleteProducts);
+
 
         public string ServerField => HostTextBox.Text;
         public string UsernameField => ConnectionUsernameTextBox.Text;

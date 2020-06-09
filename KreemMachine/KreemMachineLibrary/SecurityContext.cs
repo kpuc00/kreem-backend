@@ -15,40 +15,27 @@ namespace KreemMachineLibrary
         public static User CurrentUser { get; private set; }
 
         static readonly Dictionary<Role, Permission[]> PermissionTable = new Dictionary<Role, Permission[]> {
-            { Administrator, new[] { 
-                ViewUsers, 
-                CreateUsers, 
-                EditUsers, 
-                DeleteUsers, 
-                ViewSchedule, 
-                EditSchedule, 
-                AutogenerateSchedule, 
-                ViewStatistics, 
-                EditShifts,
-                ViewAllProducts,
-                ViewOwnProducts,
-                RequestRestockForAnyProduct,
-                RequestRestockForOwnProduct,
-                ViewRestockRequests,
-                ChangeRestockRequests,
-                } 
-            },
-            { Manager, new[] { 
-                ViewUsers, 
-                ViewSchedule, 
-                EditSchedule, 
-                AutogenerateSchedule, 
-                ViewStatistics, 
-                EditShifts,
+            { Administrator, Enum.GetValues(typeof(Permission)) as Permission[]},
+            { Manager, new[] {
+                ViewOwnUsers,
+                ViewSchedule,
+                EditSchedule,
+                AutogenerateSchedule,
+                ViewStatistics,
                 ViewOwnProducts,
                 RequestRestockForOwnProduct,
-                } 
+                SellOwnProducts,
+                }
             },
             { Depot, new[] {
                 ViewAllProducts,
+                ViewOwnProducts,
+                CreateProducts,
+                DeleteProducts,
+                EditOwnProducts,
                 ViewRestockRequests,
                 ChangeRestockRequests,
-                } 
+                }
             },
             { Employee, new Permission[]{} },
         };
@@ -72,6 +59,6 @@ namespace KreemMachineLibrary
         /// Returns true if user has either of given roles
         /// </summary>
         public static bool HasRole(params Role?[] roles) => roles.Contains(CurrentUser.Role);
-        
+
     }
 }

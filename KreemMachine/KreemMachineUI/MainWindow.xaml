@@ -158,11 +158,12 @@
                 <StackPanel Grid.Row="3" HorizontalAlignment="Left" TextBlock.FontSize="16" >
                     <!-- Manually schedule -->
                     <Button Content="Schedule manually" Click="ScheduleManuallyButton_Click"
-                                Margin="7"  Padding="7 3" />
+                                Margin="7"  Padding="7 3" 
+                                IsEnabled="{Binding ElementName=_this, Path=CanEditSchedule}"/>
                     <!-- Auto schedule -->
                     <Button Content="Autogenerate" Margin="7" Padding="7 3" x:Name="AutogenerateScheduleButton"
                             Click="AutogenerateScheduleButton_Click"
-                            IsEnabled="{Binding ElementName=_this, Path=CanEditSchedule}" />
+                            IsEnabled="{Binding ElementName=_this, Path=CanAutogenerateSchedule}" />
 
 
                 </StackPanel>
@@ -220,7 +221,8 @@
 
                 </Grid.ColumnDefinitions>
 
-                <Button Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0" Click="AddNewProductButton_Click"/>
+                <Button Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0" Click="AddNewProductButton_Click"
+                        IsEnabled="{Binding ElementName=_this, Path=CanCreateProducts}"/>
                 <TextBlock Grid.Column="1" Text="Search:" VerticalAlignment="Center"
                             FontSize="16" Margin="10 0"/>
                 <TextBox Grid.Column="2" Name="SearchProductsBar" KeyUp="SearchProductsBar_KeyUp" FontSize="16"/>
@@ -265,11 +267,17 @@
                                 <TextBlock Grid.Column="1" Text="{Binding Quantity}" Margin="0 0 10 0" />
                                 <TextBlock Grid.Column="2" Text="{Binding BuyCost}" Margin="0 0 10 0" />
                                 <TextBlock Grid.Column="3" Text="{Binding Department.Name}" Margin="0 0 10 0" />
-                                <Button Grid.Column="5" Content="Sell" Padding="4 0 4 0" Margin="0 0 10 0" Click="SellProductButton_Click"/>
+                                <Button Grid.Column="5" Content="Sell" Padding="4 0 4 0" Margin="0 0 10 0" Click="SellProductButton_Click"
+                                             IsEnabled="{Binding ElementName=_this, Path=CanSellProducts}"/>
                                 <Button Grid.Column="6" Content="Restock" Padding="4 0 4 0" Margin="0 0 10 0" Click="RequestRestockForProductButton_Clicked"
                                              IsEnabled="{Binding ElementName=_this, Path=CanRequestProductRestock}"  />
-                                <Button Grid.Column="7" Content="Edit" Padding="4 0 4 0" Margin="0 0 10 0" Click="EditProductButton_Click" />
-                                <Button Grid.Column="8" Content="Delete" Padding="4 0 4 0" Click="DeleteProductButton_Click" />
+                                <Button Grid.Column="7" Content="Edit" Padding="4 0 4 0" 
+                                        Margin="0 0 10 0" 
+                                        Click="EditProductButton_Click" 
+                                        IsEnabled="{Binding ElementName=_this, Path=CanEditProducts}"/>
+                                <Button Grid.Column="8" Content="Delete" Padding="4 0 4 0"
+                                        Click="DeleteProductButton_Click" 
+                                        IsEnabled="{Binding ElementName=_this, Path=CanDeleteProducts}"/>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -355,7 +363,12 @@
         </TabItem>
 
         <!-- Departments -->
-        <TabItem x:Name="DepartmentTab" Header="Departments" Grid.IsSharedSizeScope="True" Selector.Selected="DepartmentTab_Selected" Selector.Unselected="DepartmentTab_Unselected">
+        <TabItem x:Name="DepartmentTab" 
+                 Header="Departments" 
+                 Grid.IsSharedSizeScope="True" 
+                 Selector.Selected="DepartmentTab_Selected" 
+                 Selector.Unselected="DepartmentTab_Unselected"
+                 Visibility="{Binding ElementName=_this, Path=CanViewDepartmentsTab, Converter={StaticResource BoolToVis}}">
             <Grid>
                 <Grid.RowDefinitions>
                     <!-- Buttons and search -->
@@ -377,7 +390,8 @@
 
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="btnAddDepartment" Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0" Click="btnAddDepartment_Click"/>
+                <Button x:Name="btnAddDepartment" Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0" Click="btnAddDepartment_Click"
+                        IsEnabled="{Binding ElementName=_this, Path=CanAddDepartments}"/>
 
                 <TextBox Grid.Column="2" Name="SearchDepartmentsBar" FontSize="16"/>
 
@@ -400,8 +414,19 @@
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="{Binding Name}" Margin="0 0 10 0" />
-                                <Button x:Name="btnEditDepartment" Grid.Column="1" Content="Edit" Padding="4 0 4 0" Margin="0 0 10 0" Click="btnEditDepartment_Click_1"/>
-                                <Button x:Name="btnDeleteDepartment" Grid.Column="2" Content="Delete" Padding="4 0 4 0"  Click="btnDeleteDepartment_Click"/>
+                                <Button x:Name="btnEditDepartment" 
+                                        Grid.Column="1" 
+                                        Content="Edit" 
+                                        Padding="4 0 4 0" 
+                                        Margin="0 0 10 0" 
+                                        Click="btnEditDepartment_Click_1"
+                                        IsEnabled="{Binding ElementName=_this, Path=CanEditDepartmets}"/>
+                                <Button x:Name="btnDeleteDepartment" 
+                                        Grid.Column="2" 
+                                        Content="Delete" 
+                                        Padding="4 0 4 0"  
+                                        Click="btnDeleteDepartment_Click"
+                                        IsEnabled="{Binding ElementName=_this, Path=CanDeleteDepartments}"/>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -544,7 +569,8 @@
         </TabItem>
 
         <!-- Settings -->
-        <TabItem Header="Settings" Selector.Selected="Settings_Tab_Selected">
+        <TabItem Header="Settings" Selector.Selected="Settings_Tab_Selected"
+                 Visibility="{Binding ElementName=_this, Path=CanViewSettingsTab, Converter={StaticResource BoolToVis}}">
             <TabControl x:Name="InnerSettingsTab"
                             TabStripPlacement="Left">
                 <TabItem Header="Schedule settings">
@@ -650,7 +676,8 @@
                                             Grid.Row="2"
                                             Width="100"
                                             Height="50"
-                                            Click="ButtonSaveScheduleSetting_Click"/>
+                                            Click="ButtonSaveScheduleSetting_Click"
+                                            IsEnabled="{Binding ElementName=_this, Path=CanChangeSettings}"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Connection settings"
