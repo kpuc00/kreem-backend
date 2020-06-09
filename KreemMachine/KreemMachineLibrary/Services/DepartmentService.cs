@@ -49,11 +49,19 @@ namespace KreemMachineLibrary.Services
             return 1;
         }
 
-        public List<Department> GetAll()
+        public List<Department> GetAllViewable()
         {
             using (var db = new DataBaseContext())
             {
                 return db.Departments.Where(d => d.Deleted == 0).ToList();
+            }
+        }
+
+        public List<Department> GetAll()
+        {
+            using (var db = new DataBaseContext())
+            {
+                return db.Departments.ToList();
             }
         }
 

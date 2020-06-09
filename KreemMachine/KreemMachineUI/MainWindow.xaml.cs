@@ -120,7 +120,7 @@ namespace KreemMachine
             RefreshProductsTableTimer.Elapsed += (sender, e) => Dispatcher.Invoke(() => RefreshProductsTable());
             RefreshDepartmentTableTimer.Elapsed += (sender, e) => Dispatcher.Invoke(() => RefreshDepartmentTable());
 
-            AllDepartmentsListBox.ItemsSource = departmentService.GetAll();
+            AllDepartmentsListBox.ItemsSource = departmentService.GetAllViewable();
 
         }
 
@@ -694,7 +694,7 @@ namespace KreemMachine
 
         private void StockStatisticsTab_Selected(object sender, RoutedEventArgs e)
         {
-            var departments = productServices.GetAllDepartments();
+            var departments = departmentService.GetAllViewable();
             cbxStockCategory.ItemsSource = departments;
             cbxStockCategory.SelectedItem = departments[0];
             cbxStockCategory.DisplayMemberPath = "Name";
@@ -763,7 +763,7 @@ namespace KreemMachine
 
         private void RefreshDepartmentTable() {
             AllDepartmentsListBox.ItemsSource = null;
-            AllDepartmentsListBox.ItemsSource = departmentService.GetAll();
+            AllDepartmentsListBox.ItemsSource = departmentService.GetAllViewable();
         }
 
         private void SearchDepartmentsBar_KeyUp(object sender, KeyEventArgs e)

@@ -24,6 +24,7 @@ namespace KreemMachine
     {
         Product product;
         ProductServices productServices;
+        DepartmentService departmentService = new DepartmentService();
 
         public EditProduct(Product givenProduct, ProductServices givenProductServices)
         {
@@ -32,7 +33,7 @@ namespace KreemMachine
             product = givenProduct;
             productServices = givenProductServices;
 
-            var departments = productServices.GetAllDepartments();
+            var departments = departmentService.GetAllViewable();
             DepartmentComboBox.DisplayMemberPath = "Name";
             DepartmentComboBox.ItemsSource = departments;
 

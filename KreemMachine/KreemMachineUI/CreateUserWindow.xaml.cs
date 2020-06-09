@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using KreemMachineLibrary.Exceptions;
 using KreemMachineLibrary.Models.Statics;
+using System.Collections.ObjectModel;
 
 namespace KreemMachine
 {
@@ -26,6 +27,7 @@ namespace KreemMachine
     {
 
         UserService users = new UserService();
+        DepartmentService departmentService = new DepartmentService();
 
         public CreateUserWindow()
         {
@@ -36,6 +38,11 @@ namespace KreemMachine
         {
             RoleComboBox.ItemsSource = Enum.GetValues(typeof(Role));
             RoleComboBox.SelectedItem = Role.Employee;
+
+            var departments = departmentService.GetAll();
+            DepartmentComboBox.ItemsSource = departments;
+            DepartmentComboBox.DisplayMemberPath = "Name";
+            DepartmentComboBox.SelectedItem = departments[0];
 
             FirstNameTextBox.Text = "";
             LastNameTextBox.Text = "";
@@ -51,7 +58,7 @@ namespace KreemMachine
         {
             try
             {
-                users.Save(FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, (Role)RoleComboBox.SelectedItem, HourlyWageTextBox.Text, BirthDatePicker.DisplayDate, AddressTextBox.Text, PhoneNumberTextBox.Text);
+                users.Save(FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, (Role)RoleComboBox.SelectedItem, (Department)DepartmentComboBox.SelectedItem, HourlyWageTextBox.Text, BirthDatePicker.DisplayDate, AddressTextBox.Text, PhoneNumberTextBox.Text);
 
                 this.Close();
             }
