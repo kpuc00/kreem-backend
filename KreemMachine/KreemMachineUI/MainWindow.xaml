@@ -34,7 +34,7 @@
         </TabControl.Resources>
 
         <!--Users-->
-        <TabItem Header="Users" Visibility="{Binding ElementName=_this, Path=CanViewUsersTab, Converter={StaticResource BoolToVis}}"
+        <TabItem x:Name="UsersTabItem" Header="Users" Visibility="{Binding ElementName=_this, Path=CanViewUsersTab, Converter={StaticResource BoolToVis}}"
                      Selector.Selected="UsersTabItem_Selected" Selector.Unselected="UsersTabItem_Unselected">
             <Grid Grid.IsSharedSizeScope="True" >
                 <Grid.RowDefinitions>
@@ -749,5 +749,9 @@
                 </TabItem>
             </TabControl>
         </TabItem>
+        <!-- Logout -->
+        <TabItem x:Name="LogoutBtn" Header="Logout" 
+                 Grid.IsSharedSizeScope="True" 
+                 MouseUp="LogoutBtn_MouseUp"/>
     </TabControl>
 </Window>

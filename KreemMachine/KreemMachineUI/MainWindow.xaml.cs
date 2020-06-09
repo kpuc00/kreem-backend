@@ -68,7 +68,7 @@ namespace KreemMachine
         public string UsernameField => ConnectionUsernameTextBox.Text;
         public string PasswordField => ConnectionPasswordPasswordBox.Password;
         public string DatabaseNameField => ConnectionDatabaseNameTextBox.Text;
-        
+
         ScheduledShift manuallyScheduledShift;
 
         public ScheduledShift ManuallyScheduledShift
@@ -383,7 +383,7 @@ namespace KreemMachine
 
             DateTime monthStart = DateTime.Now.AddMonths(1).ThisMonth();
 
-            for(DateTime weekToProcess = monthStart;
+            for (DateTime weekToProcess = monthStart;
                 weekToProcess <= monthStart.AddMonths(1);
                 weekToProcess = weekToProcess.AddDays(7))
             {
@@ -391,11 +391,11 @@ namespace KreemMachine
                 DateTime weekEnd = weekToProcess.AddDays(7);
                 Console.WriteLine($"start: {weekStart} end: {weekEnd}");
 
-                tasks.Add( Task.Run(() =>
-                {
-                    List<ScheduledShift> shifts = scheduleService.GetOrCreateScheduledShifts(weekStart, weekEnd);
-                    scheduleService.AutogenerateSchedule(shifts);
-                }));
+                tasks.Add(Task.Run(() =>
+               {
+                   List<ScheduledShift> shifts = scheduleService.GetOrCreateScheduledShifts(weekStart, weekEnd);
+                   scheduleService.AutogenerateSchedule(shifts);
+               }));
                 //break;
             }
 
@@ -780,7 +780,8 @@ namespace KreemMachine
             RefreshDepartmentTableTimer.Stop();
         }
 
-        private void RefreshDepartmentTable() {
+        private void RefreshDepartmentTable()
+        {
             AllDepartmentsListBox.ItemsSource = null;
             AllDepartmentsListBox.ItemsSource = departmentService.GetAllViewable();
         }
@@ -800,5 +801,16 @@ namespace KreemMachine
         }
         #endregion
 
+        private void LogoutBtn_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to logout?", "Logout", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                var window = new LoginWindow();
+                window.Show();
+
+                this.Close();
+            }
+            MainContent.SelectedItem = UsersTabItem;
+        }
     }
 }
