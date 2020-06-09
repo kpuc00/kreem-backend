@@ -78,14 +78,6 @@ namespace KreemMachineLibrary.Services
             UpdateProduct(product: product, quantity: quantity, soldProduct: soldProduct);
         }
 
-        public List<Department> GetAllDepartments()
-        {
-            using (var db = new DataBaseContext())
-            {
-                return db.Departments.ToList();
-            }
-        }
-
         public List<Product> GetViewableProducts()
         {
             using (var db = new DataBaseContext())
