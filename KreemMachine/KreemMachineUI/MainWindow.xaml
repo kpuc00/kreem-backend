@@ -393,7 +393,7 @@
                 <Button x:Name="btnAddDepartment" Padding="7 3" Margin="5,3,5,0" Content="Add new" Grid.Column="0" Click="btnAddDepartment_Click"
                         IsEnabled="{Binding ElementName=_this, Path=CanAddDepartments}"/>
 
-                <TextBox Grid.Column="2" Name="SearchDepartmentsBar" FontSize="16"/>
+                <TextBox Grid.Column="2" Name="SearchDepartmentsBar" FontSize="16" KeyUp="SearchDepartmentsBar_KeyUp"/>
 
                 <Grid Grid.Row="1" TextBlock.FontSize="18" Grid.ColumnSpan="3" >
                     <Grid.ColumnDefinitions>

@@ -17,6 +17,9 @@ namespace KreemMachineLibrary.Models
         [Required]
         public string Name { get; set; }
 
+        [Column("deleted")]
+        public int Deleted { get; set; }
+
         public virtual List<User> Users { get; set; }
 
         public Department() { }

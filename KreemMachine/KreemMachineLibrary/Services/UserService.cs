@@ -18,9 +18,9 @@ namespace KreemMachineLibrary.Services
     public class UserService
     {
         
-        public User Save(string firstName, string lastName, string email, Role role, string hourlyWage, DateTime birthDate, string address, string phoneNumber)
+        public User Save(string firstName, string lastName, string email, Role role, Department department, string hourlyWage, DateTime birthDate, string address, string phoneNumber)
         {
-            User user = this.VerifyInputDataUser(firstName, lastName, email, role, hourlyWage, birthDate, address, phoneNumber);
+            User user = this.VerifyInputDataUser(firstName, lastName, email, role, department, hourlyWage, birthDate, address, phoneNumber);
             HashPassword(user);
             user = SaveToDatabase(user);
             return user;
@@ -42,7 +42,7 @@ namespace KreemMachineLibrary.Services
         }
 
         //This method checks the input values of a user
-        private User VerifyInputDataUser(string firstName, string lastName, string email, Role role, string hourlyWage, DateTime birthDate, string address, string phoneNumber)
+        private User VerifyInputDataUser(string firstName, string lastName, string email, Role role, Department department, string hourlyWage, DateTime birthDate, string address, string phoneNumber)
         {
             if (String.IsNullOrWhiteSpace(firstName))
             {
@@ -88,7 +88,7 @@ namespace KreemMachineLibrary.Services
                 }
             }
 
-            return new User(firstName, lastName, email, role, float.Parse(hourlyWage), birthDate, address, phoneNumber);
+            return new User(firstName, lastName, email, role, department, float.Parse(hourlyWage), birthDate, address, phoneNumber);
         }
 
         internal User SaveToDatabase (User user)
@@ -165,6 +165,7 @@ namespace KreemMachineLibrary.Services
             using (var db = new DataBaseContext())
                 return db.Users
                     .Include(u => u.Department)
+                    .OrderByDescending(u => u.Department.Id)
                     .ToList();
         }
 
@@ -175,15 +176,18 @@ namespace KreemMachineLibrary.Services
                     .Include(u => u.Department)
                     .Where(u => u.DepartmentId == SecurityContext.CurrentUser.DepartmentId 
                             || u.DepartmentId == null )
+                    .OrderByDescending(u => u.Department.Id)
                     .ToList();
         }
 
-        public void UpdateEmployee(User user, string firstName, string lastName, string email, Role role, string hourlyWage, DateTime birthDate, string address, string phoneNumber) {
-            this.VerifyInputDataUser(firstName, lastName, email, role, hourlyWage, birthDate, address, phoneNumber);
+        public void UpdateEmployee(User user, string firstName, string lastName, string email, Role role, Department department, string hourlyWage, DateTime birthDate, string address, string phoneNumber) {
+            this.VerifyInputDataUser(firstName, lastName, email, role, department, hourlyWage, birthDate, address, phoneNumber);
 
             user.FirstName = firstName;
             user.LastName = lastName;
             user.Role = role;
+            user.Department = department;
+            user.DepartmentId = department.Id;
             user.HourlyWage = float.Parse(hourlyWage);
             user.Birthdate = birthDate;
             user.Address = address;

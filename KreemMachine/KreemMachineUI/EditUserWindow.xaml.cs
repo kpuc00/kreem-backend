@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 using KreemMachineLibrary.Models.Statics;
+using System.Collections.ObjectModel;
 
 namespace KreemMachine
 {
@@ -26,7 +27,8 @@ namespace KreemMachine
     {   
         User user;
         UserService userService;
-        
+        DepartmentService departmentService = new DepartmentService();
+
         public EditUserWindow(User user, UserService userService)
         {
             InitializeComponent();
@@ -38,6 +40,19 @@ namespace KreemMachine
             EmailTextBox.Text = this.user.Email;
             RoleComboBox.ItemsSource = Enum.GetValues(typeof(Role));
             RoleComboBox.SelectedItem = this.user.Role;
+
+            var departments = departmentService.GetAll();
+            DepartmentComboBox.ItemsSource = departments;
+            DepartmentComboBox.DisplayMemberPath = "Name";
+            int departmentId = Convert.ToInt32(this.user.DepartmentId);
+            foreach (var item in departments)
+            {
+                if (item.Id == departmentId)
+                {
+                    DepartmentComboBox.SelectedItem = item;
+                }
+            }
+
             HourlyWageTextBox.Text = this.user.HourlyWage.ToString();
             BirthDatePicker.SelectedDate = (DateTime)this.user.Birthdate;
             AddressTextBox.Text = this.user.Address;
@@ -48,7 +63,7 @@ namespace KreemMachine
         {
             try
             {
-                this.userService.UpdateEmployee(this.user, FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, (Role)RoleComboBox.SelectedItem, HourlyWageTextBox.Text, (DateTime)BirthDatePicker.SelectedDate, AddressTextBox.Text, PhoneNumberTextBox.Text);
+                this.userService.UpdateEmployee(this.user, FirstNameTextBox.Text, LastNameTextBox.Text, EmailTextBox.Text, (Role)RoleComboBox.SelectedItem, (Department)DepartmentComboBox.SelectedItem, HourlyWageTextBox.Text, (DateTime)BirthDatePicker.SelectedDate, AddressTextBox.Text, PhoneNumberTextBox.Text);
 
                 this.Close();
             }

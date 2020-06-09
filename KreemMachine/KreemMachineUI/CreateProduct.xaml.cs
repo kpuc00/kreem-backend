@@ -24,12 +24,13 @@ namespace KreemMachine
     public partial class CreateProduct : Window
     {
         ProductServices productServices = new ProductServices();
+        DepartmentService departmentService = new DepartmentService();
 
         public CreateProduct()
         {
             InitializeComponent();
 
-            var departments = productServices.GetAllDepartments();
+            var departments = departmentService.GetAllViewable();
             DepartmentComboBox.ItemsSource = departments;
             DepartmentComboBox.DisplayMemberPath = "Name";
 

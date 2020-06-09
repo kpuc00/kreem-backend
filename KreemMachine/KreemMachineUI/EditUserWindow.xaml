@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KreemMachine"
         mc:Ignorable="d"
-        Title="EditUserWindow" Height="700" Width="500"
+        Title="EditUserWindow" Height="750" Width="500"
         WindowStartupLocation="CenterScreen" Icon="kreem_icon.png">
 
     <Grid Margin="20" TextElement.FontSize="18">
         
         <Grid.RowDefinitions>
             <RowDefinition Height="200"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -34,24 +35,27 @@
         <TextBlock Text="*Last Name:" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
         <TextBlock Text="*Email:" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
         <TextBlock Text="*Role:" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
-        <TextBlock Text="*Hourly Wage:" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
-        <TextBlock Text="*Birth Date:" Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
-        <TextBlock Text="Address:" Grid.Column="0" Grid.Row="7" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
-        <TextBlock Text="Phone Number:" Grid.Column="0" Grid.Row="8" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
-        <TextBlock Text="Fields with * are required" Grid.ColumnSpan="2" Grid.Row="9" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5 5 10 5"/>
-        
+        <TextBlock Text="Department:" Grid.Column="0" Grid.Row="5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
+        <TextBlock Text="*Hourly Wage:" Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
+        <TextBlock Text="*Birth Date:" Grid.Column="0" Grid.Row="7" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
+        <TextBlock Text="Address:" Grid.Column="0" Grid.Row="8" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
+        <TextBlock Text="Phone Number:" Grid.Column="0" Grid.Row="9" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5 5 10 5"/>
+        <TextBlock Text="Fields with * are required" Grid.ColumnSpan="2" Grid.Row="10" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5 5 10 5"/>
+
         <!--Input fields on right-->
-        <TextBox Name="FirstNameTextBox" Grid.Row="1" Grid.Column="1" Margin="5" KeyUp="FirstNameTextBox_KeyUp"/>
-        <TextBox Name="LastNameTextBox" Grid.Row="2" Grid.Column="1" Margin="5" KeyUp="LastNameTextBox_KeyUp"/>
-        <TextBox Name="EmailTextBox" Grid.Row="3" Grid.Column="1" IsEnabled="False" Margin="5"/>
-        <ComboBox Name="RoleComboBox" Grid.Row="4" Grid.Column="1" Margin="5"/>
-        <TextBox Name="HourlyWageTextBox" Grid.Row="5" Grid.Column="1" Margin="5"/>
-        <DatePicker Name="BirthDatePicker" Grid.Row="6" Grid.Column="1" Margin="5"/>
-        <TextBox Name="AddressTextBox" Grid.Row="7" Grid.Column="1" Margin="5"/>
-        <TextBox Name="PhoneNumberTextBox" Grid.Row="8" Grid.Column="1" Margin="5"/>
-        
+        <TextBox Name="FirstNameTextBox" Text="" Grid.Row="1" Grid.Column="1" Margin="5" KeyUp="FirstNameTextBox_KeyUp"/>
+        <TextBox Name="LastNameTextBox" Text="" Grid.Row="2" Grid.Column="1" Margin="5" KeyUp="LastNameTextBox_KeyUp"/>
+        <TextBox Name="EmailTextBox" Text="" Grid.Row="3" Grid.Column="1" IsEnabled="False" Margin="5"/>
+        <ComboBox Name="RoleComboBox" Text="" Grid.Row="4" Grid.Column="1" Margin="5"/>
+        <ComboBox Name="DepartmentComboBox" Text="" Grid.Row="5" Grid.Column="1" Margin="5"/>
+
+        <TextBox Name="HourlyWageTextBox" Text="" Grid.Row="6" Grid.Column="1" Margin="5"/>
+        <DatePicker Name="BirthDatePicker" Text="" Grid.Row="7" Grid.Column="1" Margin="5"/>
+        <TextBox Name="AddressTextBox" Text="" Grid.Row="8" Grid.Column="1" Margin="5"/>
+        <TextBox Name="PhoneNumberTextBox" Text="" Grid.Row="9" Grid.Column="1" Margin="5"/>
+
         <!--Button on the bottom-->
-        <Button Name="UpdateUserButton" Content="Update" Grid.Row="10" Margin="126,34.4,127.6,65.6"  Width="200" Height="60"  Grid.ColumnSpan="2" Click="UpdateUserButton_Click"/>
+        <Button Name="UpdateUserButton" Content="Update" Grid.Row="11" Margin="126,34.4,127.6,65.6"  Width="200" Height="60"  Grid.ColumnSpan="2" Click="UpdateUserButton_Click"/>
 
     </Grid>
 </Window>

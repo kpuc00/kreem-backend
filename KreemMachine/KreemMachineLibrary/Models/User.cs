@@ -96,18 +96,19 @@ namespace KreemMachineLibrary.Models
 
         public User() { }
 
-        public User(string firstName, string lastName, string email, Role role, float hourlyWage,
-                    DateTime? birthdate, string adress = null, string phoneNumber = null, Department department = null)
+        public User(string firstName, string lastName, string email, Role role, Department department, float hourlyWage,
+                    DateTime? birthdate, string adress = null, string phoneNumber = null)
         {
             FirstName = firstName;
             LastName = lastName;
             Email = email;
             Role = role;
+            Department = department;
+            DepartmentId = department.Id;
             HourlyWage = hourlyWage;
             Birthdate = birthdate;
             Address = adress;
             PhoneNumber = phoneNumber;
-            Department = department;
         }
 
         /// <summary>
