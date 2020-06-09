@@ -714,7 +714,7 @@ namespace KreemMachine
 
         #endregion
 
-        #region Department 
+        #region Departments
 
         private void btnAddDepartment_Click(object sender, RoutedEventArgs e)
         {
@@ -725,10 +725,20 @@ namespace KreemMachine
 
         private void btnDeleteDepartment_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            var department = button.DataContext as Department;
+            RefreshDepartmentTableTimer.Stop();
+            if (MessageBox.Show("You are about to remove this department. Continue?", "Delete department", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                var button = sender as Button;
+                var department = button.DataContext as Department;
 
-            departmentService.Delete(department);
+                int i = departmentService.Delete(department);
+                if (i == 1)
+                {
+                    SearchDepartmentsBar.Text = null;
+                    DepartmentTab_Selected(sender, e);
+                }
+                RefreshDepartmentTableTimer.Start();
+            }
         }
 
         private void btnEditDepartment_Click_1(object sender, RoutedEventArgs e)
@@ -756,6 +766,19 @@ namespace KreemMachine
             AllDepartmentsListBox.ItemsSource = departmentService.GetAll();
         }
 
+        private void SearchDepartmentsBar_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(SearchDepartmentsBar.Text))
+            {
+                RefreshDepartmentTableTimer.Stop();
+                AllDepartmentsListBox.ItemsSource = departmentService.FilterDepartments(SearchDepartmentsBar.Text);
+            }
+
+            else
+            {
+                DepartmentTab_Selected(sender, e);
+            }
+        }
         #endregion
 
     }

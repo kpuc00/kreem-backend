@@ -36,20 +36,36 @@ namespace KreemMachineLibrary.Services
             }
         }
 
-        public void Delete(Department department)
+        public int Delete(Department department)
         {
+            department.Deleted = 1;
+
             using (var db = new DataBaseContext())
             {
-                /*db.Departments.Remove(department);
-                db.SaveChanges();*/
+                db.Entry(department).State = EntityState.Modified;
+                db.SaveChanges();
             }
+
+            return 1;
         }
 
         public List<Department> GetAll()
         {
             using (var db = new DataBaseContext())
             {
-                return db.Departments.ToList();
+                return db.Departments.Where(d => d.Deleted == 0).ToList();
+            }
+        }
+
+        public List<Department> FilterDepartments(string s)
+        {
+            using (var db = new DataBaseContext())
+            {
+                var departments = db.Departments.Where(d => d.Deleted == 0);
+
+                    return departments
+                        .Where(d => d.Name.ToLower().Contains(s.ToLower()))
+                        .ToList();
             }
         }
     }
