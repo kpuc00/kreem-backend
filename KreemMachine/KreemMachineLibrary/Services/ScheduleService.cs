@@ -140,6 +140,9 @@ namespace KreemMachineLibrary.Services
 
         internal bool CanUserWorkShift(User user, ScheduledShift scheduledShift)
         {
+            if (CurrentUserHasAuthorityOverEmployee(user) == false)
+                return false;
+
             if (IsUserAssignedToShift(user, scheduledShift))
                 return true;
 
@@ -156,6 +159,15 @@ namespace KreemMachineLibrary.Services
                 return false;
 
             return true;
+        }
+
+        private bool CurrentUserHasAuthorityOverEmployee(User user)
+        {
+            if (SecurityContext.HasPermissions(Permission.ScheduleAnyEmployee))
+                return true;
+            if (SecurityContext.HasPermissions(Permission.ScheduleOwnEmployee) && user.DepartmentId == SecurityContext.CurrentUser.DepartmentId)
+                return true;
+            return false;
         }
 
         internal bool IsUserAssignedToShift(User user, ScheduledShift scheduledShift)

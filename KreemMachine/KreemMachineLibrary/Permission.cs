@@ -18,6 +18,8 @@ namespace KreemMachineLibrary
         ViewSchedule,
         EditSchedule,
         AutogenerateSchedule,
+        ScheduleAnyEmployee,
+        ScheduleOwnEmployee,
         // Statistics
         ViewStatistics,
         EditShifts,

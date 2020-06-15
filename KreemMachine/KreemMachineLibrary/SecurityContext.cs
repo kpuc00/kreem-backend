@@ -25,6 +25,7 @@ namespace KreemMachineLibrary
                 ViewOwnProducts,
                 RequestRestockForOwnProduct,
                 SellOwnProducts,
+                ScheduleOwnEmployee,
                 }
             },
             { Depot, new[] {
