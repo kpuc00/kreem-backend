@@ -227,13 +227,13 @@ namespace KreemMachineLibrary.Services
                     {
                         if (shift.EmployeeScheduledShits.Count >= shift.Shift.MinStaff)
                             break;
+                        if (shift.EmployeeScheduledShits.Any(e => e.Id == employee.Id))
+                            continue;
                         var assignment = new UserScheduledShift(employee, shift);
                         db.UserScheduledShifts.Add(assignment);
                         shift.EmployeeScheduledShits.Add(assignment);
                     }
                     db.SaveChanges();
-
-
                 }
         }
 
