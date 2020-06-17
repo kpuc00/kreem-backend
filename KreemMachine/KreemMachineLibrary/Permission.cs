@@ -33,7 +33,8 @@ namespace KreemMachineLibrary
         // Restock Requests
         RequestRestockForAnyProduct,
         RequestRestockForOwnProduct,
-        ViewRestockRequests,
+        ViewAllRestockRequests,
+        ViewOwnRestockRequests,
         ChangeRestockRequests,
         // Departments
         CreateDepartments,

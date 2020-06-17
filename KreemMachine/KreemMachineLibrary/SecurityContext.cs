@@ -24,6 +24,7 @@ namespace KreemMachineLibrary
                 ViewStatistics,
                 ViewOwnProducts,
                 RequestRestockForOwnProduct,
+                ViewOwnRestockRequests,
                 SellOwnProducts,
                 ScheduleOwnEmployee,
                 }
@@ -34,7 +35,7 @@ namespace KreemMachineLibrary
                 CreateProducts,
                 DeleteProducts,
                 EditOwnProducts,
-                ViewRestockRequests,
+                ViewAllRestockRequests,
                 ChangeRestockRequests,
                 }
             },
@@ -51,9 +52,16 @@ namespace KreemMachineLibrary
         /// </summary>
         public static bool HasPermissions(params Permission[] permissions)
         {
-            if (!CurrentUser.Role.HasValue) return false;
+            if (CurrentUser != null && CurrentUser.Role.HasValue == false) return false;
 
             return PermissionTable[CurrentUser.Role.Value].Intersect(permissions).Count() == permissions.Length;
+        }
+
+        public static bool HasAny(params Permission[] permissions)
+        {
+            if (CurrentUser != null && CurrentUser.Role.HasValue == false) return false;
+
+            return PermissionTable[CurrentUser.Role.Value].Intersect(permissions).Count() > 0;
         }
 
         /// <summary>

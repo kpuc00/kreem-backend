@@ -37,19 +37,16 @@ namespace KreemMachine
         IEnumerable<Shift> AllShifts;
 
         #region Security Bindings
-        public bool CanViewUsersTab => SecurityContext.HasPermissions(Permission.ViewAllUsers)
-                                        || SecurityContext.HasPermissions(Permission.ViewOwnUsers);
+        public bool CanViewUsersTab => SecurityContext.HasAny(Permission.ViewAllUsers, Permission.ViewOwnUsers);
         public bool CanViewScheduleTab => SecurityContext.HasPermissions(Permission.ViewSchedule);
         public bool CanViewStatisticsTab => SecurityContext.HasPermissions(Permission.ViewStatistics);
         public bool CanCreateUser => SecurityContext.HasPermissions(Permission.CreateUsers);
         public bool CanEditUser => SecurityContext.HasPermissions(Permission.EditUsers);
         public bool CanDeleteUser => SecurityContext.HasPermissions(Permission.DeleteUsers);
         public bool CanEditSchedule => SecurityContext.HasPermissions(Permission.EditSchedule);
-        public bool CanViewProductsTab => SecurityContext.HasPermissions(Permission.ViewAllProducts)
-                                          || SecurityContext.HasPermissions(Permission.ViewOwnProducts);
-        public bool CanViewRestockRequestsTab => SecurityContext.HasPermissions(Permission.ViewRestockRequests);
-        public bool CanRequestProductRestock => SecurityContext.HasPermissions(Permission.RequestRestockForAnyProduct)
-                                          || SecurityContext.HasPermissions(Permission.RequestRestockForOwnProduct);
+        public bool CanViewProductsTab => SecurityContext.HasAny(Permission.ViewAllProducts, Permission.ViewOwnProducts);
+        public bool CanViewRestockRequestsTab => SecurityContext.HasAny(Permission.ViewAllRestockRequests, Permission.ViewOwnRestockRequests);
+        public bool CanRequestProductRestock => SecurityContext.HasAny(Permission.RequestRestockForAnyProduct, Permission.RequestRestockForOwnProduct);
         public bool CanChangeRestockRequests => SecurityContext.HasPermissions(Permission.ChangeRestockRequests);
         public bool CanViewDepartmentsTab => SecurityContext.HasPermissions(Permission.ViewDeparments);
         public bool CanAddDepartments => SecurityContext.HasPermissions(Permission.CreateDepartments);
