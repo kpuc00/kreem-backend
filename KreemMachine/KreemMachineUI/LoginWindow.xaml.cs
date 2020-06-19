@@ -26,7 +26,6 @@ namespace KreemMachine
     /// </summary>
     public partial class LoginWindow : Window
     {
-
         UserService users = new UserService();
 
         public LoginWindow()
@@ -45,8 +44,6 @@ namespace KreemMachine
 
             }).Start();
         }
-
-
 
         string Email => EmailTextBox.Text;
 
@@ -73,7 +70,6 @@ namespace KreemMachine
             window.Show();
 
             this.Hide();
-
         }
 
         private void EmailTextBox_KeyDown(object sender, KeyEventArgs e)
