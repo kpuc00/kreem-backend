@@ -40,7 +40,7 @@ namespace KreemMachine
                 var shift = new ShiftService().GetAllShifts()[0];
                 var scheduled = await new ScheduleService().GetScheduledShiftOrCreateNewAsync(DateTime.Now.Date, shift);
                 new ScheduleService().GetSuggestedEmployees(scheduled);
-                new ProductServices().LoadProducts();
+                new ProductService().LoadProducts();
                 _ = new StockService().GetActiveRequestsAsync();
 
             }).Start();

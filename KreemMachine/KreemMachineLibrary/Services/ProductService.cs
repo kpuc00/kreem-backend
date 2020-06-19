@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace KreemMachineLibrary.Services
 {
-    public class ProductServices
+    public class ProductService
     {
         public Product CreateProduct(string givenName, string givenBuyCost, string givenSellPrice, string givenQuantity, Department selectedDepartment)
         {

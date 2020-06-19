@@ -23,10 +23,10 @@ namespace KreemMachine
     public partial class EditProduct : Window
     {
         Product product;
-        ProductServices productServices;
+        ProductService productServices;
         DepartmentService departmentService = new DepartmentService();
 
-        public EditProduct(Product givenProduct, ProductServices givenProductServices)
+        public EditProduct(Product givenProduct, ProductService givenProductServices)
         {
             InitializeComponent();
 

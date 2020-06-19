@@ -112,7 +112,7 @@ namespace KreemMachine
         ConnectionSettingsService connectionService = new ConnectionSettingsService();
         ScheduleService scheduleService = new ScheduleService();
         StatisticsService statisticsService = new StatisticsService();
-        ProductServices productServices = new ProductServices();
+        ProductService productServices = new ProductService();
         StockService stockService = new StockService();
         DepartmentService departmentService = new DepartmentService();
 

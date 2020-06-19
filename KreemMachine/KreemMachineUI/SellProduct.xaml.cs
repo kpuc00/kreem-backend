@@ -22,9 +22,9 @@ namespace KreemMachine
     public partial class SellProduct : Window
     {
         Product product;
-        ProductServices productServices;
+        ProductService productServices;
 
-        public SellProduct(Product passedProduct, ProductServices passedService)
+        public SellProduct(Product passedProduct, ProductService passedService)
         {
             InitializeComponent();
 
