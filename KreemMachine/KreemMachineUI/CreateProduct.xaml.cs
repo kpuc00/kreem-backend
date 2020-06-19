@@ -71,7 +71,7 @@ namespace KreemMachine
             {
                 MessageBox.Show(ex.Message, "Create product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 MessageBox.Show("Something went wrong. Make sure the name has not been used before!", "Create product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
