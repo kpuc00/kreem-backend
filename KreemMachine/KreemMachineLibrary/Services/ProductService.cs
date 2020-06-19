@@ -23,7 +23,6 @@ namespace KreemMachineLibrary.Services
             }
 
             return product;
-
         }
 
         public int RemoveProduct(Product product)
