@@ -478,6 +478,26 @@
                             <DataGrid x:Name="EmplStatsDataGrid" Grid.Row="1" GridLinesVisibility="None" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True"/>
                         </Grid>
                     </TabItem>
+                    
+                    <TabItem x:Name="DepartmentStatisticsTab" Header="Department" Height="25" Margin="0,0,0,-0.2" VerticalAlignment="Bottom" Selector.Selected="DepartmentStatisticsTab_Selected">
+                        <Grid Background="White">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="From:" Margin="5" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <DatePicker x:Name="fromDatePickerDep" Margin="0,5,0,5" VerticalAlignment="Center" LostFocus="DatePickerDep_LostFocus"/>
+                                <Label Content="To:" Margin="30,5,5,5" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <DatePicker x:Name="toDatePickerDep" Margin="0,5,0,5" VerticalAlignment="Center" LostFocus="DatePickerDep_LostFocus"/>
+                                <Label Content="Category:" Margin="30,5,5,5" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <ComboBox x:Name="cbxDepartmentCategory" Margin="0,6,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="cbxDepartmentCategory_SelectionChanged"/>
+                            </StackPanel>
+                            <DataGrid x:Name="DepartmentGrid" Grid.Row="1" GridLinesVisibility="None" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True"/>
+                        </Grid>
+                    </TabItem>
+
+
 
                     <TabItem x:Name="StockStatisticsTab" Header="Stock" Height="25" Margin="0,0,0,-0.2" VerticalAlignment="Bottom" Selector.Selected="StockStatisticsTab_Selected">
                         <Grid Background="White">
@@ -492,12 +512,6 @@
                                 <DatePicker x:Name="endDateStock" Margin="0,5,0,5" VerticalAlignment="Center" SelectedDateChanged="DateStock_SelectedDateChanged"/>
                                 <Label Content="Category:" Margin="30,5,5,5" VerticalAlignment="Center" FontWeight="Bold"/>
                                 <ComboBox x:Name="cbxStockCategory" Margin="0,6,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="StockCategory_SelectionChanged"/>
-                                <RadioButton x:Name="rbnStockPrice" Margin="30,5,5,5" FontWeight="Bold" IsChecked="True" Checked="StockPrice_Checked">
-                                    Price
-                                </RadioButton>
-                                <RadioButton x:Name="rbnStockAmount" Margin="30,5,5,5" FontWeight="Bold" Checked="StockPrice_Checked">
-                                    Amount
-                                </RadioButton>
                             </StackPanel>
                             <DataGrid x:Name="StockGrid" Grid.Row="1" GridLinesVisibility="None" CanUserResizeColumns="False" CanUserResizeRows="False" IsReadOnly="True"/>
                         </Grid>

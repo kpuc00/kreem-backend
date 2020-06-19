@@ -697,7 +697,12 @@ namespace KreemMachine
 
         private void StockStatistics()
         {
-            if (cbxStockCategory.SelectedItem == null)
+            if ((Department)cbxStockCategory.SelectedItem == null)
+            {
+                return;
+            }
+            StockGrid.ItemsSource = statisticsService.StockStatistics(startDateStock.SelectedDate ?? default(DateTime), endDateStock.SelectedDate ?? default(DateTime), (Department)cbxStockCategory.SelectedItem);
+/*            if (cbxStockCategory.SelectedItem == null)
             {
                 return;
             }
@@ -708,7 +713,7 @@ namespace KreemMachine
             else if (rbnStockAmount.IsChecked == true)
             {
                 StockGrid.ItemsSource = statisticsService.GetAmountSoldThisMonth(startDateStock.SelectedDate ?? default(DateTime), endDateStock.SelectedDate ?? default(DateTime), (Department)cbxStockCategory.SelectedItem);
-            }
+            }*/
         }
 
         private void StockStatisticsTab_Selected(object sender, RoutedEventArgs e)
@@ -811,6 +816,37 @@ namespace KreemMachine
                 this.Close();
             }
             MainContent.SelectedItem = UsersTabItem;
+        }
+
+        private void DepartmentStatisticsTab_Selected(object sender, RoutedEventArgs e)
+        {
+            var departments = departmentService.GetAllViewable();
+            cbxDepartmentCategory.ItemsSource = departments;
+            cbxDepartmentCategory.SelectedItem = departments[0];
+            cbxDepartmentCategory.DisplayMemberPath = "Name";
+
+            fromDatePickerDep.SelectedDate = DateTime.Now.ThisMonth();
+            toDatePickerDep.SelectedDate = DateTime.Now.NextMonth();
+
+            DepartmentStatistics();
+
+        }
+
+        private void cbxDepartmentCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DepartmentStatistics();
+        }
+
+        private void DepartmentStatistics() {
+            if ((Department)cbxDepartmentCategory.SelectedItem == null) {
+                return;
+            }
+            DepartmentGrid.ItemsSource = statisticsService.StatisticsPerDepartment(fromDatePickerDep.SelectedDate ?? default(DateTime), toDatePickerDep.SelectedDate ?? default(DateTime), (Department)cbxDepartmentCategory.SelectedItem);
+        }
+
+        private void DatePickerDep_LostFocus(object sender, RoutedEventArgs e)
+        {
+            DepartmentStatistics();
         }
     }
 }

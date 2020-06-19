@@ -367,6 +367,118 @@ namespace KreemMachineLibrary.Services
                 return new ObservableCollection<StockStatisticsAmountDTO>(query);
             }
         }
+
+        public ObservableCollection<StockStatisticsDTO> StockStatistics(DateTime startDate, DateTime endDate, Department department)
+        {
+
+            using (var db = new DataBaseContext())
+            {
+                var query = from d in db.Departments
+                            join p in db.Products on d.Id equals p.DepartmentId
+                            join ps in db.ProductSales on p.Id equals ps.ProductId
+                            where ps.Timestamp >= startDate && ps.Timestamp <= endDate && p.DepartmentId == department.Id
+                            select new
+                            {
+                                SoldProduct = ps
+                            } into joined
+                            group joined by joined.SoldProduct.Product.Id into newGrouping
+                            select new StockStatisticsDTO
+                            {
+                                Item = newGrouping.FirstOrDefault().SoldProduct.Product.Name,
+                                Amount = newGrouping.Sum(p => p.SoldProduct.Product.Quantity),
+                                BuyPrice = newGrouping.FirstOrDefault().SoldProduct.Product.BuyCost,
+                                Income = newGrouping.Sum(p => (p.SoldProduct.Quantity * p.SoldProduct.Product.BuyCost)),
+                                AmountSold = newGrouping.Sum(p => p.SoldProduct.Quantity),
+                                Profit = newGrouping.Sum(p => (p.SoldProduct.Product.SellPrice - p.SoldProduct.Product.BuyCost) * p.SoldProduct.Quantity),
+                            };
+
+                return new ObservableCollection<StockStatisticsDTO>(query);
+            }
+        }
         #endregion
+
+        #region Department 
+
+        public ObservableCollection<DepartmentDTO> AllDepartmentStatistics() {
+
+            using (var db = new DataBaseContext())
+            {
+                var query = from d in db.Departments
+                            join p in db.Products on d.Id equals p.DepartmentId
+                            join u in db.Users on d.Id equals u.DepartmentId
+                            select new
+                            {
+                                Department = d,
+                                User = u,
+                                Product = p,
+                            } into joined
+                            group joined by joined.Department into newGrouping
+                            select new DepartmentDTO
+                            {
+                                Department = newGrouping.Key.Name,
+
+                            };
+
+
+                return new ObservableCollection<DepartmentDTO>(query);
+
+            }
+        
+        }
+
+        public ObservableCollection<StatisticksPerDepartmentDTO> StatisticsPerDepartment(DateTime fromDate, DateTime toDate, Department department) {
+            using (var db = new DataBaseContext())
+            {
+                var query = from d in db.Departments
+                            join u in db.Users on d.Id equals u.DepartmentId
+                            join us in db.UserScheduledShifts on u.Id equals us.UserId
+                            join ss in db.ScheduledShifts on us.ScheduledShiftId equals ss.Id
+                            where ss.Date >= fromDate && ss.Date < toDate && u.DepartmentId == department.Id
+                            select new
+                            {
+                                U = u,
+                                SS = ss,
+                                US = us
+                            } into joined
+                            group joined by joined.U into newGrouping
+                            select new StatisticksPerDepartmentDTO
+                            {
+                                Name = newGrouping.Key.FirstName + " " + newGrouping.Key.LastName,
+                                HoursWorked = newGrouping.Sum(y => y.SS.Duration),
+                                SumWage = newGrouping.Sum(x => x.US.HourlyWage),
+
+                            };
+
+                return new ObservableCollection<StatisticksPerDepartmentDTO>(query);
+            }
+        }
+/*        public ObservableCollection<ResourcesPerEmployeeDTO> GetResourcesPerEmployeeDate(DateTime fromDate, DateTime toDate)
+        {
+            using (var db = new DataBaseContext())
+            {
+                var result = from ss in db.ScheduledShifts
+                             join us in db.UserScheduledShifts on ss.Id equals us.ScheduledShiftId
+                             where ss.Date >= fromDate && ss.Date < toDate
+                             select new { SS = ss, US = us } into joined
+                             group joined by new
+                             {
+                                 user = joined.US.User,
+                             } into g
+                             select new ResourcesPerEmployeeDTO
+                             {
+                                 EmployeeName = g.Key.user.FirstName + " " + g.Key.user.LastName,
+                                 NumberOfScheduledShifts = g.Count(),
+                                 HoursWorked = g.Sum(y => y.SS.Duration),
+                                 Cost = g.Sum(x => x.US.HourlyWage)
+                             };
+
+                return new ObservableCollection<ResourcesPerEmployeeDTO>(result);
+            }
+        }*/
+
+        #endregion
+
+
+
     }
 }

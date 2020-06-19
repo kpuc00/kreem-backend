@@ -104,12 +104,15 @@
   <ItemGroup>
     <Compile Include="DTO\ConnectionSettings.cs" />
     <Compile Include="DataBaseContext.cs" />
+    <Compile Include="DTO\DepartmentDTO.cs" />
     <Compile Include="DTO\ProductBoughtForAMonthDTO.cs" />
     <Compile Include="DTO\ProductSoldForAMonthDTO.cs" />
     <Compile Include="DTO\ResourcesPerEmployeeDTO.cs" />
     <Compile Include="DTO\ResourcesPerMonthDTO.cs" />
     <Compile Include="DTO\ResourcesPerShiftDTO.cs" />
+    <Compile Include="DTO\StatisticksPerDepartmentDTO.cs" />
     <Compile Include="DTO\StockStatisticsAmountDTO.cs" />
+    <Compile Include="DTO\StockStatisticsDTO.cs" />
     <Compile Include="DTO\StockStatisticsPriceDTO.cs" />
     <Compile Include="Exceptions\BuyCostIncorrectFormatException.cs" />
     <Compile Include="Exceptions\DepartmentExistsException.cs" />
