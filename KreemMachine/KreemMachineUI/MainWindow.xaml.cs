@@ -122,7 +122,9 @@ namespace KreemMachine
         Timer RefreshProductsTableTimer = new Timer(5000);
         Timer RefreshDepartmentTableTimer = new Timer(5000);
 
-        public MainWindow(User user)
+        LoginWindow loginWindow;
+
+        public MainWindow(User user, LoginWindow loginWindow)
         {
             InitializeComponent();
             fromDatePicker.SelectedDate = DateTime.Today.AddDays(1 - DateTime.Today.Day);
@@ -133,6 +135,8 @@ namespace KreemMachine
 
             AllDepartmentsListBox.ItemsSource = departmentService.GetAllViewable();
 
+            this.loginWindow = loginWindow;
+            this.Closed += MainWindow_Closed;
         }
 
         private void SearchTextBox_KeyUp(object sender, KeyEventArgs e)
@@ -805,12 +809,15 @@ namespace KreemMachine
         {
             if (MessageBox.Show("Are you sure you want to logout?", "Logout", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
             {
-                var window = new LoginWindow();
-                window.Show();
+                this.loginWindow.Show();
+
+                this.Closed -= MainWindow_Closed;
 
                 this.Close();
             }
             MainContent.SelectedItem = UsersTabItem;
         }
+
+        private void MainWindow_Closed(object sender, EventArgs e) => loginWindow.Close();
     }
 }

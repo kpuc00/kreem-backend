@@ -69,13 +69,11 @@ namespace KreemMachine
 
         private void DislayMainWindow(User user)
         {
-            var window = new MainWindow(user);
+            var window = new MainWindow(user, this);
             window.Show();
 
             this.Hide();
 
-            // after 'MainWindow' is closed, also close This Window
-            window.Closed += (Sender, E) => this.Close();
         }
 
         private void EmailTextBox_KeyDown(object sender, KeyEventArgs e)
