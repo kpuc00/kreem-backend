@@ -805,22 +805,6 @@ namespace KreemMachine
                 DepartmentTab_Selected(sender, e);
             }
         }
-        #endregion
-
-        private void LogoutBtn_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            if (MessageBox.Show("Are you sure you want to logout?", "Logout", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-            {
-                this.loginWindow.Show();
-
-                this.Closed -= MainWindow_Closed;
-
-                this.Close();
-            }
-            MainContent.SelectedItem = UsersTabItem;
-        }
-
-        private void MainWindow_Closed(object sender, EventArgs e) => loginWindow.Close();
 
         private void DepartmentStatisticsTab_Selected(object sender, RoutedEventArgs e)
         {
@@ -852,5 +836,27 @@ namespace KreemMachine
         {
             DepartmentStatistics();
         }
+
+        #endregion
+
+        #region Logout
+
+        private void LogoutBtn_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to logout?", "Logout", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                this.loginWindow.Show();
+
+                this.Closed -= MainWindow_Closed;
+
+                this.Close();
+            }
+            MainContent.SelectedItem = UsersTabItem;
+        }
+
+        private void MainWindow_Closed(object sender, EventArgs e) => loginWindow.Close();
+
+        #endregion
+
     }
 }
