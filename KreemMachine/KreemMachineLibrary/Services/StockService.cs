@@ -1,4 +1,5 @@
-﻿using KreemMachineLibrary.Models;
+﻿using KreemMachineLibrary.Exceptions;
+using KreemMachineLibrary.Models;
 using KreemMachineLibrary.Models.Statics;
 using System;
 using System.Collections.Generic;
@@ -37,14 +38,24 @@ namespace KreemMachineLibrary.Services
         public async Task<List<RestockRequest>> GetActiveRequestsAsync()
         {
             string RESTOCK_STAGE_HIDE = RestockStageType.Hide.ToString();
+
             using (var db = new DataBaseContext())
             {
-                return await db.RestockRequests
-                    .Where(r => !r.Stages.Any(s => s.TypeStr == RESTOCK_STAGE_HIDE))
-                    .Where(r => r.Product.Deleted != 1)
-                    .Include(r => r.Product.Department)
-                    .Include(r => r.Stages.Select(s => s.User))
-                    .ToListAsync();
+                var query = db.RestockRequests
+                        .Where(r => !r.Stages.Any(s => s.TypeStr == RESTOCK_STAGE_HIDE))
+                        .Where(r => r.Product.Deleted != 1)
+                        .Include(r => r.Product.Department)
+                        .Include(r => r.Stages.Select(s => s.User));
+
+                if (SecurityContext.HasPermissions(Permission.ViewAllRestockRequests))
+                    return await query.ToListAsync();
+                if (SecurityContext.HasPermissions(Permission.ViewOwnRestockRequests))
+                {
+                    long? id = SecurityContext.CurrentUser.DepartmentId;
+                    return await query.Where(r => r.Product.DepartmentId == id).ToListAsync();
+                }
+                throw new MissingPermissionException(Permission.ViewAllRestockRequests, Permission.ViewOwnProducts);
+                
             }
         }
 

@@ -39,9 +39,9 @@ namespace KreemMachine
                 new UserService().AuthenticateByCredentials("", "");
                 var shift = new ShiftService().GetAllShifts()[0];
                 var scheduled = await new ScheduleService().GetScheduledShiftOrCreateNewAsync(DateTime.Now.Date, shift);
-                new ScheduleService().GetSuggestedEmployees(scheduled);
+                // new ScheduleService().GetSuggestedEmployees(scheduled);
                 new ProductServices().LoadProducts();
-                _ = new StockService().GetActiveRequestsAsync();
+                //_ = new StockService().GetActiveRequestsAsync();
 
             }).Start();
         }

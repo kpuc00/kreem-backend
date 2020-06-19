@@ -18,6 +18,8 @@ namespace KreemMachineLibrary
         ViewSchedule,
         EditSchedule,
         AutogenerateSchedule,
+        ScheduleAnyEmployee,
+        ScheduleOwnEmployee,
         // Statistics
         ViewStatistics,
         EditShifts,
@@ -31,7 +33,8 @@ namespace KreemMachineLibrary
         // Restock Requests
         RequestRestockForAnyProduct,
         RequestRestockForOwnProduct,
-        ViewRestockRequests,
+        ViewAllRestockRequests,
+        ViewOwnRestockRequests,
         ChangeRestockRequests,
         // Departments
         CreateDepartments,
