@@ -26,7 +26,6 @@ namespace KreemMachine
     /// </summary>
     public partial class LoginWindow : Window
     {
-
         UserService users = new UserService();
 
         public LoginWindow()
@@ -39,14 +38,12 @@ namespace KreemMachine
                 new UserService().AuthenticateByCredentials("", "");
                 var shift = new ShiftService().GetAllShifts()[0];
                 var scheduled = await new ScheduleService().GetScheduledShiftOrCreateNewAsync(DateTime.Now.Date, shift);
-                // new ScheduleService().GetSuggestedEmployees(scheduled);
-                new ProductServices().LoadProducts();
-                //_ = new StockService().GetActiveRequestsAsync();
+                new ScheduleService().GetSuggestedEmployees(scheduled);
+                new ProductService().LoadProducts();
+                _ = new StockService().GetActiveRequestsAsync();
 
             }).Start();
         }
-
-
 
         string Email => EmailTextBox.Text;
 
@@ -69,13 +66,10 @@ namespace KreemMachine
 
         private void DislayMainWindow(User user)
         {
-            var window = new MainWindow(user);
+            var window = new MainWindow(user, this);
             window.Show();
 
             this.Hide();
-
-            // after 'MainWindow' is closed, also close This Window
-            window.Closed += (Sender, E) => this.Close();
         }
 
         private void EmailTextBox_KeyDown(object sender, KeyEventArgs e)

@@ -11,7 +11,6 @@ namespace KreemMachineLibrary.Services
 {
     public class DepartmentService
     {
-
         public void SaveToDatabase(Department department)
         {
             using (var db = new DataBaseContext())

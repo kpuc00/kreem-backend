@@ -142,7 +142,7 @@
     <Compile Include="Services\ConnectionSettingsService.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Services\DepartmentService.cs" />
-    <Compile Include="Services\ProductServices.cs" />
+    <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\ShiftService.cs" />
     <Compile Include="Services\ScheduleService.cs" />
     <Compile Include="Services\StatisticsService.cs" />

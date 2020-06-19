@@ -34,19 +34,7 @@ namespace KreemMachineLibrary.Models
 
         public virtual Department Department { get; set; }
 
-        public Product()
-        {
-        }
-
-        public Product(long id, string name, int quantity, float buyCost, float sellPrice, Department department)
-        {
-            Id = id;
-            Name = name;
-            Quantity = quantity;
-            BuyCost = buyCost;
-            SellPrice = sellPrice;
-            Department = department;
-        }
+        public Product() { }
 
         public Product(string name, int quantity, float buyCost, float sellPrice, Department department)
         {

@@ -23,7 +23,7 @@ namespace KreemMachine
     /// </summary>
     public partial class CreateProduct : Window
     {
-        ProductServices productServices = new ProductServices();
+        ProductService productServices = new ProductService();
         DepartmentService departmentService = new DepartmentService();
 
         public CreateProduct()
@@ -71,7 +71,7 @@ namespace KreemMachine
             {
                 MessageBox.Show(ex.Message, "Create product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 MessageBox.Show("Something went wrong. Make sure the name has not been used before!", "Create product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }

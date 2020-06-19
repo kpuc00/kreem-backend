@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using KreemMachineLibrary.Exceptions;
+using System.Data.Entity.Infrastructure;
 
 namespace KreemMachine
 {
@@ -23,10 +24,10 @@ namespace KreemMachine
     public partial class EditProduct : Window
     {
         Product product;
-        ProductServices productServices;
+        ProductService productServices;
         DepartmentService departmentService = new DepartmentService();
 
-        public EditProduct(Product givenProduct, ProductServices givenProductServices)
+        public EditProduct(Product givenProduct, ProductService givenProductServices)
         {
             InitializeComponent();
 
@@ -74,6 +75,10 @@ namespace KreemMachine
             catch (RequiredFieldsEmpty ex)
             {
                 MessageBox.Show(ex.Message, "Edit product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            catch (DbUpdateException)
+            {
+                MessageBox.Show("Something went wrong. Make sure the name has not been used before!", "Edit product", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
     }

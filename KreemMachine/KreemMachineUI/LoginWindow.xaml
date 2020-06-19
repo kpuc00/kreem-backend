@@ -5,12 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KreemMachine"
         mc:Ignorable="d"
-        Title="Kreem Machine: Log In" Height="300" Width="300"
+        Title="Kreem Machine: Log In" Height="410" Width="350"
         WindowStartupLocation="CenterScreen" Icon="kreem_icon.png">
 
-    <StackPanel Margin="20 0" TextBlock.FontSize="18">
+    <StackPanel Margin="50 30" TextBlock.FontSize="18">
 
-        <!--Email-->
+        <Image Source="kreem_icon.png" Height="50" Margin="0 0 0 20"/>
+
+        <!--Log in-->
         <TextBlock Text="Log in" FontSize="35" Margin="0, 0, 0, 15" />
 
         <!--Email-->
