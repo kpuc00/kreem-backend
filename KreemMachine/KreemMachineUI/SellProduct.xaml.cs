@@ -36,9 +36,20 @@ namespace KreemMachine
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            productServices.SellProduct(product, int.Parse(QuantityTextBox.Text), new ProductSale(int.Parse(QuantityTextBox.Text), DateTime.Now));
-
-            this.Close();
+            try
+            {
+                productServices.SellProduct(product, int.Parse(QuantityTextBox.Text), new ProductSale(int.Parse(QuantityTextBox.Text), DateTime.Now));
+                this.Close();
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Input data is of invalid format.");
+            }
+            
         }
     }
 }

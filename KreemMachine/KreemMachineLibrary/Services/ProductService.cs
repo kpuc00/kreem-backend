@@ -62,7 +62,11 @@ namespace KreemMachineLibrary.Services
         {
             var sProduct = new ProductSale(quantity, DateTime.Now, product);
 
+            if (product.Quantity < soldProduct.Quantity)
+                throw new InvalidOperationException("Cannot sell more products than are available in stock");
+
             product.Quantity -= soldProduct.Quantity;
+
 
             using (var db = new DataBaseContext())
             {
@@ -74,7 +78,7 @@ namespace KreemMachineLibrary.Services
 
         public void SellProduct(Product product, int quantity, ProductSale soldProduct)
         {
-            UpdateProduct(product: product, quantity: quantity, soldProduct: soldProduct);
+            UpdateProduct(product, soldProduct, quantity);
         }
 
         public List<Product> GetViewableProducts()

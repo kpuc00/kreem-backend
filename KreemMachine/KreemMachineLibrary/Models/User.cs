@@ -103,7 +103,6 @@ namespace KreemMachineLibrary.Models
             LastName = lastName;
             Email = email;
             Role = role;
-            Department = department;
             DepartmentId = department.Id;
             HourlyWage = hourlyWage;
             Birthdate = birthdate;
