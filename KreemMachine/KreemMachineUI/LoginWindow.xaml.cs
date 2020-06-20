@@ -61,7 +61,7 @@ namespace KreemMachine
         }
 
         private static bool UserLogInIsValid(User user) =>
-            user != null && SecurityContext.HasRole(Role.Administrator, Role.Depot, Role.Manager);
+            user != null && SecurityContext.HasPermissions(Permission.LogIn);
         
 
         private void DislayMainWindow(User user)

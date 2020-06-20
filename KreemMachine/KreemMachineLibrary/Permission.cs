@@ -44,5 +44,6 @@ namespace KreemMachineLibrary
         // Settings
         ViewSettings,
         ChangeSettings,
+        LogIn,
     }
 }

@@ -15,7 +15,45 @@ namespace KreemMachineLibrary
         public static User CurrentUser { get; private set; }
 
         static readonly Dictionary<Role, Permission[]> PermissionTable = new Dictionary<Role, Permission[]> {
-            { Administrator, Enum.GetValues(typeof(Permission)) as Permission[]},
+            { UserAdmin, new []{
+                ViewAllUsers,
+                ViewOwnUsers,
+                CreateUsers,
+                EditUsers,
+                DeleteUsers,
+                ViewSchedule,
+                EditSchedule,
+                AutogenerateSchedule,
+                ScheduleAnyEmployee,
+                ScheduleOwnEmployee,
+                ViewStatistics,
+                EditShifts,
+                ViewSettings,
+                ChangeSettings,
+                LogIn,
+                } 
+            },
+            { ProductAdmin, new[] {
+                ViewAllProducts,
+                ViewOwnProducts,
+                CreateProducts,
+                DeleteProducts,
+                EditOwnProducts,
+                ViewAllRestockRequests,
+                ChangeRestockRequests,
+                LogIn,
+                }
+            },
+            { DepartmentAdmin, new[]{
+                ViewAllUsers,
+                CreateDepartments,
+                ViewDeparments,
+                EditDepartments,
+                DeleteDepartments,
+                ViewStatistics,
+                LogIn,
+                } 
+            },
             { Manager, new[] {
                 ViewOwnUsers,
                 ViewSchedule,
@@ -27,19 +65,11 @@ namespace KreemMachineLibrary
                 ViewOwnRestockRequests,
                 SellOwnProducts,
                 ScheduleOwnEmployee,
+                LogIn,
                 }
             },
-            { Depot, new[] {
-                ViewAllProducts,
-                ViewOwnProducts,
-                CreateProducts,
-                DeleteProducts,
-                EditOwnProducts,
-                ViewAllRestockRequests,
-                ChangeRestockRequests,
-                }
-            },
-            { Employee, new Permission[]{} },
+            
+            { Employee, Array.Empty<Permission>() },
         };
 
         internal static void Authenticate(User user)

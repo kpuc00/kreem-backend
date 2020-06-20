@@ -8,9 +8,10 @@ namespace KreemMachineLibrary.Models.Statics
 {
     public enum Role 
     {
-        Administrator,
+        UserAdmin,
+        ProductAdmin,
+        DepartmentAdmin,
         Manager,
-        Depot,
         Employee
     }
 }

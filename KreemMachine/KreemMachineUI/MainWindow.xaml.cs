@@ -261,7 +261,14 @@ namespace KreemMachine
         {
             Console.WriteLine("Refreshing users");
             AllUsersListBox.ItemsSource = null;
-            AllUsersListBox.ItemsSource = userService.GetUsers();
+            try
+            {
+                AllUsersListBox.ItemsSource = userService.GetUsers();
+            }
+            catch(MissingPermissionException ex) 
+            {
+                Console.WriteLine("Could not refresh table view " + ex.Message);
+            }
         }
 
 
@@ -571,7 +578,15 @@ namespace KreemMachine
         private void RefreshProductsTable(object sender = null, EventArgs args = null)
         {
             Console.WriteLine("Refreshing products");
-            AllProductsListBox.ItemsSource = productServices.GetViewableProducts();
+
+            try
+            {
+                AllProductsListBox.ItemsSource = productServices.GetViewableProducts();
+            }
+            catch (MissingPermissionException ex)
+            {
+                Console.WriteLine("Could not refresh table view " + ex.Message);
+            }
         }
 
         private void RequestRestockForProductButton_Clicked(object sender, RoutedEventArgs e)
@@ -802,8 +817,15 @@ namespace KreemMachine
 
         private void RefreshDepartmentTable()
         {
-            AllDepartmentsListBox.ItemsSource = null;
-            AllDepartmentsListBox.ItemsSource = departmentService.GetAllViewable();
+            try
+            {
+                AllDepartmentsListBox.ItemsSource = null;
+                AllDepartmentsListBox.ItemsSource = departmentService.GetAllViewable();
+            }
+            catch (MissingPermissionException ex)
+            {
+                Console.WriteLine("Could not refresh table view " + ex.Message);
+            }
         }
 
         private void SearchDepartmentsBar_KeyUp(object sender, KeyEventArgs e)

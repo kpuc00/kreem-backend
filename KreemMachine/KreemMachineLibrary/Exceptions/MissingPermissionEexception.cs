@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KreemMachineLibrary.Exceptions
 {
-    class MissingPermissionException : Exception
+    public class MissingPermissionException : Exception
     {
         public MissingPermissionException(params Permission[] permissions)
             :base("You don't have the right permission to perform this action")

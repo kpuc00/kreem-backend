@@ -97,6 +97,7 @@ namespace KreemMachineLibrary.Services
             {
 
                 int similarEmailsNumber = db.Users.Where(u => u.LastName.ToLower() == user.LastName.ToLower() && u.Email.Substring(0,1).ToLower() == user.Email.Substring(0,1).ToLower()).Count();
+                string interfix = similarEmailsNumber != 0 ? similarEmailsNumber.ToString() : "";
 
                 user.Email = GenerateEmployeeEmail(user.FirstName, user.LastName, similarEmailsNumber.ToString());
                 
@@ -186,7 +187,7 @@ namespace KreemMachineLibrary.Services
         }
 
         public int DeleteEmployee(User user, User logedUser) {
-            Role?[] notDeletableEmployeeRoles = new Role?[] { Role.Administrator, Role.Manager };
+            Role?[] notDeletableEmployeeRoles = new Role?[] { Role.UserAdmin, Role.ProductAdmin, Role.DepartmentAdmin };
            
             if (notDeletableEmployeeRoles.Contains(user.Role) )
             {
