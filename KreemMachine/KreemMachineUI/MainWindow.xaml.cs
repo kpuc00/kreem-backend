@@ -134,6 +134,20 @@ namespace KreemMachine
 
             this.loginWindow = loginWindow;
             this.Closed += MainWindow_Closed;
+
+            SetUpDefaultTab();
+        }
+
+        private void SetUpDefaultTab()
+        {
+            if (CanViewUsersTab)
+                MainContent.SelectedItem = UsersTabItem;
+            else if (CanViewScheduleTab)
+                MainContent.SelectedItem = ScheduleTabItem;
+            else if (CanViewProductsTab)
+                MainContent.SelectedItem = ProductsTabItem;
+            else
+                MainContent.SelectedItem = LogoutBtn;
         }
 
         private void SearchTextBox_KeyUp(object sender, KeyEventArgs e)
@@ -851,7 +865,7 @@ namespace KreemMachine
 
                 this.Close();
             }
-            MainContent.SelectedItem = UsersTabItem;
+            SetUpDefaultTab();
         }
 
         private void MainWindow_Closed(object sender, EventArgs e) => loginWindow.Close();

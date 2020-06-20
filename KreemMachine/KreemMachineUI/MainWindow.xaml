@@ -34,8 +34,8 @@
         </TabControl.Resources>
 
         <!--Users-->
-        <TabItem x:Name="UsersTabItem" Header="Users" Visibility="{Binding ElementName=_this, Path=CanViewUsersTab, Converter={StaticResource BoolToVis}}"
-                     Selector.Selected="UsersTabItem_Selected" Selector.Unselected="UsersTabItem_Unselected">
+        <TabItem x:Name="UsersTabItem" Header="Users" Visibility="{Binding ElementName=_this, Path=CanViewUsersTab, Converter={StaticResource BoolToVis}}" 
+                 Selector.Selected="UsersTabItem_Selected" Selector.Unselected="UsersTabItem_Unselected">
             <Grid Grid.IsSharedSizeScope="True" >
                 <Grid.RowDefinitions>
                     <!--Create button and search-->
@@ -108,7 +108,7 @@
         </TabItem>
 
         <!--Schedule-->
-        <TabItem Header="Schedule" Selector.Selected="ScheduleTab_Selected"
+        <TabItem Header="Schedule" x:Name="ScheduleTabItem" Selector.Selected="ScheduleTab_Selected"
                      Visibility="{Binding ElementName=_this, Path=CanViewScheduleTab, Converter={StaticResource BoolToVis}}">
             <Grid>
                 <Grid.RowDefinitions>
@@ -195,7 +195,7 @@
         </TabItem>
 
         <!-- Products -->
-        <TabItem Header="Products" Selector.Selected="StocKTabItem_Selected" Selector.Unselected="StockTabItem_Unselected" Grid.IsSharedSizeScope="True" 
+        <TabItem Header="Products" x:Name="ProductsTabItem" Selector.Selected="StocKTabItem_Selected" Selector.Unselected="StockTabItem_Unselected" Grid.IsSharedSizeScope="True" 
                      Visibility="{Binding ElementName=_this, Path=CanViewProductsTab, Converter={StaticResource BoolToVis}}" >
             <Grid>
                 <Grid.RowDefinitions>
