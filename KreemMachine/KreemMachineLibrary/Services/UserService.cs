@@ -93,28 +93,13 @@ namespace KreemMachineLibrary.Services
 
         internal User SaveToDatabase (User user)
         {
-            string mail = user.Email;
             using (var db = new DataBaseContext())
             {
-                var temp = from u in db.Users
-                           select u.Email;
-                var allMail = temp.ToList();
 
-                int mailCount = 0;
-                if (allMail.Contains(mail))
-                {
-                    foreach (string e in allMail)
-                    {
-                        if (e == mail)
-                        {
-                            mailCount++;
-                        }
-                    }
-                    string newMail = mail[0] + mailCount.ToString() + mail.Substring(1);
-                    user.Email = newMail;
-                }
+                int similarEmailsNumber = db.Users.Where(u => u.LastName.ToLower() == user.LastName.ToLower() && u.Email.Substring(0,1).ToLower() == user.Email.Substring(0,1).ToLower()).Count();
 
-
+                user.Email = GenerateEmployeeEmail(user.FirstName, user.LastName, similarEmailsNumber.ToString());
+                
                 var fromDb = db.Users.Add(user);
                 db.SaveChanges();
                 return fromDb;
@@ -222,11 +207,14 @@ namespace KreemMachineLibrary.Services
 
         }
 
-        public string GenerateEmployeeEmail(string first, string last) {
+        public string GenerateEmployeeEmail(string first, string last, string number = "") {
+
+
+
             string firstLetter = first[0].ToString().ToLower();
             string lastLower = last.ToLower();
 
-            string employeeEmail = firstLetter + "." + lastLower + "@mediabazaar.nl";
+            string employeeEmail = firstLetter + number + "." + lastLower + "@mediabazaar.nl";
             
             return employeeEmail;
         }
