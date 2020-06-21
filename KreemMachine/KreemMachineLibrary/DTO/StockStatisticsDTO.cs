@@ -15,8 +15,10 @@ namespace KreemMachineLibrary.DTO
     
         public double Income { get; set; }
 
-        public int AmountSold { get; set; } 
+        public int AmountSold { get; set; }
 
-        public double Profit { get; set; }
+        private double _profit;
+        public double ProfitDouble { set => _profit = value; }
+        public string Profit { get => _profit.ToString("n2"); }
     }
 }

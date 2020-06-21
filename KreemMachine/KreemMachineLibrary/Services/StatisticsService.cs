@@ -389,7 +389,7 @@ namespace KreemMachineLibrary.Services
                                 BuyPrice = newGrouping.FirstOrDefault().SoldProduct.Product.BuyCost,
                                 Income = newGrouping.Sum(p => (p.SoldProduct.Quantity * p.SoldProduct.Product.BuyCost)),
                                 AmountSold = newGrouping.Sum(p => p.SoldProduct.Quantity),
-                                Profit = newGrouping.Sum(p => (p.SoldProduct.Product.SellPrice - p.SoldProduct.Product.BuyCost) * p.SoldProduct.Quantity),
+                                ProfitDouble = newGrouping.Sum(p => (p.SoldProduct.Product.SellPrice - p.SoldProduct.Product.BuyCost) * p.SoldProduct.Quantity),
                             };
 
                 return new ObservableCollection<StockStatisticsDTO>(query);
