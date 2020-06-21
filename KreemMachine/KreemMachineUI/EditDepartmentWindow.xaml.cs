@@ -1,4 +1,5 @@
-﻿using KreemMachineLibrary.Models;
+﻿using KreemMachineLibrary.Exceptions;
+using KreemMachineLibrary.Models;
 using KreemMachineLibrary.Services;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,14 @@ namespace KreemMachine
         private void btnEditDepartment_Click(object sender, RoutedEventArgs e)
         {
             department.Name = tbxDepartmentName.Text;
-            this.departmentService.Update(department);
+            try
+            { 
+                this.departmentService.Update(department);
+            }
+            catch (DepartmentExistsException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
             this.Close();
         }
     }

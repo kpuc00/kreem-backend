@@ -30,6 +30,12 @@ namespace KreemMachineLibrary.Services
         {
             using (var db = new DataBaseContext())
             {
+                var temp = from d in db.Departments select d.Name;
+                if (temp.ToList().Contains(department.Name))
+                {
+                    throw new DepartmentExistsException("Department already exists");
+                }
+
                 db.Entry(department).State = EntityState.Modified;
                 db.SaveChanges();
             }

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using KreemMachineLibrary.Models;
 using KreemMachineLibrary.Services;
+using KreemMachineLibrary.Exceptions;
 
 namespace KreemMachine
 {
@@ -31,7 +32,14 @@ namespace KreemMachine
         private void btnAddDEpartment_Click(object sender, RoutedEventArgs e)
         {
             Department department = new Department(tbxDepartmentName.Text);
-            this.departmentService.SaveToDatabase(department);
+            try
+            {
+                this.departmentService.SaveToDatabase(department);
+            }
+            catch (DepartmentExistsException ex)
+            {
+                MessageBox.Show(ex.Message);   
+            }
 
             this.Close();
         }
