@@ -10,6 +10,6 @@ namespace KreemMachineLibrary.DTO
     {
         public DateTime? Month { get; set; }
         public int NumberOfEmployees { get; set; }
-        public float Cost { get; set; }
+        public double Cost { get; set; }
     }
 }

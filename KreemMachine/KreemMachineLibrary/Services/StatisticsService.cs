@@ -35,7 +35,7 @@ namespace KreemMachineLibrary.Services
                                  Date = g.Key.Date,
                                  Shift = g.Key.Shift.Name,
                                  NumberOfEmployees = g.Count(),
-                                 Cost = g.Sum(us => us.US.HourlyWage)
+                                 Cost = g.Sum(us => us.US.HourlyWage * us.SS.Duration)
                              };
 
                 return new ObservableCollection<ResourcesPerShiftDTO>(result);
@@ -67,7 +67,7 @@ namespace KreemMachineLibrary.Services
                              {
                                  Month = g.FirstOrDefault().SS.Date,
                                  NumberOfEmployees = g.Count(),
-                                 Cost = g.Sum(us => us.US.HourlyWage)
+                                 Cost = g.Sum(us => us.US.HourlyWage * us.SS.Duration)
                              };
 
 
@@ -94,7 +94,7 @@ namespace KreemMachineLibrary.Services
                                  EmployeeName = g.Key.user.FirstName + " " + g.Key.user.LastName,
                                  NumberOfScheduledShifts = g.Count(),
                                  HoursWorked = g.Sum(y => y.SS.Duration),
-                                 Cost = g.Sum(x => x.US.HourlyWage)
+                                 Cost = g.Sum(x => x.US.HourlyWage * x.SS.Duration),
                              };
 
                 return new ObservableCollection<ResourcesPerEmployeeDTO>(result);
@@ -445,7 +445,7 @@ namespace KreemMachineLibrary.Services
                             {
                                 Name = newGrouping.Key.FirstName + " " + newGrouping.Key.LastName,
                                 HoursWorked = newGrouping.Sum(y => y.SS.Duration),
-                                SumWage = newGrouping.Sum(x => x.US.HourlyWage),
+                                SumWage = newGrouping.Sum(x => x.US.HourlyWage * x.SS.Duration),
 
                             };
 
