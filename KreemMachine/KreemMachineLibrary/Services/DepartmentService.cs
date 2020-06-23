@@ -66,7 +66,7 @@ namespace KreemMachineLibrary.Services
         {
             using (var db = new DataBaseContext())
             {
-                return db.Departments.ToList();
+                return db.Departments.Where(d => d.Deleted != 1).ToList();
             }
         }
 
