@@ -11,7 +11,7 @@ namespace KreemMachineLibrary.DTO
         public string EmployeeName { get; set; }
         public int NumberOfScheduledShifts { get; set; }
         public double HoursWorked { get; set; }
-        public float Cost { get; set; }
+        public double Cost { get; set; }
 
         public ResourcesPerEmployeeDTO() { }
     }

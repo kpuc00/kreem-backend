@@ -11,7 +11,7 @@ namespace KreemMachineLibrary.DTO
         public DateTime Date { get; set; }
         public string Shift { get; set; }
         public int NumberOfEmployees { get; set; }
-        public float Cost { get; set; }        
+        public double Cost { get; set; }        
 
         public ResourcesPerShiftDTO() { }
 
